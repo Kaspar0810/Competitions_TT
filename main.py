@@ -79,7 +79,7 @@ pdfmetrics.registerFont(TTFont('DejaVuSerif', os.path.join(outpath, 'DejaVuSerif
 pdfmetrics.registerFont(TTFont('DejaVuSerif-Bold', os.path.join(outpath, 'DejaVuSerif-Bold.ttf')))
 pdfmetrics.registerFont(TTFont('DejaVuSerif-Italic', os.path.join(outpath, 'DejaVuSerif-Italic.ttf')))
 # ============== рабочий вариант
-class _MyTableModel(QAbstractTableModel):
+class MyTableModel(QAbstractTableModel):
     def __init__(self, data):
         super().__init__()
         self._data = data
@@ -171,7 +171,7 @@ class _MyTableModel(QAbstractTableModel):
 
 
 
-class MyTableModel(QAbstractTableModel): # === вариант эксперементальный ============
+class _MyTableModel(QAbstractTableModel): # === вариант эксперементальный ============
     def __init__(self, data):
         super().__init__()
         self._data = data
@@ -1107,7 +1107,7 @@ class StartWindow(QMainWindow, Ui_Form):
             my_win.setStyleSheet("#MainWindow{background-color:lightblue}")
         # === вставить  проверку DB ======      
         flag = check_delete_db()
-        if flag is None:
+        if flag == 1:
             return
         else:
             delete_db_copy(del_files_list=flag)
@@ -1115,7 +1115,7 @@ class StartWindow(QMainWindow, Ui_Form):
 
     def open(self):
         flag = check_delete_db()
-        if flag is not None:
+        if flag != 1:
             delete_db_copy(del_files_list=flag)
         go_to()
         self.close()
@@ -2262,7 +2262,7 @@ def dupl_regions(n_gr):
     return region_list
 
 
-def _fill_table(player_list):
+def fill_table(player_list):
     """заполняет таблицу со списком участников QtableView спортсменами из db"""
     data = []
     data_table_tmp = []
@@ -2391,7 +2391,7 @@ def _fill_table(player_list):
         my_win.tableView.horizontalHeader().setStyleSheet("background-color:yellow;") # делает фон заголовков светлоголубой
 
         my_win.tableView.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
-        my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
+        # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
         my_win.tableView.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
         my_win.tableView.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
     else:
@@ -2410,7 +2410,7 @@ def _fill_table(player_list):
             row = 0
             my_win.statusbar.showMessage(
                 "Такого спортсмена в рейтинг листе нет нет", 10000)
-    my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
+    # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
     my_win.tableView.setSortingEnabled(True)
     my_win.tableView.show()
     finish = time.time()
@@ -2419,7 +2419,7 @@ def _fill_table(player_list):
     print('Время работы в миллисекундах: ', res_msec)
 
 
-def fill_table(player_list): # ============== вариант эксперемнетальный =============
+def _fill_table(player_list): # ============== вариант эксперемнетальный =============
     """заполняет таблицу со списком участников QtableView спортсменами из db"""
     data = []
     header_list = []
