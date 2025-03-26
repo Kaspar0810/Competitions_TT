@@ -1107,7 +1107,7 @@ class StartWindow(QMainWindow, Ui_Form):
             my_win.setStyleSheet("#MainWindow{background-color:lightblue}")
         # === вставить  проверку DB ======      
         flag = check_delete_db()
-        if flag == 1:
+        if flag == 0:
             return
         else:
             delete_db_copy(del_files_list=flag)
@@ -1306,7 +1306,8 @@ def check_delete_db():
         if result == msgBox.Ok:
             flag = del_files_list
         else:
-            return
+            flag = 0
+            return flag
     else:
         flag = 1 # нет старых баз
     return flag
@@ -3130,9 +3131,11 @@ def page():
         my_win.widget.hide()
     elif tb == 1:  # -список участников-
         my_win.resize(1110, 825)
+        # my_win.resize(1110, 805)
         my_win.tableView.setGeometry(QtCore.QRect(260, 225, 841, 552))
         my_win.tabWidget.setGeometry(QtCore.QRect(260, 0, 841, 221))
         my_win.toolBox.setGeometry(QtCore.QRect(10, 10, 243, 762))
+        my_win.checkBox_15.setChecked(False) # сбрасывает флажок по -предзаявке-
         load_coach_to_combo()
         load_comboBox_filter()
         region()
@@ -12735,8 +12738,8 @@ def setka_32_2_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i, 0), (i, 206), 'CENTER')
         style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
