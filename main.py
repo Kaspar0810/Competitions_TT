@@ -4426,6 +4426,8 @@ def player_in_setka_and_write_Game_list_and_Result(fin, posev_data):
         st = "Одна таблица"
     system_table = system.label_string
     mp = system.max_player
+    # вариант с макс количеством игроков 
+    mp = full_net_player(player_in_final=mp)
 
     if system_table == "Сетка (с розыгрышем всех мест) на 8 участников":
         game = 12
@@ -7400,9 +7402,11 @@ def choice_setka_automat(fin, flag, count_exit):
             full_posev.sort(key=lambda k: k[7]) # сортировка списка участников по месту в 1-ом финале
         elif count_exit == 1 or fin == "Одна таблица":
             full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
-        elif count_exit > 1 and fin == "1-й финал":
-            full_posev.sort(key=lambda k: k[7]) # сортировка списка участников по месту в 1-ом финале
-            full_posev.sort(key=lambda k: k[3]) # сортировка списка участников по группам
+        elif fin == "1-й финал":
+            if count_exit > 1:
+                full_posev.sort(key=lambda k: (k[7], k[3])) # сортировка списка участников по месту в 1-ом финале
+            else:
+                full_posev.sort(key=lambda k: k[3]) # сортировка списка участников по группам
         elif count_exit != 1 or fin != "1-й финал":
             full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
    
@@ -7584,9 +7588,9 @@ def choice_setka_automat(fin, flag, count_exit):
                                     player_list_tmp.clear()
                                     pl_id_list_tmp.clear()
                                     q += 1
-                                if fin != "Суперфинал":
-                                    pl_id_list.sort(key=lambda x: x[2], reverse=True) # отсортировывает списки списков по 3-му элементу
-                                    player_list.sort(key=lambda x: x[2], reverse=True) # отсортировывает списки списков по 3-му элементу
+                                # if fin != "Суперфинал":
+                                #     pl_id_list.sort(key=lambda x: x[2], reverse=True) # отсортировывает списки списков по 3-му элементу
+                                #     player_list.sort(key=lambda x: x[2], reverse=True) # отсортировывает списки списков по 3-му элементу
                                 for i in range(0, count_posev):
                                     n_poseva = posev[i] 
                                     count_sev = len(n_poseva)
@@ -12824,10 +12828,12 @@ def mesto_in_final(fin):
                 id_list.append(sys_id)
         for k in id_list:
             sys = system.select().where(System.id == k).get()
-            max_player = sys.max_player
+            mp = sys.max_player
+            # ================
+            # mp = full_net_player(player_in_final=mp)
             stage = sys.stage
             if stage != fin:
-                final.append(max_player)
+                final.append(mp)
             else:   
                 mesto[fin] = sum(final) + 1
                 break
@@ -13209,12 +13215,6 @@ def tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr):
         posev = posev_data[((i + 1) // 2) - 1]
         fam_id = posev["фамилия"]
         znak = fam_id.find("/")
-        #==== вариант вместо фамилия id игрока
-        # if znak != -1:
-        #     tbl_tmp[i - 1][1] = fam_id[znak + 1:]
-        # else:
-        #     tbl_tmp[i - 1][1] = posev["фамилия"]
-        #=====================================
         fam = fam_id[:znak]
         id_fam = fam_id[znak + 1:]
         if znak != -1:
@@ -13271,11 +13271,12 @@ def setka_data(stage, posev_data):
     id_name = {}
     tds = []
     fam_name_city = []
-    # all_list = []
     id_system = system_id(stage)
     system = System.select().where((System.title_id == title_id()) & (System.id == id_system)).get()  # находит system id последнего
 
     mp = system.max_player
+    # ======================
+    mp = full_net_player(player_in_final=mp) # показывает максимальное число игроков какая нужна сетка
     for i in range(1, mp * 2 + 1, 2):
         posev = posev_data[((i + 1) // 2) - 1]
         family = posev['фамилия'] # фамилия имя / город
