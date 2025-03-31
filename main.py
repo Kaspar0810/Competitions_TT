@@ -1108,7 +1108,7 @@ class StartWindow(QMainWindow, Ui_Form):
         # === вставить  проверку DB ======      
         flag = check_delete_db()
         # if flag == 0:
-        if flag == 1: # нет старых баз
+        if flag == 0: # 0 отмена удаления старых баз
             return
         else:
             delete_db_copy(del_files_list=flag)
@@ -7330,8 +7330,8 @@ def choice_setka_automat(fin, flag, count_exit):
                 # == реальное число игроков в финале
                 real_all_player_in_final = len(choice.select().where(Choice.mesto_group.in_(nums)))
                 # == число игроков в конкретном посеве финала
-                if flag == 3:
-                    choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
+                if flag == 3: # ручная жеребьевка
+                    choice_posev = choice.select().where(Choice.mesto_group.in_(nums)) # выбирает список игроков соответсвенно местам в группе
                 else:
                     if n == 0:
                         choice_posev = choice.select().where(Choice.mesto_group == nums[n]) # если 1-й финал и 1-й посев то сортирует по группам 
@@ -7358,7 +7358,8 @@ def choice_setka_automat(fin, flag, count_exit):
                 choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final == nums[n]))
                 real_all_player_in_final = len(choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums))))
         count_player_in_final = len(choice_posev) # количество игроков в отдельном посева
-
+        # вариант когда игроков меньше сетки (12 человек а сетка на 16)
+        max_player = full_net_player(player_in_final=max_player) # на сколько игроков сетка
         if real_all_player_in_final != max_player:
             free_num = free_place_in_setka(max_player, real_all_player_in_final)
             del_num = 1 # флаг, что есть свободные номера
@@ -7400,6 +7401,7 @@ def choice_setka_automat(fin, flag, count_exit):
         elif count_exit == 1 or fin == "Одна таблица":
             full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
         elif count_exit > 1 and fin == "1-й финал":
+            full_posev.sort(key=lambda k: k[7]) # сортировка списка участников по месту в 1-ом финале
             full_posev.sort(key=lambda k: k[3]) # сортировка списка участников по группам
         elif count_exit != 1 or fin != "1-й финал":
             full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
@@ -9173,12 +9175,6 @@ def total_game_table(exit_stage, kpt, fin, pv):
         if etap_text == "Полуфиналы":
             vt = "группы"
             type_table = "группы"
-            # +++ вариант с полуфиналом с выходом из 1-ого пф
-            # if exit_stage == "Предварительный":
-            #     gr_pf = total_gr // 2
-            #     # player_in_final = gr_pf * kpt * 2 # колво участников в полуфинале
-            # elif exit_stage == "1-й полуфинал":
-            #     gr_pf = total_gr // 4
             gr_pf = total_gr // 2
             player_in_final = gr_pf * kpt * 2 # колво участников в полуфинале    
             cur_index = 0
@@ -9202,11 +9198,11 @@ def total_game_table(exit_stage, kpt, fin, pv):
         # ======
             if fin == "1-й финал" and type_table == "сетка":
                 result = msgBox.question(my_win, "Уведомление", "Будет ли разигрываться 3-е место\n в 1-ом финале?"
-                , msgBox.No, msgBox.Ok) 
-                if result == msgBox.Ok:
-                    no_game3 = 3
-                else:
+                , msgBox.No, msgBox.Yes) 
+                if result == msgBox.Yes:
                     no_game3 = ""
+                else:
+                    no_game3 = 3
 
             if exit_stage == "1-й полуфинал" or exit_stage == "2-й полуфинал":
                 system_exit = system.select().where(System.stage == exit_stage).get()
@@ -9234,6 +9230,8 @@ def total_game_table(exit_stage, kpt, fin, pv):
             str_setka = f"{gr_pf} {vt} по {kpt * 2} участника"
             total_gr = gr_pf
         else:
+            player_in_final_full = full_net_player(player_in_final)
+            # ==========================
             str_setka = f"{vt} {player_in_final_full} участников" # пишет в базе данных полное кол-во игроков сетке
             total_gr = 0
  
@@ -9244,7 +9242,8 @@ def total_game_table(exit_stage, kpt, fin, pv):
         elif type_table == "группы": # если ПФ
             m_pl = player_in_final
         else: # если финал сетка
-            m_pl = full_net_player(player_in_final)
+            m_pl = player_in_final
+            # m_pl = full_net_player(player_in_final)
         # ======
         system = System(title_id=title_id(), total_athletes=total_athletes, total_group=total_gr, kol_game_string=stroka_kol_game,
                         max_player=m_pl, stage=fin, type_table=type_table, page_vid=pv, label_string=str_setka,
