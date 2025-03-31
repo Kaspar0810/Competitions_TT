@@ -1107,7 +1107,8 @@ class StartWindow(QMainWindow, Ui_Form):
             my_win.setStyleSheet("#MainWindow{background-color:lightblue}")
         # === вставить  проверку DB ======      
         flag = check_delete_db()
-        if flag == 0:
+        # if flag == 0:
+        if flag == 1: # нет старых баз
             return
         else:
             delete_db_copy(del_files_list=flag)
@@ -1116,7 +1117,8 @@ class StartWindow(QMainWindow, Ui_Form):
     def open(self):
         flag = check_delete_db()
         # if flag != 1:
-        if flag == 1:
+        # if flag == 1:
+        if flag != 0:
             delete_db_copy(del_files_list=flag)
         go_to()
         self.close()
@@ -1307,7 +1309,7 @@ def check_delete_db():
         if result == msgBox.Ok:
             flag = del_files_list
         else:
-            flag = 0
+            flag = 0 # нажал отмена удаление старых баз DB
             return flag
     else:
         flag = 1 # нет старых баз
@@ -7317,7 +7319,8 @@ def choice_setka_automat(fin, flag, count_exit):
     nums = rank_mesto_out_in_group_or_semifinal_to_final(fin) # получение списка номеров мест, выходящих в финал, суперфинал
 
     n = 0  
-    end_posev = count_exit if flag != 3 else 1
+    # end_posev = count_exit if flag != 3 else 1
+    end_posev = count_exit
     while n < end_posev:  #  ======   НАЧАЛО ПОСЕВА   =========   добавил n=0 и n+=1 стр 7098
         if system.stage == "Одна таблица":
             real_all_player_in_final = len(choice.select().where(Choice.basic == fin))
@@ -7327,10 +7330,13 @@ def choice_setka_automat(fin, flag, count_exit):
                 # == реальное число игроков в финале
                 real_all_player_in_final = len(choice.select().where(Choice.mesto_group.in_(nums)))
                 # == число игроков в конкретном посеве финала
-                if n == 0:
-                    choice_posev = choice.select().where(Choice.mesto_group == nums[n]) # если 1-й финал и 1-й посев то сортирует по группам 
+                if flag == 3:
+                    choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
                 else:
-                    choice_posev = choice.select().where(Choice.mesto_group == nums[n])          
+                    if n == 0:
+                        choice_posev = choice.select().where(Choice.mesto_group == nums[n]) # если 1-й финал и 1-й посев то сортирует по группам 
+                    else:
+                        choice_posev = choice.select().where(Choice.mesto_group == nums[n])          
             elif stage_exit == "1-й полуфинал" or stage_exit == "2-й полуфинал": # выходят из полуфинала
                 real_all_player_in_final = len(choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums))))
                 # == число игроков в конкретном посеве финала
@@ -7340,10 +7346,13 @@ def choice_setka_automat(fin, flag, count_exit):
             real_all_player_in_final = len(choice.select().where((Choice.final == stage_exit) & (Choice.mesto_final.in_(nums))))
         else: # финалы по сетке начиная со 2-ого и т.д.
             if stage_exit == "Предварительный": # откуда выход в финал
-                if count_exit > 1:
-                    choice_posev = choice.select().where(Choice.mesto_group == nums[n])
-                else:
+                if flag == 3:
                     choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
+                else:
+                    if count_exit > 1:
+                        choice_posev = choice.select().where(Choice.mesto_group == nums[n])
+                    else:
+                        choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
                 real_all_player_in_final = len(choice.select().where(Choice.mesto_group.in_(nums))) # реальное число игроков в сетке
             elif stage_exit == "1-й полуфинал" or stage_exit == "2-й полуфинал": # выходят из полуфинала
                 choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final == nums[n]))
@@ -7800,7 +7809,19 @@ def setka_choice_number(fin, count_exit):
                 posev_2 = [[2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31]]
                 player_net = 32
         elif count_exit == 3:
-            pass
+            if type_setka == "Сетка (с розыгрышем всех мест) на 8 участников" or type_setka == "Сетка (-2) на 8 участников":
+                posev_1 = [[1, 8], [4, 5]]
+                posev_2 = [[2, 3, 6, 7]]
+                player_net = 8
+            elif type_setka == "Сетка (с розыгрышем всех мест) на 16 участников" or type_setka == "Сетка (-2) на 16 участников":
+                posev_1 = [[1, 16], [8, 9]]
+                posev_2 = [[4, 5, 12, 13]]
+                posev_3 = [[2, 3, 6, 7, 10, 11, 14, 15]]
+                player_net = 16
+            elif type_setka == "Сетка (с розыгрышем всех мест) на 32 участников" or type_setka == "Сетка (-2) на 32 участников":
+                posev_1 = [[1, 32], [16, 17], [8, 9, 24, 25], [4, 5, 12, 13, 20, 21, 28, 29]]
+                posev_2 = [[2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31]]
+                player_net = 32
         elif count_exit == 4:
             if type_setka == "Сетка (с розыгрышем всех мест) на 8 участников" or type_setka == "Сетка (-2) на 8 участников":
                 posev_1 = [[1, 8]]
@@ -15840,10 +15861,10 @@ def made_list_winners():
     my_win.Button_made_page_pdf.setEnabled(True)
     my_win.tableWidget.clear()
     players = Player.select().where(Player.title_id == title_id())
-    winners = players.select().where(Player.mesto < 4).order_by(Player.mesto)
+    winners = players.select().where((Player.mesto < 4) & (Player.bday != 0000-00-00)).order_by(Player.mesto)
     count = len(winners)
     if count == 0:
-        return
+        return 
     n = 0
     for l in winners:
         my_win.tableWidget.setColumnCount(8) # устанавливает колво столбцов
