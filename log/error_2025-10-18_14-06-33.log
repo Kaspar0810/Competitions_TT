@@ -1,0 +1,7 @@
+2025-10-18 14:07:19,153 - ERROR - Необработанное исключение: NameError: name 'update_player_list' is not defined
+2025-10-18 14:07:19,154 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 802, in r_update
+    update_player_list(self)
+    ^^^^^^^^^^^^^^^^^^
+NameError: name 'update_player_list' is not defined. Did you mean: 'self.update_player_list'?

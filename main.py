@@ -388,6 +388,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         rank_Menu = menuBar.addMenu("Рейтинг")  # основное
         rank_Menu.addAction(self.rAction)
         rank_Menu.addAction(self.r1Action)
+        rank_Menu.addAction(self.r_update_Action)
         # меню печать
         print_Menu = printMenu.addMenu("Чистые таблицы") 
         print_Menu.addAction(self.clear_s8_Action)  
@@ -457,6 +458,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.exitAction = QAction("Выход")
         self.rAction = QAction("Текущий рейтинг")
         self.r1Action = QAction("Рейтинг за январь")
+        self.r_update_Action = QAction("Обновление R")
         self.first_comp_Action = QAction("пусто")
         self.second_comp_Action = QAction("пусто")
         self.third_comp_Action = QAction("пусто")
@@ -621,6 +623,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Connect Рейтинг actions
         self.rAction.triggered.connect(self.r_File)
         self.r1Action.triggered.connect(self.r1_File)
+        self.r_update_Action.triggered.connect(self.r_update)
 
         self.print_list_nopay_R_Action.triggered.connect(self.check_debitor_R)
         self.print_list_pay_R_Action.triggered.connect(self.check_debitor_R)
@@ -688,14 +691,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     short_name_comp=short_name_comp, 
                     tab_enabled="Титул Участники", 
                     multiregion=titles.multiregion,
-                    otchestvo=titles.otchestvo
+                    otchestvo=titles.otchestvo,
+                    r_date = ""
                     ).save()
 
             # получение последней записи в таблице
         t_id_last = Title.select().order_by(Title.id.desc()).get()
         system = System(title_id=t_id_last, total_athletes=0, total_group=0, max_player=0, stage="", type_table="",
                             page_vid="", label_string="", kol_game_string="", choice_flag=False, score_flag=5,
-                            visible_game=False, stage_exit="", mesta_exit=0, no_game="").save()
+                            visible_game=False, stage_exit="", mesta_exit=0, no_game="", r_date="").save()
         my_win.tabWidget.setCurrentIndex(0)
         db_r(gamer=gm)
         db_select_title()
@@ -765,6 +769,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         my_win.comboBox_choice_R.setCurrentIndex(1)
         my_win.lineEdit_find_player_in_R.setFocus()
 
+    def r_update(self):
+        """Обновление r_листа до текущего месяца"""
+        msgBox = QMessageBox
+        gamer_list =  ["Мальчики", "Юноши", "Юниоры", "Мужчины"]
+        titles = Title.get(Title.id == title_id())
+        gamer = titles.gamer
+        if gamer in gamer_list:
+            table_db = R_list_m
+        else:
+            table_db = R_list_d
+        reply = msgBox.information(my_win, 'Уведомление', "Выберите файл с текущим рейтингом.",
+                                                    msgBox.Ok)
+    
+        fname = QFileDialog.getOpenFileName(
+            my_win, "Выбрать файл R-листа", "", "Excel files(*.xls *.xlsx)")
+        if fname == ("", ""):
+            # получение последней записи в таблице
+            title = Title.select().order_by(Title.id.desc()).get()
+            system = System.get(Title.id == title)
+            system.delete_instance()
+            title.delete_instance()
+            return
+        # записываем дату загружаемого рейтинга в db
+        filepatch = str(fname[0])
+        znak = filepatch.rfind("/")
+        date_r = filepatch[znak + 1:znak + 8]
+        Title.update(r_date=date_r).where(Title.id == title_id()).execute()
+        # =======================
+        load_listR_in_db(fname, table_db)
+        my_win.statusbar.showMessage("Текущий рейтинг загружен")
+        update_player_list()
+
     def import_db(self):
         """Импорт из бэкап в базу данных"""
             # Connect to the MySQL database
@@ -789,9 +825,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         my_win.tabWidget.setCurrentIndex(1)
 
     def export_db(self):
-        """Экспорт базы данных"""
-        
+        """Экспорт базы данных"""   
         filename, filter = QtWidgets.QFileDialog.getSaveFileName(my_win, 'Выберите файл для сохранения','backup_db','*.sql')
+
+    # def update_player_list(self):
+    #     """Обновление рейтинга у спортсменов текущим R_list"""
+    #     pass
 
 
     def log_file_read(self):
@@ -1289,6 +1328,32 @@ def unconfirmed_city():
     return player_city_dict 
 
 
+def update_player_list():
+    """Обновление рейтинга у спортсменов текущим R_list"""
+    titles = Title.get(Title.id == title_id())
+    gamer = titles.gamer
+    gamer_list = ["Мальчики", "Юноши", "Юниоры", "Мужчины"]
+    r_data = R_list_m if gamer in gamer_list else R_list_d
+    player_list = Player.select().where(Player.title_id == title_id())
+    for pl in player_list:
+        player = pl.player
+        # r_old = pl.rank
+        bd = pl.bday
+        city = pl.city
+        id_pl = pl.id
+        player_list_R = r_data.select().where(r_data.r_fname == player)
+        for  gamer in player_list_R:
+            bd_r = gamer.r_bithday
+            city_r = gamer.r_city
+            if bd == bd_r and city == city_r:
+                r_new = gamer.r_list
+                Player.update(rank=r_new).where(Player.id == id_pl).execute()
+                # return
+
+
+
+
+
 class StartWindow(QMainWindow, Ui_Form):
     """Стартовое окно приветствия"""
     def __init__(self):
@@ -1336,10 +1401,10 @@ class StartWindow(QMainWindow, Ui_Form):
             self.Button_open.setEnabled(False)
             self.Button_old.setEnabled(False)   
     
-
     def last_comp(self):
         """открытие последних соревнований"""
         sex = ["Девочки", "Девушки", "Юниорки", "Женщины"]
+        control_date_R_list()
         id_title = db_select_title()      
         tab_enabled(id_title)
         title_new = Title.select().where(Title.id == id_title).get()
@@ -1356,7 +1421,6 @@ class StartWindow(QMainWindow, Ui_Form):
         else:
             delete_db_copy(del_files_list=flag)
 
-
     def open(self):
         """открытие соревнований из архива"""
         self.close() 
@@ -1366,7 +1430,6 @@ class StartWindow(QMainWindow, Ui_Form):
            delete_db_copy(del_files_list=flag) 
         go_to() 
         my_win.show()
-
 
     def new(self):
         """запускает новые соревнования"""
@@ -1381,7 +1444,7 @@ class StartWindow(QMainWindow, Ui_Form):
 
             title = Title(name="", sredi="", vozrast="", data_start="", data_end="", mesto="", referee="",
                           kat_ref="", secretary="", kat_sec="", gamer=gamer, full_name_comp="", pdf_comp="",
-                          short_name_comp="", tab_enabled="Титул", multiregion="").save()
+                          short_name_comp="", tab_enabled="Титул", multiregion="", r_date="").save()
             # получение последней записи в таблице
             t_id = Title.select().order_by(Title.id.desc()).get()
             id_title = t_id.id
@@ -1409,7 +1472,6 @@ class StartWindow(QMainWindow, Ui_Form):
                 data_list.append(str_data)
         data_list.insert(0, "-выберите дату-")
         fir_window.comboBox_arhive_year.addItems(data_list)
-
 
     def choice_competition(self):
         """выбор соревнования из архива"""
@@ -1510,6 +1572,7 @@ class StartWindow(QMainWindow, Ui_Form):
 class ToolTip(): # создание всплывающих подсказок
     my_win.Button_made_R_file.setToolTip("Создание файла Excel для обсчета рейтинга")
     my_win.Button_made_one_file_pdf.setToolTip("Перед созданием одного файла, передвиньте строки с названием этапаов в необходимом порядке")
+
 
 class ProgressBarThread(QThread):
     def __init__(self, fir_window, parent=None):
@@ -1617,6 +1680,12 @@ def db_r(gamer):  # table_db присваивает по умолчанию зн
         system.delete_instance()
         title.delete_instance()
         return
+    # записываем дату загружаемого рейтинга в db
+    filepatch = str(fname[0])
+    znak = filepatch.rfind("/")
+    date_r = filepatch[znak + 1:znak + 8]
+    Title.update(r_date=date_r).where(Title.id == title_id()).execute()
+    # =======================
     control_R_list(fname, gamer)
     load_listR_in_db(fname, table_db)
     my_win.statusbar.showMessage("Текущий рейтинг загружен")
@@ -1671,6 +1740,25 @@ def control_R_list(fname, gamer):
             db_r(gamer)
     else:
         return
+
+
+def control_date_R_list():
+    """Проверка на дату загруженного R_list и дату соревнований"""
+    msgBox = QMessageBox
+    titles = Title.get(Title.id == title_id())
+    r_date = titles.r_date
+    year_current = (datetime.today().strftime("%Y"))
+    month_current = int(datetime.today().strftime("%m"))
+    date_current = f"{year_current}_{month_current}"
+    if r_date != date_current:
+        result = msgBox.information(my_win, "", "Загруженный R_лист, не соответсвует\n"
+                                                    "дате начала соревнований\n."
+                                                    "Его неоходимо обновить.",
+                                    msgBox.Ok, msgBox.Cancel)
+        if result == msgBox.Ok:
+            pass
+        else:
+            return
 
 
 def load_listR_in_db(fname, table_db):
@@ -19836,7 +19924,7 @@ def sort_double_player():
         # migrate(migrator.rename_column('titles', 'kat_sek', 'kat_sec')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
-        # migrate(migrator.add_column('players_double', 'para_shot', CharField(null=True)))
+        # migrate(migrator.add_column('titles', 'r_date', CharField(null=True))) # null=True допускает пустое значение
     #     # Добавляем внешний ключ
     #     migrate(migrator.add_foreign_key_constraint(
     #         'game_lists',  # таблица куда добавляем

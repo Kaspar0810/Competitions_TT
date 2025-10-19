@@ -99,6 +99,7 @@ class Title(BaseModel):
     multiregion = IntegerField()
     perenos = IntegerField()
     otchestvo = IntegerField()
+    r_date = CharField()
 
     class Meta:
         db_table = "titles"

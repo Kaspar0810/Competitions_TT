@@ -1,0 +1,7 @@
+2025-10-18 13:48:16,357 - ERROR - Необработанное исключение: NameError: name 'msgbox' is not defined
+2025-10-18 13:48:16,360 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 782, in r_update
+    reply = msgbox.information(my_win, 'Уведомление', "Выберите файл с текущим рейтингом, \nзатем файл рейтинга за январь месяц.",
+            ^^^^^^
+NameError: name 'msgbox' is not defined
