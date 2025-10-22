@@ -3448,9 +3448,9 @@ def add_player():
     msgBox = QMessageBox()    
     flag = False
     sex_list = ["Девочки", "Девушки", "Юниорки", "Женщины"]
-        titles = Title.select().where(Title.id == title_id()).get()
-        pol = titles.gamer
-        sex = "woman" if pol in sex_list else "man"
+    titles = Title.select().where(Title.id == title_id()).get()
+    pol = titles.gamer
+    sex = "woman" if pol in sex_list else "man"
     player_list = Player.select().where(Player.title_id == title_id())
     txt = my_win.Button_add_edit_player.text()
     count = len(player_list)
