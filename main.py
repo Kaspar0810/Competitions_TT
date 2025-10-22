@@ -3518,7 +3518,9 @@ def add_player():
     year = bd[6:]
     bd_new = f"{year}-{month}-{day}"
     flag_player_full = find_player_in_table_players_full(fam, name, ci=ct, bd=bd_new)
-    flag_player = flag_player_full[5]
+    # =========== вариант с доб нового игрока в player_full
+    flag_player = 2 if flag_player_full is None else flag_player_full[5]
+    # flag_player = flag_player_full[5]
     # if flag_player_full is None and flag_player == 2:
     if flag_player == 2: # новый спортсмен
         player_full = Players_full(player=pl, bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc, patronymic_id=idp).save()

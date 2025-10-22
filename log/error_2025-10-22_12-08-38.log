@@ -1,0 +1,7 @@
+2025-10-22 12:08:56,181 - ERROR - Необработанное исключение: TypeError: 'NoneType' object is not subscriptable
+2025-10-22 12:08:56,182 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 3816, in dclick_in_listwidget
+    flag_player = player_full[5] # если 0 то спортсмен есть в базе, 1 есть в базе, но у него другой город, 2 новый спортсмен с таким же именем и др
+                  ~~~~~~~~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
