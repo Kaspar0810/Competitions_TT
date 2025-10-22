@@ -3447,6 +3447,10 @@ def add_player():
     """добавляет игрока в список и базу данных"""
     msgBox = QMessageBox()    
     flag = False
+    sex_list = ["Девочки", "Девушки", "Юниорки", "Женщины"]
+        titles = Title.select().where(Title.id == title_id()).get()
+        pol = titles.gamer
+        sex = "woman" if pol in sex_list else "man"
     player_list = Player.select().where(Player.title_id == title_id())
     txt = my_win.Button_add_edit_player.text()
     count = len(player_list)
@@ -3523,7 +3527,7 @@ def add_player():
     # flag_player = flag_player_full[5]
     # if flag_player_full is None and flag_player == 2:
     if flag_player == 2: # новый спортсмен
-        player_full = Players_full(player=pl, bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc, patronymic_id=idp).save()
+        player_full = Players_full(player=pl, bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc, patronymic_id=idp, sex=sex).save()
     elif flag_player == 0 or flag_player == 1: # спортсмен есть но изменился город
         Players_full.update(bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc).where(Players_full.id == flag_player_full[0]).execute()
     # ==== определяет завявка предварительная или нет
@@ -3545,7 +3549,7 @@ def add_player():
             bd_mod = f"{year}-{monh}-{days}"
             plr = Player(player=pl, bday=bd_mod, rank=rn, city=ct, region=rg,
                          razryad=rz, coach_id=idc, full_name=fn, mesto=ms, title_id=title_id(), pay_rejting=pay_R,
-                         comment=comment, coefficient_victories=0, total_game_player=0, total_win_game=0, patronymic_id=idp).save()
+                         comment=comment, coefficient_victories=0, total_game_player=0, total_win_game=0, patronymic_id=idp, sex=sex).save()
                          
         my_win.checkBox_6.setChecked(False)  # сбрасывает флажок -удаленные-
     else:  # просто редактирует игрока
@@ -3564,7 +3568,7 @@ def add_player():
             with db:
                 players = Player(player=pl, bday=bd_new, rank=rn, city=ct, region=rg, razryad=rz,
                                 coach_id=idc, mesto="", full_name=fn, title_id=title_id(), pay_rejting=debt, comment="", 
-                                coefficient_victories=0, total_game_player=0, total_win_game=0, application=zayavka, patronymic_id=idp).save()
+                                coefficient_victories=0, total_game_player=0, total_win_game=0, application=zayavka, patronymic_id=idp, sex=sex).save()
             player_predzayavka = Player.select().where((Player.title_id == title_id()) & (Player.application == "предварительная"))
             count_pred = len(player_predzayavka)
             my_win.label_predzayavka.setText(f"По предзаявке: {count_pred} чел.")
