@@ -1752,7 +1752,7 @@ def control_date_R_list():
     date_current = f"{year_current}_{month_current}"
     if r_date != date_current:
         result = msgBox.information(my_win, "", "Загруженный R_лист, не соответсвует\n"
-                                                    "дате начала соревнований\n."
+                                                    "дате начала соревнований.\n"
                                                     "Его неоходимо обновить.",
                                     msgBox.Ok, msgBox.Cancel)
         if result == msgBox.Ok:
@@ -3809,7 +3809,7 @@ def dclick_in_listwidget():
         check_age_player(znak, bd)
         ci = text[sz2 + 2:ds] # город
         # ==== поиск игрока в базе данных и заполнение полей отчество, разряд и тренер
-        player_full = find_player_in_table_players_full(fam, name, ci, bd)
+        flag_player_full = find_player_in_table_players_full(fam, name, ci, bd)
         # ==== переводит строку с датой из базы даннных в строку к обычному виду
         if znak == -1:
             bd = format_date_for_view(str_date=bd)  
@@ -3819,17 +3819,18 @@ def dclick_in_listwidget():
         my_win.lineEdit_R.setText(r)
         my_win.lineEdit_city_list.setText(ci)
         # =========== всатвляет данные если они есть в базе =============
-        flag_player = player_full[5] # если 0 то спортсмен есть в базе, 1 есть в базе, но у него другой город, 2 новый спортсмен с таким же именем и др
+        flag_player = 2 if flag_player_full is None else flag_player_full[5]
+        # flag_player = flag_player_full[5] # если 0 то спортсмен есть в базе, 1 есть в базе, но у него другой город, 2 новый спортсмен с таким же именем и др
         if flag_player == 0 or flag_player == 1: # если 0, то значит спортсмен есть в базе player_full
             # if player_full is not None:
-            coaches = Coach.get(Coach.id == player_full[1])
+            coaches = Coach.get(Coach.id == flag_player_full[1])
             coach = coaches.coach
             my_win.lineEdit_coach.setText(coach)
-            my_win.comboBox_razryad.setCurrentText(player_full[2])
+            my_win.comboBox_razryad.setCurrentText(flag_player_full[2])
             titles = Title.get(Title.id == title_id())
             flag_otc = titles.otchestvo
             if flag_otc == 1:
-                patr = Patronymic.get(Patronymic.id == player_full[3])
+                patr = Patronymic.get(Patronymic.id == flag_player_full[3])
                 otc = patr.patronymic
                 my_win.lineEdit_otchestvo.setText(otc)
          # ======= проверка на рейтинг ====
