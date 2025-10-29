@@ -3645,22 +3645,22 @@ def find_otchestvo():
     """ищет отчество в базе данных"""
     txt = my_win.label_63.text()
     my_win.listWidget.clear()
-    if txt == "":
-        return
-    else:
-        sex_list = ["Девочки", "Девушки", "Юниорки", "Женщины"]
-        my_win.label_63.setText("Отчество")
-        titles = Title.select().where(Title.id == title_id()).get()
-        pol = titles.gamer
-        sex = "w" if pol in sex_list else "m"
-        otc = my_win.lineEdit_otchestvo.text()
-        otc = otc.capitalize()  # Переводит первую букву в заглавную
-        otchestvo_list = Patronymic.select()
-        pat = otchestvo_list.where((Patronymic.patronymic ** f'{otc}%') & (Patronymic.sex == sex))  # like
-        if (len(pat)) != 0:
-            for chp in pat:
-                full_stroka = chp.patronymic
-                my_win.listWidget.addItem(full_stroka)
+    # if txt == "":
+    #     return
+    # else:
+    sex_list = ["Девочки", "Девушки", "Юниорки", "Женщины"]
+    my_win.label_63.setText("Отчество")
+    titles = Title.select().where(Title.id == title_id()).get()
+    pol = titles.gamer
+    sex = "w" if pol in sex_list else "m"
+    otc = my_win.lineEdit_otchestvo.text()
+    otc = otc.capitalize()  # Переводит первую букву в заглавную
+    otchestvo_list = Patronymic.select()
+    pat = otchestvo_list.where((Patronymic.patronymic ** f'{otc}%') & (Patronymic.sex == sex))  # like
+    if (len(pat)) != 0:
+        for chp in pat:
+            full_stroka = chp.patronymic
+            my_win.listWidget.addItem(full_stroka)
  
 
 def format_date_for_db(str_date):
