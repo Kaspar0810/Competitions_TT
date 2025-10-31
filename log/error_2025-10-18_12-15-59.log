@@ -1,9 +1,0 @@
-2025-10-18 12:16:26,800 - ERROR - Необработанное исключение: AttributeError: 'Title' object has no attribute 'f_date'
-2025-10-18 12:16:26,804 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1344, in last_comp
-    control_date_R_list()
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1687, in control_date_R_list
-    r_date = titles.f_date
-             ^^^^^^^^^^^^^
-AttributeError: 'Title' object has no attribute 'f_date'. Did you mean: 'r_date'?

@@ -1,0 +1,11 @@
+2025-10-31 10:27:44,924 - ERROR - Необработанное исключение: TypeError: arguments did not match any overloaded call:
+  addItem(self, aitem: Optional[QListWidgetItem]): argument 1 has unexpected type 'list'
+  addItem(self, label: Optional[str]): argument 1 has unexpected type 'list'
+2025-10-31 10:27:44,926 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 4746, in find_coach
+    my_win.listWidget.addItem(list_coach)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+TypeError: arguments did not match any overloaded call:
+  addItem(self, aitem: Optional[QListWidgetItem]): argument 1 has unexpected type 'list'
+  addItem(self, label: Optional[str]): argument 1 has unexpected type 'list'

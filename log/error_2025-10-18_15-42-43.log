@@ -1,9 +1,0 @@
-2025-10-18 15:44:14,654 - ERROR - Необработанное исключение: AttributeError: 'builtin_function_or_method' object has no attribute 'pl'
-2025-10-18 15:44:14,656 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 802, in r_update
-    update_player_list()
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1350, in update_player_list
-    Player.update(rank=r_new).where(Player.id == id.pl).execute()
-                                                 ^^^^^
-AttributeError: 'builtin_function_or_method' object has no attribute 'pl'

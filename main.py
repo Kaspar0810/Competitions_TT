@@ -4742,8 +4742,10 @@ def find_coach():
         for pl in coach_list: #походит циклом и создает список с их ID
             c_id = pl.id
             list_coach.append(c_id)
-
+            full_stroka = pl.coach
+            my_win.listWidget.addItem(full_stroka)
         player_list = player.select().where(Player.coach_id << list_coach) # окончательная выборка со всеми тренерами (id)
+        # my_win.listWidget.addItem(list_coach)
     else:
         c = Coach.select()
         c = c.where(Coach.coach ** f'{cp}%')  # like
