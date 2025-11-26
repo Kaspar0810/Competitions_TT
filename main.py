@@ -13550,18 +13550,11 @@ def table_made(pv, stage):
     from reportlab.platypus import Table
 
     # PAGE_WIDTH, PAGE_HEIGHT = landscape(A4) if pv == 'альбомная' else A4
-    if pv[0] > pv[1]:
-        pv = A4
-    else:
-        pv = landscape(A4)
-    PAGE_WIDTH, PAGE_HEIGHT = pv # ориентация страницы
-    # margin = 1.5 * cm
-    # gap_beetwen_tables = 0.5 * cm # промежуток между таблицами
-    # HEADER_HEIGT = 0.8 * cm
-
-    # available_width = PAGE_WIDTH - 2 * margin - gap_beetwen_tables
-    # table_widht = available_width / 2
-    # available_heigt = PAGE_HEIGHT - 2 * margin - HEADER_HEIGT
+    # # if pv[0] > pv[1]:
+    # #     pv = A4
+    # # else:
+    # #     pv = landscape(A4)
+    # margin = 0.5 * cm # поля страницы
      # ==== новый вариант с использованием system id
     id_system = system_id(stage)
     system = System.select().where((System.title_id == title_id()) & (System.id == id_system)).get()  # находит system id последнего
@@ -13709,29 +13702,32 @@ def table_made(pv, stage):
         temp = []
         data = []
         if pv == landscape(A4):  # страница альбомная, то таблицы размещаются обе в ряд
-            for k in range(0, 2, 2):   
+            for k in range(0, kg, 2):   
                 data_1 =  [[dict_table[k]]]
                 data_2 =  [[dict_table[k + 1]]]
-                # def fit_table_to_width(data, total_width):
-                #     # Простая равномерная разбивка (можно улучшить по содержимому)
-                #     num_cols = len(data_1[0])
-                #     col_width = total_width / num_cols
-                #     return [col_width] * num_cols
-                tbl_1 = Table(data_1, colWidths=[14 * cm])
-                tbl_2 = Table(data_2, colWidths=[14 * cm])
+                tbl_1 = Table(data_1, colWidths=["*", "*"])
+                tbl_2 = Table(data_2, colWidths=[7 * cm, 7 * cm])
                 tbl_1.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
                 tbl_2.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
                 gr_1 = f'группа {k + 1}'
                 gr_2 = f'группа {k + 2}'
-                title_para_1 = Paragraph(gr_1, h2)
-                title_para_2 = Paragraph(gr_2, h2)
-                block_1 = KeepTogether(title_para_1, tbl_1)
-                block_2 = KeepTogether(title_para_2, tbl_2)
-                
-                
-                main_table = PlatypusTable([[block_1, block_2]], colWidths=[(PAGE_WIDTH / 2 / 28 * cm), (PAGE_WIDTH / 2 / 28 * cm)])
-                # main_table = Table([[block_1, block_2]], colWidths=[cW, cW])
-                elements.append(main_table)
+                # Функция для компоновки двух таблиц в строку
+                def make_row_of_tables(gr_1, tbl_1, gr_2, tbl_2):
+                    from reportlab.platypus import Table as PlatypusTable
+                    # Формируем "столбцы" для размещения таблиц в ряд
+                    # Каждая "ячейка" содержит заголовок и таблицу вертикально
+                    col1 = [Paragraph(gr_1, h2), tbl_1]
+                    col2 = [Paragraph(gr_2, h2), tbl_2]
+
+                    combined = PlatypusTable([[col1, col2]],colWidths=[14 * cm, 14 * cm],
+                    hAlign='CENTER')
+                    combined.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                                                    ('LEFTPADDING', (0, 0), (-1, -1), 5),
+                                                    ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+                                                    ]))
+                    return combined
+                # Добавляем объединённую структуру
+                elements.append(make_row_of_tables(gr_1, tbl_1, gr_2, tbl_2))
         else:  # страница книжная, то таблицы размещаются в столбец
             for k in range(1, kg // 2 + 1):
                 for i in range(0, kg):
@@ -13787,10 +13783,8 @@ def table_made(pv, stage):
     if sender == my_win.indent_edit_Action:
         indent = change_indent_page()
         doc.leftMargin = indent * cm
-    # doc.leftMargin = 0 * cm
     elements.insert(0, (Paragraph(f"{title}. {sex}", h1)))
     doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
-    # doc.build(elements)
     os.chdir("..")
 
 
