@@ -13542,7 +13542,7 @@ def load_name_net_after_choice_for_wiev(fin):
         setka_32_made(fin)
 
 
-def table_made(pv, stage):
+def _table_made(pv, stage):
     """создание таблиц kg - количество групп(таблиц), g2 - наибольшое кол-во участников в группе
      pv - ориентация страницы, е - если участников четно группам, т - их количество"""
     sender = my_win.sender()
@@ -13795,7 +13795,7 @@ def table_made(pv, stage):
 
 
 
-def _table_made(pv, stage):
+def table_made(pv, stage):
     """создание таблиц kg - количество групп(таблиц), g2 - наибольшое кол-во участников в группе
      pv - ориентация страницы, е - если участников четно группам, т - их количество"""
     sender = my_win.sender()
