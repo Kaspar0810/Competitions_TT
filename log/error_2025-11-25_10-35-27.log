@@ -1,0 +1,12 @@
+2025-11-25 10:35:38,986 - ERROR - Необработанное исключение: KeyError: -2
+2025-11-25 10:35:38,987 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13724, in table_made
+    data_1 = [[dict_table[(l * 2 - 2) + 0]]]
+               ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: -2

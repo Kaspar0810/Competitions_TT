@@ -1,0 +1,12 @@
+2025-11-21 14:44:55,877 - ERROR - Необработанное исключение: TypeError: unsupported operand type(s) for -: 'tuple' and 'float'
+2025-11-21 14:44:55,877 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13726, in table_made
+    combined_table = PlatypusTable([[col1, col2]],colWidths=[(pv - 2 * cm) / 2 - 0.2*cm] * 2,
+                                                              ~~~^~~~~~~~
+TypeError: unsupported operand type(s) for -: 'tuple' and 'float'

@@ -1,0 +1,16 @@
+2025-11-25 10:41:54,799 - ERROR - Необработанное исключение: ValueError: <Table@0x156E418B6B0 1 rows x 1 cols> with cell(0,0) containing
+"<Table@0x156EEBEBF80 9 rows x 9 cols(tallest row 9)> with cell(0,0) containing\n'№'" data error - 1 columns in data but 9 column widths
+2025-11-25 10:41:54,802 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13726, in table_made
+    tbl_1 = Table(data_1, colWidths=cW)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 320, in __init__
+    raise ValueError(f'{self.identity()} data error - {ncols} columns in data but {len(colWidths)} column widths')
+ValueError: <Table@0x156E418B6B0 1 rows x 1 cols> with cell(0,0) containing
+"<Table@0x156EEBEBF80 9 rows x 9 cols(tallest row 9)> with cell(0,0) containing\n'№'" data error - 1 columns in data but 9 column widths

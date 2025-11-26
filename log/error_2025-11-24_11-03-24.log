@@ -1,0 +1,30 @@
+2025-11-24 11:03:41,584 - ERROR - Необработанное исключение: TypeError: unsupported operand type(s) for -=: 'float' and 'tuple'
+2025-11-24 11:03:41,585 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13804, in table_made
+    doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1322, in build
+    BaseDocTemplate.build(self,flowables, canvasmaker=canvasmaker)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1083, in build
+    self.handle_flowable(flowables)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 932, in handle_flowable
+    if frame.add(f, canv, trySplit=self.allowSplitting):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\frames.py", line 158, in _add
+    w, h = flowable.wrap(aW, h)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 1354, in wrap
+    self._calc(availWidth, availHeight)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 740, in _calc
+    self._calc_height(availHeight,availWidth,W=W)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 620, in _calc_height
+    if not W: W = _calc_pc(self._argW,availWidth)   #widths array
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 133, in _calc_pc
+    s -= v
+TypeError: unsupported operand type(s) for -=: 'float' and 'tuple'

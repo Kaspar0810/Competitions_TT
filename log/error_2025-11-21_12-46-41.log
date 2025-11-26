@@ -1,0 +1,48 @@
+2025-11-21 12:46:54,838 - ERROR - Необработанное исключение: AttributeError: 
+raised by class KeepTogether(reportlab.platypus.flowables)@0x1f17fe1bf50 wrap
+ 'list' object has no attribute 'wrapOn'
+2025-11-21 12:46:54,838 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 711, in wrap
+    W,H = _listWrapOn(self._content,aW,self.canv,dims=dims)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 637, in _listWrapOn
+    w,h = f.wrapOn(canv,availWidth,0xfffffff)
+          ^^^^^^^^
+AttributeError: 'list' object has no attribute 'wrapOn'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5664, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8064, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13780, in table_made
+    doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1322, in build
+    BaseDocTemplate.build(self,flowables, canvasmaker=canvasmaker)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1083, in build
+    self.handle_flowable(flowables)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 932, in handle_flowable
+    if frame.add(f, canv, trySplit=self.allowSplitting):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\frames.py", line 158, in _add
+    w, h = flowable.wrap(aW, h)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 713, in wrap
+    annotateException('\nraised by class %s(%s)@0x%8.8x wrap\n' % (self.__class__.__name__,self.__class__.__module__,id(self)))
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\lib\utils.py", line 1176, in annotateException
+    rl_reraise(t,t(sep.join((_ for _ in (msg,str(v),postMsg) if _))),b)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\lib\utils.py", line 138, in rl_reraise
+    raise v.with_traceback(b)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 711, in wrap
+    W,H = _listWrapOn(self._content,aW,self.canv,dims=dims)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 637, in _listWrapOn
+    w,h = f.wrapOn(canv,availWidth,0xfffffff)
+          ^^^^^^^^
+AttributeError: 
+raised by class KeepTogether(reportlab.platypus.flowables)@0x1f17fe1bf50 wrap
+ 'list' object has no attribute 'wrapOn'

@@ -1,0 +1,23 @@
+2025-11-21 14:35:24,886 - ERROR - Необработанное исключение: TypeError: Paragraph.split() missing 1 required positional argument: 'availHeight'
+2025-11-21 14:35:24,886 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13723, in table_made
+    col1 = [Paragraph(title1), shell_table[l][0]]
+            ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\paragraph.py", line 1859, in __init__
+    self._setup(text, style, bulletText or getattr(style,'bulletText',None), frags, cleanBlockQuotedText)
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\paragraph.py", line 1877, in _setup
+    text = cleaner(text)
+           ^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\paragraph.py", line 139, in cleanBlockQuotedText
+    L=list(filter(truth,list(map(_lineClean, split(text, '\n')))))
+                                             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\paragraph.py", line 96, in split
+    return [uword for uword in (_wsc_re_split(text) if delim is None and '\xa0' in text else text.split(delim))]
+                                                                                             ^^^^^^^^^^^^^^^^^
+TypeError: Paragraph.split() missing 1 required positional argument: 'availHeight'

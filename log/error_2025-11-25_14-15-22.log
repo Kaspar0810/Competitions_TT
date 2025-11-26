@@ -1,0 +1,19 @@
+2025-11-25 14:18:05,544 - ERROR - Необработанное исключение: LayoutError: Flowable <Table@0x1BE550E4CB0 1 rows x 2 cols(tallest row 16777221)> with cell(0,0) containing
+'<KeepTogether at 0x1be550e4d40> containing :<Paragraph at 0x'(793.7007874015748 x 16777221), tallest cell 16777221.0 points,  too large on page 2 in frame 'normal'(685.8897637795277 x 460.25196850393706*) of template 'Later'
+2025-11-25 14:18:05,545 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13785, in table_made
+    doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1322, in build
+    BaseDocTemplate.build(self,flowables, canvasmaker=canvasmaker)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1083, in build
+    self.handle_flowable(flowables)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 962, in handle_flowable
+    raise LayoutError(ident)
+reportlab.platypus.doctemplate.LayoutError: Flowable <Table@0x1BE550E4CB0 1 rows x 2 cols(tallest row 16777221)> with cell(0,0) containing
+'<KeepTogether at 0x1be550e4d40> containing :<Paragraph at 0x'(793.7007874015748 x 16777221), tallest cell 16777221.0 points,  too large on page 2 in frame 'normal'(685.8897637795277 x 460.25196850393706*) of template 'Later'
