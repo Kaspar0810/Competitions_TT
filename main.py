@@ -6993,6 +6993,9 @@ def delete_player():
         count = len(player_list)
         my_win.label_46.setText(f"Всего: {count} участников")
         fill_table(player_list)
+        # ==== вариант после удаления игрока восстанавливает название кнопки
+        my_win.Button_add_edit_player.setText("Добавить")
+        my_win.Button_del_player.setEnabled(False)
     else:
         return
 
