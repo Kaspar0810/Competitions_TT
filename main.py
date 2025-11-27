@@ -13706,7 +13706,7 @@ def table_made(pv, stage):
                 data_1 =  [[dict_table[k]]]
                 data_2 =  [[dict_table[k + 1]]]
                 tbl_1 = Table(data_1, colWidths=["*", "*"])
-                tbl_2 = Table(data_2, colWidths=[7 * cm, 7 * cm])
+                tbl_2 = Table(data_2, colWidths=["*", "*"])
                 tbl_1.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
                 tbl_2.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
                 gr_1 = f'группа {k + 1}'
