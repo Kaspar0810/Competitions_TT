@@ -11427,7 +11427,12 @@ def choice_tbl_made():
             ch_d = Choice.get(Choice.id == i)
             ch_d.delete_instance()
     for i in players:
-        family = i.player
+        # family = i.player
+        family_shot = i.player
+        # otc_id = i.patronymic_id
+        patronymics = Patronymic.select().where(Patronymic.id == i.patronymic_id).get()
+        otc = patronymics.patronymic
+        family = f"{family_shot} {otc}"
         region = i.region
         rank = i.rank
         coach_id = i.coach_id
@@ -17908,6 +17913,7 @@ def player_choice_in_group(num_gr):
     choice_group = Choice.select().where((Choice.title_id == title_id()) & (Choice.group == num_gr))
     players = Player.select().where((Player.title_id == title_id()) & (Player.bday != '0000-00-00'))
     for posev in choice_group:
+        # pl = players.select().where(Player.id == posev.player_choice_id).get()
         pl = players.select().where(Player.id == posev.player_choice_id).get()
         city = pl.city
         id_pl = posev.player_choice_id
