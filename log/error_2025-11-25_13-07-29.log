@@ -1,2 +1,0 @@
-2025-11-25 13:09:07,069 - ERROR - Необработанное исключение: LayoutError: Flowable <Table@0x16CD6878B90 1 rows x 2 cols(tallest row 16777221)> with cell(0,0) containing
-'<KeepTogether at 0x16cd6878c20> containing :<Paragraph at 0x'(793.7007874015748 x 16777221), tallest cell 16777221.0 points,  too large on page 2 in frame 'normal'(685.8897637795277 x 460.25196850393706*) of template 'Later'

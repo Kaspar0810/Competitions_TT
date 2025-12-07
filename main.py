@@ -3694,7 +3694,7 @@ def check_rejting_pay(pl):
         year_player = int(b_day[6:])
         date_current = int(datetime.today().strftime("%Y"))
         raznica = date_current - year_player
-        if raznica > 11:
+        if raznica > 17: # оплачиват спортсмены только с 18 лет 
             my_win.textEdit.setText("Спортсмену необходимо оплатить рейтинг!")
             my_win.textEdit.setStyleSheet("Color: red")
     elif txt_edit == "Спортсмену необходимо оплатить рейтинг!":
@@ -13732,25 +13732,53 @@ def table_made(pv, stage):
                 # Добавляем объединённую структуру
                 elements.append(make_row_of_tables(gr_1, tbl_1, gr_2, tbl_2))
         else:  # страница книжная, то таблицы размещаются в столбец
-            for k in range(1, kg // 2 + 1):
-                for i in range(0, kg):
-                    data_tmp.append(dict_table[i])  
-                    tmp = data_tmp.copy()
-                    data_temp.append(tmp) 
-                    temp = data_temp.copy()
-                    data.append(temp)
-                    data_tmp.clear()
-                    data_temp.clear()
-            shell_table = []
-            s_tmp = []
-            for l in range(0, kg): 
-                shell_tmp = Table(data[l], colWidths=["*"])
-                s_tmp.append(shell_tmp)
-                tmp_copy = s_tmp.copy()
-                shell_table.append(tmp_copy)
-                s_tmp.clear()
-                elements.append(Paragraph(f'группа {l + 1}', h2))
-                elements.append(shell_table[l][0])
+            # ====== ВАРИАНТ С ЗАГОЛОВОКАМИ =====
+            for k in range(0, kg):   
+                data_1 =  [[dict_table[k]]]
+                # data_2 =  [[dict_table[k + 1]]]
+                tbl_1 = Table(data_1, colWidths=["*", "*"])
+                # tbl_2 = Table(data_2, colWidths=["*", "*"])
+                tbl_1.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
+                # tbl_2.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
+                gr_1 = f'группа {k + 1}'
+                # gr_2 = f'группа {k + 2}'
+                # Функция для компоновки двух таблиц в строку
+                def make_row_of_tables(gr_1, tbl_1):
+                    from reportlab.platypus import Table as PlatypusTable
+                    # Формируем "столбцы" для размещения таблиц в ряд
+                    # Каждая "ячейка" содержит заголовок и таблицу вертикально
+                    col1 = [Paragraph(gr_1, h2), tbl_1]
+                    # col2 = [Paragraph(gr_2, h2), tbl_2]
+
+                    combined = PlatypusTable([[col1]],colWidths=["*", "*"],
+                    hAlign='CENTER')
+                    combined.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                                                    ('LEFTPADDING', (0, 0), (-1, -1), 5),
+                                                    ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+                                                    ]))
+                    return combined
+                # Добавляем объединённую структуру
+                elements.append(make_row_of_tables(gr_1, tbl_1))
+            # ========
+            # for k in range(1, kg // 2 + 1):
+            #     for i in range(0, kg):
+            #         data_tmp.append(dict_table[i])  
+            #         tmp = data_tmp.copy()
+            #         data_temp.append(tmp) 
+            #         temp = data_temp.copy()
+            #         data.append(temp)
+            #         data_tmp.clear()
+            #         data_temp.clear()
+            # shell_table = []
+            # s_tmp = []
+            # for l in range(0, kg): 
+            #     shell_tmp = Table(data[l], colWidths=["*"])
+            #     s_tmp.append(shell_tmp)
+            #     tmp_copy = s_tmp.copy()
+            #     shell_table.append(tmp_copy)
+            #     s_tmp.clear()
+            #     elements.append(Paragraph(f'группа {l + 1}', h2))
+            #     elements.append(shell_table[l][0])
 
     if pv == A4:
         pv = A4
@@ -15437,8 +15465,8 @@ def setka_32_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i, 0), (i, strok), 'CENTER')
         style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
@@ -15494,6 +15522,14 @@ def setka_32_full_made(fin):
     final = fin
     titles = Title.select().where(Title.id == title_id()).get()
     gamer = titles.gamer
+    # ===== 
+    # if sender == my_win.clear_s32_full_Action:
+    #     max_pl = 32
+    # else:
+    #     id_system = system_id(fin)
+    #     sys = System.select().where(System.id == id_system).get()
+    #     max_pl = sys.max_player # максимальное число игроков в сетке
+    # ====
     id_system = system_id(fin)
     sys = System.select().where(System.id == id_system).get()
     max_pl = sys.max_player # максимальное число игроков в сетке
@@ -15720,6 +15756,7 @@ def setka_32_2_made(fin):
     max_pl = sys.max_player # максимальное число игроков в сетке
     first_mesto = mesto_in_final(fin) if sender != my_win.clear_s32_2_Action else 1
     last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
+
     last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
@@ -15986,7 +16023,13 @@ def write_in_setka(data, stage, first_mesto, table):
     if stage == "Парный разряд":
         player = Players_double.select().where(Players_double.title_id == title_id())
     else:  
-        player = Player.select().where(Player.title_id == title_id())     
+        player = Player.select().where(Player.title_id == title_id())  
+    # ====
+    # if sender == my_win.action:
+    #     system_flag = False
+    # else:
+    #     system_flag = True
+    #    
     system_flag = True
     if system_flag is True: 
         id_system = system_id(stage)
@@ -16065,7 +16108,8 @@ def write_in_setka(data, stage, first_mesto, table):
     elif table == "setka_32_2":
         # встреч, которые попадают на сноски (в сетке за 3 место) должно быть в row_num_win а список состоит из одного номера встречи куда идет победитель
         row_last = 207
-        column_last = 15
+        # column_last = 15
+        column_last = 14
         row_end = 65
         row_num_win = {1: [3], 2: [7], 3: [11], 4: [15], 5: [19], 6: [23], 7: [27], 8: [31], 9: [35], 10: [39], 11: [43], 12: [47],
         13: [51], 14: [55], 15: [59], 16: [63], 17: [5], 18: [13], 19: [21], 20: [29], 21: [37], 22: [45], 23: [53], 24: [61],

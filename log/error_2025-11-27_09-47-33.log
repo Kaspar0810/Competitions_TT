@@ -1,7 +1,0 @@
-2025-11-27 10:46:26,320 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'pay_R' where it is not associated with a value
-2025-11-27 10:46:26,321 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 3562, in add_player
-    full_name=fn, pay_rejting=pay_R, comment=comment, coach_id = idc, patronymic_id=idp).where(Player.id == pl_id).execute()
-                              ^^^^^
-UnboundLocalError: cannot access local variable 'pay_R' where it is not associated with a value

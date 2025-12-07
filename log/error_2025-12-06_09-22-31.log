@@ -1,0 +1,45 @@
+2025-12-06 13:22:53,645 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: 'ДОБИН Иван'
+2025-12-06 13:22:53,647 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8085, in made_pdf_table_for_view
+    setka_32_2_made(fin)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15848, in setka_32_2_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 16308, in write_in_setka
+    if d1 != "" and type(d1) == str and int(d1) > 0:
+                                        ^^^^^^^
+ValueError: invalid literal for int() with base 10: 'ДОБИН Иван'
+2025-12-06 13:23:01,191 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: 'ДОБИН Иван'
+2025-12-06 13:23:01,192 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8085, in made_pdf_table_for_view
+    setka_32_2_made(fin)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15848, in setka_32_2_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 16308, in write_in_setka
+    if d1 != "" and type(d1) == str and int(d1) > 0:
+                                        ^^^^^^^
+ValueError: invalid literal for int() with base 10: 'ДОБИН Иван'
+2025-12-06 13:23:36,062 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: 'БОРИСОВА Екатерина'
+2025-12-06 13:23:36,063 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8085, in made_pdf_table_for_view
+    setka_32_2_made(fin)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15848, in setka_32_2_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 16308, in write_in_setka
+    if d1 != "" and type(d1) == str and int(d1) > 0:
+                                        ^^^^^^^
+ValueError: invalid literal for int() with base 10: 'БОРИСОВА Екатерина'
