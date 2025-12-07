@@ -1,0 +1,13 @@
+2025-11-23 18:17:44,393 - ERROR - Необработанное исключение: ValueError: <Table@0x19C9504F360 unknown rows x unknown cols>... invalid data type
+2025-11-23 18:17:44,395 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13720, in table_made
+    tbl_1 = Table(dict_table[(k * 2 - 2) + 0], colWidths=cW)
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 275, in __init__
+    raise ValueError("%s invalid data type" % self.identity())
+ValueError: <Table@0x19C9504F360 unknown rows x unknown cols>... invalid data type

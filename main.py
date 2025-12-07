@@ -13553,16 +13553,16 @@ def load_name_net_after_choice_for_wiev(fin):
 def table_made(pv, stage):
     """создание таблиц kg - количество групп(таблиц), g2 - наибольшое кол-во участников в группе
      pv - ориентация страницы, е - если участников четно группам, т - их количество"""
-    sender = my_win.sender()
     stage_list_sf = ["1-й полуфинал", "2-й полуфинал"]
     from reportlab.platypus import Table
 
-    # PAGE_WIDTH, PAGE_HEIGHT = landscape(A4) if pv == 'альбомная' else A4
-    # # if pv[0] > pv[1]:
-    # #     pv = A4
-    # # else:
-    # #     pv = landscape(A4)
-    # margin = 0.5 * cm # поля страницы
+
+    styles = getSampleStyleSheet()
+    custom_style = styles['Normal'].fontName = 'DejaVuSerif'
+    custom_style = styles['Normal'].fontSize = 6
+    custom_style = styles["Normal"].clone("CustomStyle")
+    custom_style.wordWrap = 'LTR' # Перенос слов (LTR - Left-To-Right)
+    custom_style.leading = 6 # Межстрочный интервал
      # ==== новый вариант с использованием system id
     id_system = system_id(stage)
     system = System.select().where((System.title_id == title_id()) & (System.id == id_system)).get()  # находит system id последнего
@@ -13593,12 +13593,12 @@ def table_made(pv, stage):
         pv = A4
         center_stage = 140 # откуда начинается надпись -предварительный этап-
         if max_pl < 7:
-            family_col = 3.8
-            wcells = 12.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
+            family_col = 5.0
+            wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
             # wcells = round(wcells, 2)
         else:
-            family_col = 3.8
-            wcells = 12.8 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
+            family_col = 5.0
+            wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
         wcells = round(wcells, 2)
 
     col = ((wcells * cm,) * max_pl)
@@ -13611,12 +13611,9 @@ def table_made(pv, stage):
         if max_pl > 16:
             rH = (0.42 * cm)  # высота строки
         else:
-            rH = (0.45 * cm)  # высота строки
+            rH = (0.47 * cm)  # высота строки
     else:
-        if max_pl < 5:
-            rH = (0.34 * cm)  # высота строки
-        else:
-            rH = (0.3 * cm)  # высота строки
+        rH = (0.29 * cm)  # высота строки
     num_columns = []  # заголовки столбцов и их нумерация в зависимости от кол-во участников
 
     for i in range(max_pl):
@@ -13704,10 +13701,6 @@ def table_made(pv, stage):
         elements.append(Paragraph(text, h2))
         elements.append(shell_table)
     else:
-        data_tmp = []
-        data_temp = []
-        tmp = []
-        temp = []
         data = []
         if pv == landscape(A4):  # страница альбомная, то таблицы размещаются обе в ряд
             for k in range(0, kg, 2):   
@@ -13740,23 +13733,17 @@ def table_made(pv, stage):
             # ====== ВАРИАНТ С ЗАГОЛОВОКАМИ =====
             for k in range(0, kg):   
                 data_1 =  [[dict_table[k]]]
-                # data_2 =  [[dict_table[k + 1]]]
                 tbl_1 = Table(data_1, colWidths=["*", "*"])
-                # tbl_2 = Table(data_2, colWidths=["*", "*"])
-                tbl_1.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
-                # tbl_2.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'TOP')]))
+                tbl_1.setStyle(TableStyle([('VALIGN',(0, 0), (-1, -1), 'LEFT')]))
                 gr_1 = f'группа {k + 1}'
-                # gr_2 = f'группа {k + 2}'
                 # Функция для компоновки двух таблиц в строку
                 def make_row_of_tables(gr_1, tbl_1):
                     from reportlab.platypus import Table as PlatypusTable
                     # Формируем "столбцы" для размещения таблиц в ряд
                     # Каждая "ячейка" содержит заголовок и таблицу вертикально
                     col1 = [Paragraph(gr_1, h2), tbl_1]
-                    # col2 = [Paragraph(gr_2, h2), tbl_2]
-
                     combined = PlatypusTable([[col1]],colWidths=["*", "*"],
-                    hAlign='CENTER')
+                    hAlign='LEFT')
                     combined.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'TOP'),
                                                     ('LEFTPADDING', (0, 0), (-1, -1), 5),
                                                     ('RIGHTPADDING', (0, 0), (-1, -1), 5),
@@ -13764,26 +13751,6 @@ def table_made(pv, stage):
                     return combined
                 # Добавляем объединённую структуру
                 elements.append(make_row_of_tables(gr_1, tbl_1))
-            # ========
-            # for k in range(1, kg // 2 + 1):
-            #     for i in range(0, kg):
-            #         data_tmp.append(dict_table[i])  
-            #         tmp = data_tmp.copy()
-            #         data_temp.append(tmp) 
-            #         temp = data_temp.copy()
-            #         data.append(temp)
-            #         data_tmp.clear()
-            #         data_temp.clear()
-            # shell_table = []
-            # s_tmp = []
-            # for l in range(0, kg): 
-            #     shell_tmp = Table(data[l], colWidths=["*"])
-            #     s_tmp.append(shell_tmp)
-            #     tmp_copy = s_tmp.copy()
-            #     shell_table.append(tmp_copy)
-            #     s_tmp.clear()
-            #     elements.append(Paragraph(f'группа {l + 1}', h2))
-            #     elements.append(shell_table[l][0])
 
     if pv == A4:
         pv = A4
@@ -13816,9 +13783,9 @@ def table_made(pv, stage):
     catalog = 1
     change_dir(catalog)
     doc.topMargin = 1.8 * cm # высота отступа от верха листа pdf
-    if sender == my_win.indent_edit_Action:
-        indent = change_indent_page()
-        doc.leftMargin = indent * cm
+    # if sender == my_win.indent_edit_Action:
+    #     indent = change_indent_page()
+    doc.leftMargin = 1 * cm
     elements.insert(0, (Paragraph(f"{title}. {sex}", h1)))
     doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
     os.chdir("..")
@@ -16386,6 +16353,14 @@ def  table_data(stage, kg):
         max_gamer = count_player_group
         num_gr = stage
         tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+        # ===== вариант доб отчество в таблицу круг ===
+        for i in range (0, max_gamer * 2, 2):
+            data = tdt_tmp[0][i]
+            fam = data[1]
+            znak = fam.rfind(" ")
+            family = f"{fam[:znak]}\n{fam[znak:]}"
+            tdt_tmp[0][i] = family
+        # =======
         tdt_new.append(tdt_tmp[0])
         tdt_color.append(tdt_tmp[1])
         tdt_all.append(tdt_new)

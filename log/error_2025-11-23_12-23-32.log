@@ -1,0 +1,15 @@
+2025-11-23 12:25:17,689 - ERROR - Необработанное исключение: ValueError: <Table@0x1D3E338AFD0 1 rows x 2 cols> with cell(0,0) containing
+"<Table@0x1D3E4B94440 15 rows x 12 cols(tallest row 8)> with cell(0,0) containing\n'№'" data error - 2 columns in data but 12 column widths
+2025-11-23 12:25:17,690 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13739, in table_made
+    shell_table_1 = Table(data[l], colWidths=cW, rowHeights=None)
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 318, in __init__
+    raise ValueError(f'{self.identity()} data error - {ncols} columns in data but {len(colWidths)} column widths')
+ValueError: <Table@0x1D3E338AFD0 1 rows x 2 cols> with cell(0,0) containing
+"<Table@0x1D3E4B94440 15 rows x 12 cols(tallest row 8)> with cell(0,0) containing\n'№'" data error - 2 columns in data but 12 column widths

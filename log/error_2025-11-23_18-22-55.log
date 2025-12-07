@@ -1,0 +1,12 @@
+2025-11-23 18:23:18,819 - ERROR - Необработанное исключение: TypeError: unhashable type: 'list'
+2025-11-23 18:23:18,821 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8065, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13720, in table_made
+    tbl_1 = Table(dict_table[(k * 2 - 2) + 0, [0]], colWidths=cW)
+                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
