@@ -14148,7 +14148,7 @@ def list_winners_pdf():
     h3 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic", leftIndent=200, textColor="green",
             firstLineIndent=-20)  # стиль параграфа
     h3.spaceAfter = 10  # промежуток после заголовка
-    story.append(Paragraph(f'Список победителей и призеров', h3))
+    story.append(Paragraph(f'Итоговый протокол', h3))
     story.append(t)
 
     doc = SimpleDocTemplate(f"{short_name}_winners_list.pdf", pagesize=landscape(A4))
@@ -16377,6 +16377,14 @@ def  table_data(stage, kg):
                 posev_data = player_choice_semifinal(stage, num_gr)
             count_player_group = len(posev_data)
             tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+             # ===== вариант доб отчество в таблицу круг ===
+            for i in range (0, max_gamer * 2, 2):
+                data = tdt_tmp[0][i]
+                fam = data[1]
+                znak = fam.rfind(" ")
+                family = f"{fam[:znak]}\n{fam[znak:]}"
+                tdt_tmp[0][i] = family
+            # =======
             tdt_new.append(tdt_tmp[0])
             tdt_color.append(tdt_tmp[1])
             tdt_new_id.append(tdt_tmp[2])
@@ -19359,50 +19367,44 @@ def made_list_players_for_pdf_file():
     custom_style.wordWrap = 'LTR' # Перенос слов (LTR - Left-To-Right)
     custom_style.leading = 6 # Межстрочный интервал
     story = []  # Список данных таблицы участников
-    # elements = []  # Список Заголовки столбцов таблицы
     tit = Title.get(Title.id == title_id())
-    for k in range(0, 2):
-        elements = []  # Список Заголовки столбцов таблицы
-        if k == 0:
-            player_list_x = Player.select().where(Player.title_id == title_id()).order_by(Player.mesto)
+    elements = []  # Список Заголовки столбцов таблицы
+    player_list_x = Player.select().where(Player.title_id == title_id()).order_by(Player.mesto)
+    player_list = player_list_x.select().where(Player.player != "x")
+    short_name = tit.short_name_comp
+    gamer = tit.gamer
+    otc = tit.otchestvo # если 1 значит в списках присутсвует отчество
+    count = len(player_list)  # количество записей в базе
+    kp = count + 1
+    n = 0
+    for l in player_list:
+        n += 1
+        if otc == 1:
+            pat_id  = l.patronymic_id 
+            patronymics = Patronymic.select().where(Patronymic.id == pat_id).get()  
+            o = patronymics.patronymic
+            p = l.player
+            p = f"{p} {o}"
         else:
-            player_list_x = Player.select().where(Player.title_id == title_id()).order_by(Player.player)
-        player_list = player_list_x.select().where(Player.player != "x")
-        short_name = tit.short_name_comp
-        gamer = tit.gamer
-        otc = tit.otchestvo # если 1 значит в списках присутсвует отчество
-        count = len(player_list)  # количество записей в базе
-        kp = count + 1
-        n = 0
-        for l in player_list:
-            n += 1
-            if otc == 1:
-                pat_id  = l.patronymic_id 
-                patronymics = Patronymic.select().where(Patronymic.id == pat_id).get()  
-                o = patronymics.patronymic
-                p = l.player
-                p = f"{p} {o}"
-            else:
-                p = l.player
-            b = l.bday
-            b = format_date_for_view(str_date=b)
-            r = l.rank
-            c = l.city
-            g = l.region
-            z = l.razryad
-            coach_id = l.coach_id
-            t = coach_id.coach
-            m = l.mesto
-            t = chop_line(t)
-            data = [n, [Paragraph(p, custom_style)], b, r, c, [Paragraph(g, custom_style)], z, [Paragraph(t, custom_style)], m]
-            elements.append(data)
-        elements.insert(0, ["№", "Фамилия, Имя", "Дата рожд.", "R", "Город", "Регион", "Разряд", "Тренер(ы)",
-                            "Место"])
-        t = Table(elements,
-            colWidths=(0.8 * cm, 5.0 * cm, 1.6 * cm, 0.8 * cm, 2.5 * cm, 3.2 * cm, 1.1 * cm, 4.0 * cm, 1.0 * cm),
-            # rowHeights=None, repeatRows=1)  # ширина столбцов, если None-автоматическая
-              rowHeights=(0.45 * cm), repeatRows=1)  # ширина столбцов, если None-автоматическая
-        t.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),  # Использую импортированный шрифт
+            p = l.player
+        b = l.bday
+        b = format_date_for_view(str_date=b)
+        r = l.rank
+        c = l.city
+        g = l.region
+        z = l.razryad
+        coach_id = l.coach_id
+        t = coach_id.coach
+        m = l.mesto
+        m_full = f"{m} место"
+        t = chop_line(t)
+        data = [m_full, [Paragraph(p, custom_style)], b, r, c, [Paragraph(g, custom_style)], z, [Paragraph(t, custom_style)]]
+        elements.append(data)
+    elements.insert(0, ["Место", "Фамилия, Имя", "Дата рожд.", "R", "Город", "Регион", "Разряд", "Тренер(ы)"])
+    t = Table(elements,
+            colWidths=(1.8 * cm, 5.0 * cm, 1.6 * cm, 0.8 * cm, 2.5 * cm, 3.2 * cm, 1.1 * cm, 4.0 * cm),
+            rowHeights=(0.45 * cm), repeatRows=1)  # ширина столбцов, если None-автоматическая
+    t.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),  # Использую импортированный шрифт
                             ('FONTNAME', (1, 1), (1, kp), "DejaVuSerif-Bold"),
                            # Использую импортированный шрифта размер
                         #    ('FONTSIZE', (0, 0), (-1, -1), 7),
@@ -19425,21 +19427,16 @@ def made_list_players_for_pdf_file():
                            ('BOX', (0, 0), (-1, -1), 0.5, colors.black)
                            ]))
 
-
-
-        h3 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic", leftIndent=150,
+    h3 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic", leftIndent=150,
                 firstLineIndent=-20, textColor="green")  # стиль параграфа
-        h3.spaceAfter = 10  # промежуток после заголовка
-        story.append(Paragraph(f'Список участников. {gamer}', h3))
-        story.append(t)
-        if k == 0:
-            doc = SimpleDocTemplate(f"{short_name}_player_list_mesto.pdf", pagesize=A4)
-        else:
-            doc = SimpleDocTemplate(f"{short_name}_player_list_alf.pdf", pagesize=A4)
-        catalog = 1
-        change_dir(catalog)
-        doc.build(story, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
-        os.chdir("..")
+    h3.spaceAfter = 10  # промежуток после заголовка
+    story.append(Paragraph(f'Итоговый протокол. {gamer}', h3))
+    story.append(t)
+    doc = SimpleDocTemplate(f"{short_name}_player_list_itog.pdf", pagesize=A4)
+    catalog = 1
+    change_dir(catalog)
+    doc.build(story, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
+    os.chdir("..")
 
 
 def made_list_winners():

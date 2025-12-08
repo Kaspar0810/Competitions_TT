@@ -1,0 +1,47 @@
+2025-12-08 09:49:44,693 - ERROR - Необработанное исключение: TypeError: 'str' object does not support item assignment
+2025-12-08 09:49:44,693 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1203, in view
+    view()
+    ~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5790, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8068, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13696, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13076, in tbl
+    z[1] = family
+    ~^^^
+TypeError: 'str' object does not support item assignment
+2025-12-08 09:50:08,293 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2025-12-08 09:50:08,294 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8085, in made_pdf_table_for_view
+    setka_32_2_made(fin)
+    ~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15952, in setka_32_2_made
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 18093, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2025-12-08 09:50:24,090 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2025-12-08 09:50:24,090 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5665, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8085, in made_pdf_table_for_view
+    setka_32_2_made(fin)
+    ~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15952, in setka_32_2_made
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 18093, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
