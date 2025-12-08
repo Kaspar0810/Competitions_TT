@@ -1,0 +1,20 @@
+2025-12-08 13:19:47,819 - ERROR - Необработанное исключение: TypeError: 'str' object does not support item assignment
+2025-12-08 13:19:47,829 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 11682, in etap_made
+    flag = control_all_player_in_final(etap, all_sum_player_final) # проверяет все ли игроки распределены по финалам
+  File "c:\Users\Alex\Competitions_TT\main.py", line 11866, in control_all_player_in_final
+    choice_gr_automat()
+    ~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8919, in choice_gr_automat
+    player_in_table_group_and_write_Game_list_Result(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6399, in player_in_table_group_and_write_Game_list_Result
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13696, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 13076, in tbl
+    z[1] = family
+    ~^^^
+TypeError: 'str' object does not support item assignment

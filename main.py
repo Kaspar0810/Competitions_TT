@@ -13556,7 +13556,6 @@ def table_made(pv, stage):
     stage_list_sf = ["1-й полуфинал", "2-й полуфинал"]
     from reportlab.platypus import Table
 
-
     styles = getSampleStyleSheet()
     custom_style = styles['Normal'].fontName = 'DejaVuSerif'
     custom_style = styles['Normal'].fontSize = 6
@@ -13582,23 +13581,26 @@ def table_made(pv, stage):
     family_col = 3.2
     if pv == "альбомная":  # альбомная ориентация стр
         pv = landscape(A4)
+        family_col = 4.6
         center_stage = 210 # откуда начинается надпись -предварительный этап-
-        if kg == 1 or max_pl in [10, 11, 12, 13, 14, 15, 16, 17]:
+        # if kg == 1 or max_pl in [10, 11, 12, 13, 14, 15, 16, 17]:
             # ширина столбцов таблицы в зависимости от кол-во чел (1 таблица)
-            wcells = 21.4 / max_pl
-        else:
-            # ширина столбцов таблицы в зависимости от кол-во чел (2-ух в ряд)
-            wcells = 7.4 / max_pl
+        wcells = 20.0 / max_pl
+        # else:
+        #     # ширина столбцов таблицы в зависимости от кол-во чел (2-ух в ряд)
+        #     wcells = 7.4 / max_pl
     else:  # книжная ориентация стр
         pv = A4
         center_stage = 140 # откуда начинается надпись -предварительный этап-
-        if max_pl < 7:
-            family_col = 5.0
-            wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
-            # wcells = round(wcells, 2)
-        else:
-            family_col = 5.0
-            wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
+        family_col = 5.0
+        wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
+        # if max_pl < 7:
+        #     family_col = 5.0
+        #     wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
+        #     # wcells = round(wcells, 2)
+        # else:
+        #     family_col = 5.0
+        #     wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
         wcells = round(wcells, 2)
 
     col = ((wcells * cm,) * max_pl)
@@ -16336,7 +16338,51 @@ def kol_player(stage):
     return max_gamer
 
 
+
 def  table_data(stage, kg):
+    """циклом создаем список участников каждой группы или финалов по кругу"""
+    tdt_all = []  # список списков [tdt_new] и [tdt_color]
+    tdt_color = []
+    tdt_new = []
+    tdt_new_id = []
+    result = Result.select().where(Result.title_id == title_id())  # находит system id последнего
+    id_system = system_id(stage)
+    if kg == 1:  # система одна таблица круг или финалу по кругу
+        # список словарей участник и его регион
+        result_fin = result.select().where(Result.system_id == id_system)
+        tr = len(result_fin)  # общее кол-во игр в финалах или одной таблице
+        posev_data = player_choice_one_table(stage) # posev_data (фамилия/ id)
+        count_player_group = len(posev_data)
+        max_gamer = count_player_group
+        num_gr = stage
+        tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+        tdt_new.append(tdt_tmp[0])
+        tdt_color.append(tdt_tmp[1])
+        tdt_all.append(tdt_new)
+        tdt_all.append(tdt_color)
+    else:
+        max_gamer = kol_player(stage)
+        result_stage = result.select().where(Result.system_id == id_system)
+        tr = len(result_stage)  # общее кол-во игр в группах
+        for p in range(0, kg):
+            num_gr = f"{p + 1} группа"
+            if stage == "Предварительный":
+                posev_data = player_choice_in_group(num_gr) # словарь фамилия:игрок/id регион: область
+            else:
+                posev_data = player_choice_semifinal(stage, num_gr)
+            count_player_group = len(posev_data)
+            tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+            tdt_new.append(tdt_tmp[0])
+            tdt_color.append(tdt_tmp[1])
+            tdt_new_id.append(tdt_tmp[2])
+
+            tdt_all.append(tdt_new)
+            tdt_all.append(tdt_color)
+            tdt_all.append(tdt_new_id)
+    return tdt_all
+
+
+def  _table_data(stage, kg):
     """циклом создаем список участников каждой группы или финалов по кругу"""
     tdt_all = []  # список списков [tdt_new] и [tdt_color]
     tdt_color = []
