@@ -3469,7 +3469,7 @@ def add_player():
     # есть ли необходимость в написании отчества
     titles = Title.get(Title.id == title_id())
     flag_otc = titles.otchestvo
-    if flag_otc == 1:
+    if flag_otc == 1: # список с отчеством
         player_data_list = [pl, bd, rn, ct, rg, rz, ch, otc]
     else:
         player_data_list = [pl, bd, rn, ct, rg, rz, ch]
@@ -3494,7 +3494,8 @@ def add_player():
         comment = player.comment
 
     num = count + 1
-    fn = f"{pl}/{ct}"
+    fn = f"{pl} {otc}" # ФИО
+    fn_city = f"{pl} {otc}/{ct}" # ФИО и город
     if txt != "Редактировать":
         if flag is True: # если такой игрок присутствует очищает поля 
             my_win.lineEdit_Family_name.clear()
@@ -3549,7 +3550,7 @@ def add_player():
             days = bd[:2]
             bd_mod = f"{year}-{monh}-{days}"
             plr = Player(player=pl, bday=bd_mod, rank=rn, city=ct, region=rg,
-                         razryad=rz, coach_id=idc, full_name=fn, mesto=ms, title_id=title_id(), pay_rejting=pay_R,
+                         razryad=rz, coach_id=idc, fio=fn, fio_city=fn_city,  mesto=ms, title_id=title_id(), pay_rejting=pay_R,
                          comment=comment, coefficient_victories=0, total_game_player=0, total_win_game=0, patronymic_id=idp, sex=sex).save()
                          
         my_win.checkBox_6.setChecked(False)  # сбрасывает флажок -удаленные-
@@ -3559,7 +3560,7 @@ def add_player():
             bd_new = format_date_for_db(str_date=bd)
             Coach.update(coach = ch).where(Coach.id == idc).execute()
             Player.update(player=pl, bday=bd_new, rank=rn, city = ct, region = rg, razryad = rz,
-                            full_name=fn, pay_rejting=pay_R, comment=comment, coach_id = idc, patronymic_id=idp).where(Player.id == pl_id).execute()
+                            fio_city=fn_city, fio=fn, pay_rejting=pay_R, comment=comment, coach_id = idc, patronymic_id=idp).where(Player.id == pl_id).execute()
 
         elif txt == "Добавить":
             debt = "долг" if txt_edit == "Спортсмену необходимо оплатить рейтинг!" else ""
@@ -3568,7 +3569,7 @@ def add_player():
             # =======
             with db:
                 players = Player(player=pl, bday=bd_new, rank=rn, city=ct, region=rg, razryad=rz,
-                                coach_id=idc, mesto="", full_name=fn, title_id=title_id(), pay_rejting=debt, comment="", 
+                                coach_id=idc, mesto="", fio_city=fn_city, fio=fn, title_id=title_id(), pay_rejting=debt, comment="", 
                                 coefficient_victories=0, total_game_player=0, total_win_game=0, application=zayavka, patronymic_id=idp, sex=sex).save()
             player_predzayavka = Player.select().where((Player.title_id == title_id()) & (Player.application == "предварительная"))
             count_pred = len(player_predzayavka)
@@ -5880,7 +5881,7 @@ def player_in_setka_and_write_Game_list_and_Result(fin, posev_data):
                 pl_x = pl.select().where(Player.player == "X")
                 if len(pl_x) == 0:
                     players = Player.insert(player="X", bday='0000-00-00', city="", region="", razryad="",coach_id=1, 
-                                            mesto=0, full_name="X", title_id=title_id(), pay_rejting="", comment="",  coefficient_victories="", 
+                                            mesto=0, fio_city="X", fio="X", title_id=title_id(), pay_rejting="", comment="",  coefficient_victories="", 
                                             total_game_player=0, total_win_game=0, application="", patronymic_id=1).execute()
                 else:
                     player_s = pl.select().where(Player.player == "X").get()
@@ -5985,10 +5986,10 @@ def player_fin_on_circle(fin):
 
             players = Player.select().where(Player.title_id == title_id())
 
-            pl_list = [k.full_name for k in players]
+            pl_list = [k.fio_city for k in players]
             pl_list.sort()
             pl, ok = QInputDialog.getItem(my_win, "Жеребьевка", "Выберите спортсмена для добавления.", pl_list, 0, False)
-            players_full = players.select().where(Player.full_name == pl).get()
+            players_full = players.select().where(player.fio_city == pl).get()
             pl_name = players_full.player
             pl_id = players_full.id
             pl_full = f"{pl_name}/{pl_id}"
@@ -6845,7 +6846,7 @@ def select_player_in_game():
     elif tab == 7:
         player_id = my_win.tableView.model().index(row_num, 0).data()
         players = Player.select().where(Player.id == player_id).get()
-        player = players.full_name
+        player = players.fio_city
 
         player_list = Result.select().where(((Result.player1 == player) | (Result.player2 == player)) & (Result.title_id == title_id()))
         fill_table(player_list)
@@ -7540,11 +7541,11 @@ def control_winner_player(winner, loser):
     if winner.rfind("/") == -1: # если спортсмены имеют только имя и фамилию без города (старый вариант)
         f_name_win_id = player.select().where(Player.player == winner).get()
         f_name_los_id = player.select().where(Player.player == loser).get()
-        winner = f_name_win_id.full_name
-        loser = f_name_los_id.full_name
+        winner = f_name_win_id.fio_city
+        loser = f_name_los_id.fio_city
     
-    player_win_id = player.select().where(Player.full_name == winner).get()
-    player_los_id = player.select().where(Player.full_name == loser).get()
+    player_win_id = player.select().where(player.fio_city == winner).get()
+    player_los_id = player.select().where(player.fio_city == loser).get()
     r_win = player_win_id.rank
     coefficient_win = player_win_id.coefficient_victories
     total_game_win = player_win_id.total_game_player
@@ -9690,7 +9691,7 @@ def choice_setka_automat(fin, flag, count_exit):
                 else:
                     id = tmp_list[0]
                     pl_id = Player.get(Player.id == id)
-                    family_city = pl_id.full_name
+                    family_city = pl_id.fio_city
                     posev_data[i] = family_city
                     with db:
                         choice_final = choice.select().where(Choice.player_choice_id == pl_id).get()
@@ -10178,7 +10179,7 @@ def view_table_choice(fam_city, number_net, num_id_player):
             group = list_net[2]
             group.replace("группа", "гр.")
             pl_full = player.select().where(Player.id == id_player).get()
-            player_full = pl_full.full_name
+            player_full = pl_full.fio_city
             num_fam_tmp = [r, player_full, group]
         num_fam = num_fam_tmp.copy()
         num_fam_tmp.clear()
@@ -11025,7 +11026,7 @@ def select_stage_for_edit():
        return
     elif index == 1:
         for k in players:
-            player_full = k.full_name
+            player_full = k.fio_city
             # f_name = k.player
             # region = k.region
             # id_coach = k.coach_id
@@ -11087,7 +11088,7 @@ def edit_group_after_draw():
     group.insert(0, "-выберите группу-")   
     my_win.comboBox_first_group.addItems(group)
     my_win.comboBox_second_group.addItems(group)
-    player = [k.full_name for k in players]
+    player = [k.fio_city for k in players]
     player.sort()
     my_win.comboBox_player_group_edit.addItems(player)
 
@@ -11255,12 +11256,12 @@ def change_player_between_group_after_draw():
             family_name = pl[znak + 1:znak1]
             # posev_number = pl[:znak]
             if znak == -1:
-                player_id = players.select().where(Player.full_name == pl).get()               
+                player_id = players.select().where(Player.fio_city == pl).get()               
             else:
                 region = pl[znak1 + 1:znak2]
                 player_id = players.select().where((Player.player == family_name) & (Player.region == region)).get()
             pl_id = player_id.id
-            full_name = player_id.full_name
+            full_name = player_id.fio_city
             full_name_list.append(full_name)
             player_dict[full_name] = pl_id
     # подсчитывает колличество не пустых значений (кол-во участников)
@@ -11544,6 +11545,8 @@ def load_coach_to_combo():
     coach_list = []
     my_win.comboBox_fltr_coach.clear()
     players = Player.select().where(Player.title_id == title_id())
+    if len(players) == 0:
+        return
     for k in players:
         coachs_id = k.coach_id
         coachs = Coach.select().where(Coach.id == coachs_id).get()
@@ -14554,9 +14557,9 @@ def setka_8_full_made(fin):
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
-                           ('FONTSIZE', (0, 0), (-1, -1), 7),
+                           ('FONTSIZE', (0, 0), (-1, -1), 5),
                            ('FONTNAME', (1, 0), (1, 16), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 16), 7),
+                           ('FONTSIZE', (1, 0), (1, 16), 5),
                            # 10 столбец с 0 по 68 ряд (цвет места)
                            ('TEXTCOLOR', (8, 0), (8, 39), colors.red),
                            ('ALIGN', (8, 0), (8, 39), 'RIGHT'),
@@ -16510,7 +16513,7 @@ def setka_player_after_choice(stage):
                 p_data['фамилия'] = pl.para_full
             else:
                 pl = Player.get(Player.id == id_pl)
-                p_data['фамилия'] = pl.full_name
+                p_data['фамилия'] = pl.fio_city
         else:
             p_data['фамилия'] = "X"
         tmp = p_data.copy()
@@ -16576,10 +16579,10 @@ def full_player_id(family):
     short_name = {}   
     player = Player.select().where(Player.title_id == title_id())
     if family != "X":
-        pl_id = player.select().where(Player.full_name == family).get()
+        pl_id = player.select().where(Player.fio_city == family).get()
         player_id = pl_id.id # ид игрока
-        f_name = pl_id.full_name
-        s_name = pl_id.player
+        f_name = pl_id.fio_city # ФИО/ город
+        s_name = pl_id.fio # ФИО без города
         full_name["name"] = f_name
         full_name["id"] = player_id 
         short_name["name"] = s_name
@@ -17056,10 +17059,10 @@ def score_in_setka(stage, place_3rd):
             if num_game == place_3rd and my_win.checkBox_no_play_3.isChecked(): # если два 3-х места
                 if res.player1 != "" and res.player2 != "":
                     res = result.select().where(Result.tours == place_3rd).get()
-                    id_pl1 = player.select().where(Player.full_name == res.player1).get()
-                    id_pl2 = player.select().where(Player.full_name == res.player2).get()
-                    short_name_win = id_pl1.player
-                    short_name_los = id_pl2.player
+                    id_pl1 = player.select().where(Player.fio_city == res.player1).get()
+                    id_pl2 = player.select().where(Player.fio_city == res.player2).get()
+                    short_name_win = id_pl1.fio
+                    short_name_los = id_pl2.fio
                     match = [0, short_name_win, '', '', short_name_los]
                     dict_setka[num_game] = match
             elif res.winner != "X":
@@ -17067,8 +17070,9 @@ def score_in_setka(stage, place_3rd):
                     id_pl_win = player.select().where(Players_double.para_full == res.winner).get()
                     short_name_win = id_pl_win.para_shot
                 else:
-                    id_pl_win = player.select().where(Player.full_name == res.winner).get()
-                    short_name_win = id_pl_win.player
+                    id_pl_win = player.select().where(Player.fio_city == res.winner).get()
+                    # short_name_win = id_pl_win.player
+                    short_name_win = id_pl_win.fio
                 if res.loser == "X":
                     short_name_los = "X"
                 else: 
@@ -17077,8 +17081,8 @@ def score_in_setka(stage, place_3rd):
                         short_name_los = id_pl_los.para_shot
                         # short_name_los = res.loser
                     else:
-                        id_pl_los = player.select().where(Player.full_name == res.loser).get()
-                        short_name_los = id_pl_los.player
+                        id_pl_los = player.select().where(Player.fio_city == res.loser).get()
+                        short_name_los = id_pl_los.fio
             else:
                 short_name_win = "X"
                 short_name_los = "X"
@@ -18768,7 +18772,7 @@ def load_playing_game_in_table_for_semifinal(stage):
                 posev_exit.clear()
                 for l in id_player_exit:
                     players = Player.select().where(Player.id == l).get()
-                    family_city = players.full_name
+                    family_city = players.fio_city
                     player_exit.append(family_city)  
                     # номер ид в таблице -Result- встречи игроков, попавших в полуфинал идущих по расстоновке в таблице   
                 # result_gr = result_pre.select().where((Result.player1 == player_exit[0]) & (Result.player2 == player_exit[1])).get() 
@@ -18882,7 +18886,7 @@ def load_playing_game_in_table_for_final(fin):
                 posev_exit.clear()
                 for l in id_player_exit:
                     players = Player.select().where(Player.id == l).get()
-                    family_city = players.full_name
+                    family_city = players.fio_city
                     player_exit.append(family_city)  
                     # номер ид в таблице -Result- встречи игроков, попавших в финал идущих по расстоновке в таблице   
                 result_gr = result_pre.select().where((Result.player1 == player_exit[0]) & (Result.player2 == player_exit[1])).get() 
@@ -18934,11 +18938,11 @@ def made_file_excel_for_rejting():
         group = l.number_group
         pl_win = l.winner       
         pl_los = l.loser
-        id_win = players.select().where(Player.full_name == pl_win).get()
+        id_win = players.select().where(Player.fio_city == pl_win).get()
         pl_win = id_win.player
         b_day_win = id_win.bday
         bd_win = format_date_for_view(str_date=b_day_win)
-        id_los =  players.select().where(Player.full_name == pl_los).get()
+        id_los =  players.select().where(Player.fio_city == pl_los).get()
         pl_los = id_los.player
         b_day_los = id_los.bday
         bd_los = format_date_for_view(str_date=b_day_los)
@@ -20250,10 +20254,10 @@ def sort_double_player():
     # with db.atomic():
         # migrate(migrator.drop_column('choices', 'posev_super_final')) # удаление столбца
         # migrate(migrator.alter_column_type('system', 'mesta_exit', IntegerField()))
-        # migrate(migrator.rename_column('titles', 'kat_sek', 'kat_sec')) # Переименование столбца (таблица, старое название, новое название столбца)
+        # migrate(migrator.rename_column('players', 'full_name', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
-        # migrate(migrator.add_column('titles', 'r_date', CharField(null=True))) # null=True допускает пустое значение
+        # migrate(migrator.add_column('players', 'fio', CharField(null=True))) # null=True допускает пустое значение
     #     # Добавляем внешний ключ
     #     migrate(migrator.add_foreign_key_constraint(
     #         'game_lists',  # таблица куда добавляем
@@ -20264,7 +20268,7 @@ def sort_double_player():
     #         ))
     
 
-    # db.close()
+#     db.close()
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
 
 # ===== переводит фокус на поле ввода счета в партии вкладки -группа-

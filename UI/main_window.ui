@@ -2515,7 +2515,7 @@
        <property name="geometry">
         <rect>
          <x>345</x>
-         <y>22</y>
+         <y>23</y>
          <width>91</width>
          <height>16</height>
         </rect>
@@ -2523,7 +2523,7 @@
        <property name="font">
         <font>
          <family>Courier New</family>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <italic>true</italic>
          <bold>true</bold>
@@ -2531,7 +2531,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Общий счет</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Общий счет&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
       <widget class="QPushButton" name="Button_Ok">
@@ -2609,7 +2609,7 @@
       <widget class="QLineEdit" name="lineEdit_pl1_score_total">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>355</x>
          <y>41</y>
          <width>49</width>
          <height>24</height>
@@ -2627,7 +2627,7 @@
       <widget class="QLineEdit" name="lineEdit_pl2_score_total">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>355</x>
          <y>69</y>
          <width>49</width>
          <height>24</height>
@@ -2645,7 +2645,7 @@
       <widget class="QCheckBox" name="checkBox_7">
        <property name="geometry">
         <rect>
-         <x>300</x>
+         <x>318</x>
          <y>43</y>
          <width>21</width>
          <height>20</height>
@@ -2658,7 +2658,7 @@
       <widget class="QCheckBox" name="checkBox_8">
        <property name="geometry">
         <rect>
-         <x>300</x>
+         <x>318</x>
          <y>70</y>
          <width>21</width>
          <height>20</height>
@@ -2673,13 +2673,13 @@
         <rect>
          <x>11</x>
          <y>41</y>
-         <width>271</width>
+         <width>290</width>
          <height>21</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
         </font>
        </property>
       </widget>
@@ -2688,13 +2688,13 @@
         <rect>
          <x>11</x>
          <y>71</y>
-         <width>271</width>
+         <width>290</width>
          <height>21</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
         </font>
        </property>
       </widget>
