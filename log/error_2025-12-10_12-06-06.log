@@ -1,0 +1,14 @@
+2025-12-10 12:06:41,727 - ERROR - Необработанное исключение: AttributeError: 'dict_keys' object has no attribute 'keys'
+2025-12-10 12:06:41,741 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5666, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8086, in made_pdf_table_for_view
+    setka_32_2_made(fin)
+    ~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15828, in setka_32_2_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16182, in write_in_setka
+    if dictkeys.keys() is None:
+       ^^^^^^^^^^^^^
+AttributeError: 'dict_keys' object has no attribute 'keys'

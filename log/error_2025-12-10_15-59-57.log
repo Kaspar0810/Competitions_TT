@@ -1,0 +1,14 @@
+2025-12-10 16:01:49,914 - ERROR - Необработанное исключение: KeyError: None
+2025-12-10 16:01:49,917 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5666, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8078, in made_pdf_table_for_view
+    setka_16_full_made(fin)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15082, in setka_16_full_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16237, in write_in_setka
+    id_los = id_sh_name[pl_los]
+             ~~~~~~~~~~^^^^^^^^
+KeyError: None

@@ -14557,9 +14557,11 @@ def setka_8_full_made(fin):
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
-                           ('FONTSIZE', (0, 0), (-1, -1), 5),
+                           ('FONTSIZE', (0, 0), (-1, -1), 6),
                            ('FONTNAME', (1, 0), (1, 16), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 16), 5),
+                           ('FONTSIZE', (1, 0), (1, 16), 7),
+                           ('LEADING', (1, 0), (1, 16), 7), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)
+                        #    ('ALIGN', (1, 0), (1, 16), 'CENTER'),
                            # 10 столбец с 0 по 68 ряд (цвет места)
                            ('TEXTCOLOR', (8, 0), (8, 39), colors.red),
                            ('ALIGN', (8, 0), (8, 39), 'RIGHT'),
@@ -15680,11 +15682,12 @@ def setka_32_full_made(fin):
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
                            ('FONTSIZE', (0, 0), (-1, -1), 7),
                            ('FONTNAME', (1, 0), (1, 64), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 64), 7)] + ts 
-                           + [
+                           ('FONTSIZE', (1, 0), (1, 64), 6),
+                           ('LEADING', (1, 0), (1, 64), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора) 
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 68), colors.blue),
-                           ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+                           ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                           ('VALIGN', (1, 0), (1, 64), 'BOTTOM')] + ts))
                            
 # === надпись финала
     h2 = PS("normal", fontSize=10, fontName="DejaVuSerif-Italic",
@@ -15924,13 +15927,14 @@ def setka_32_2_made(fin):
 
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
-                           ('FONTSIZE', (0, 0), (-1, -1), 7),
+                           ('FONTSIZE', (0, 0), (-1, -1), 6),
                            ('FONTNAME', (1, 0), (1, 64), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 64), 7)] + ts 
-                           + [
+                           ('FONTSIZE', (1, 0), (1, 64), 6),
+                           ('LEADING', (1, 0), (1, 64), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)                          
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 68), colors.blue),
-                           ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+                           ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                           ('VALIGN', (1, 0), (1, 64), 'BOTTOM')] + ts)) # ТЕКСТ В ЯЧЕЙКЕ ВЕРТИКАЛЬНО ПОДНЯТ ВВЕРХ C 1-М ПОСЕВОМ
 # === надпись финала
     h2 = PS("normal", fontSize=10, fontName="DejaVuSerif-Italic",
             leftIndent=50, textColor=Color(1, 0, 1, 1))  # стиль параграфа (номера таблиц)
@@ -16174,6 +16178,22 @@ def write_in_setka(data, stage, first_mesto, table):
         posev_data = setka_player_after_choice(stage) # игроки 1-ого посева
         all_list = setka_data(stage, posev_data)
         id_sh_name = all_list[2] # словарь {Фамилия Имя: id}
+    #   ================
+        flag = 0
+        for key_old in id_sh_name.keys():# вариант где в сетке нет отчество
+            flag = 1
+            if key_old is None:
+                old_keys = all_list[1] 
+                # Создание нового словаря с переименованными ключами
+                new_product = {}
+                for name in old_keys:
+                    znak = name.find("/")
+                    new_key = 'X' if znak == -1 else name[:znak]
+                    # if name in old_keys and old_keys[name]:
+                    value_old = old_keys[name]
+                    new_product[new_key] = value_old
+        id_sh_name = all_list[2] if flag == 0 else new_product # словарь {Фамилия Имя: id}    
+    # ==================
     tds = []
     tds.append(all_list[0]) # список фамилия/ город 1-ого посева
     # ======
@@ -16548,24 +16568,14 @@ def setka_data(fin, posev_data):
         id_full_name[id_f_n["name"]] = id_f_n["id"]
         id_name[id_s_n["name"]] = id_s_n["id"]
         if family != "X":
-            # находит пробел отделяющий имя от фамилии
-            # mark_space1 = family.find(" ")
-            # mark = family.find("-")
-            # family2_full = family[mark + 1:]
-            # mark_space2 = family2_full.find(" ")
-            # family1 = family[:mark_space1]
-            # family2 = family2_full[:mark_space2]
-            # name1 = family[mark_space1 + 1:mark_space1 + 2] # одна буква имени 1-ого игрока
-            # name2 = family2_full[mark_space2 + 1:mark_space2 + 2] # одна буква имени 2-ого игрока
-            # line = family.find("/")  # находит черту отделяющий имя от города
-            # city_slice = family[line:]  # получает отдельно город
-            # # получает отдельно фамилия и первую букву имени
-            # family_slice = f"{family1} {name1}.-{family2} {name2}."
-            # family_city = f'{family_slice}{city_slice}'   # все это соединяет
             # =========== вариант полное имя и город =============
             family_city = family
         else:
             family_city = "X"
+        znak = family.find("/")
+        f = family[:znak]
+        c = family[znak + 1:]
+        family = f"{f}\n{c}" # фио и на другой строке город
         tds.append(family)
         fam_name_city.append(family_city)
     all_list = [tds, id_full_name, id_name, fam_name_city]
@@ -17072,7 +17082,9 @@ def score_in_setka(stage, place_3rd):
                 else:
                     id_pl_win = player.select().where(Player.fio_city == res.winner).get()
                     # short_name_win = id_pl_win.player
-                    short_name_win = id_pl_win.fio
+                    # short_name_win = id_pl_win.fio
+                    # временный вариант со старой базой
+                    short_name_win = id_pl_win.player if id_pl_win.fio is None else id_pl_win.fio
                 if res.loser == "X":
                     short_name_los = "X"
                 else: 
@@ -17082,7 +17094,9 @@ def score_in_setka(stage, place_3rd):
                         # short_name_los = res.loser
                     else:
                         id_pl_los = player.select().where(Player.fio_city == res.loser).get()
-                        short_name_los = id_pl_los.fio
+                        # short_name_los = id_pl_los.fio
+                        # временный вариант со старой базой
+                        short_name_los = id_pl_los.player if id_pl_los.fio is None else id_pl_los.fio
             else:
                 short_name_win = "X"
                 short_name_los = "X"
