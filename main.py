@@ -5612,10 +5612,10 @@ def kol_player_in_group():
     my_win.label_19.setText(stroka_kol_game)
     my_win.label_19.show()
     my_win.Button_etap_made.setEnabled(True)
-    if int(kg) % 2 != 0: # Если число групп нечетное то вид страницы ставит -книжная-
-        my_win.comboBox_page_vid.setCurrentIndex(1)
-    else:
-        my_win.comboBox_page_vid.setCurrentIndex(0)
+    # if int(kg) % 2 != 0: # Если число групп нечетное то вид страницы ставит -книжная-
+    my_win.comboBox_page_vid.setCurrentIndex(1)
+    # else:
+    #     my_win.comboBox_page_vid.setCurrentIndex(0)
 
     if sender == my_win.Button_etap_made:
         my_win.Button_etap_made.setEnabled(False)
@@ -9464,7 +9464,7 @@ def choice_setka_automat(fin, flag, count_exit):
                     num_set = sev[w] # номер в сетке на который идет сев
                     count_sev = len(sev) # количество номеров в посеве
                 else:
-                    num_set = sev[0] # проверить
+                    num_set = sev[0] # номер посева 1-й в списке номеров
                     if len(posev[i]) > count_player_in_final and count_exit > 1:
                         count_sev = count_player_in_final
                     else:
@@ -12257,39 +12257,6 @@ def numbers_of_games(cur_index, player_in_final, kpt):
     return total_games
 
 
-# def clear_db_before_edit():
-#     """очищает таблицы при повторном создании системы"""
-#     system = System.select().where(System.title_id == title_id())
-#     title = Title.select().where(Title.id == title_id()).get()
-#     gl = Game_list.select().where(Game_list.title_id == title_id())
-#     pl = Player.select().where((Player.title_id == title_id()) & (Player.bday == '0000-00-00'))
-#     for i in gl:
-#         gl_d = Game_list.get(Game_list.id == i)
-#         gl_d.delete_instance()
-#     chc = Choice.select().where(Choice.title_id == title_id())
-#     for i in chc:
-#         ch_d = Choice.get(Choice.id == i)
-#         ch_d.delete_instance()
-#     rs = Result.select().where(Result.title_id == title_id())
-#     for i in rs:
-#         r_d = Result.get(Result.id == i)
-#         r_d.delete_instance()
-#     if len(pl) > 0: # удаляет запись в -Player- если есть крест сетки
-#         for i in pl:
-#             pl_d = Player.get(Player.id == i)
-#             pl_d.delete_instance()
-#     for i in system:  # удаляет все записи
-#         i.delete_instance()
-#     sys = System(title_id=title_id(), total_athletes=0, total_group=0, max_player=0, stage="", type_table="", page_vid="",
-#                  label_string="", kol_game_string="", choice_flag=False, score_flag=5, visible_game=True,
-#                  stage_exit="", mesta_exit="", no_game="").save()
-
-#     with db:
-#         # записывает в таблицу -Title- новые открытые вкладки
-#         title.tab_enabled = "Титул Участники"
-#         title.save() 
-
-
 def clear_db_before_choice(stage):
     """очищает систему перед повторной жеребьевкой и изменяет кол-во участников если они изменились"""
     msgBox = QMessageBox
@@ -14559,8 +14526,8 @@ def setka_8_full_made(fin):
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
                            ('FONTSIZE', (0, 0), (-1, -1), 6),
                            ('FONTNAME', (1, 0), (1, 16), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 16), 7),
-                           ('LEADING', (1, 0), (1, 16), 7), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)
+                           ('FONTSIZE', (1, 0), (1, 16), 6),
+                           ('LEADING', (1, 0), (1, 16), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)
                         #    ('ALIGN', (1, 0), (1, 16), 'CENTER'),
                            # 10 столбец с 0 по 68 ряд (цвет места)
                            ('TEXTCOLOR', (8, 0), (8, 39), colors.red),
@@ -14568,7 +14535,8 @@ def setka_8_full_made(fin):
                            ('ALIGN', (7, 0), (7, 39), 'LEFT'),
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 39), colors.blue),
-                           ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
+                           ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                           ('VALIGN', (1, 0), (1, 16), 'BOTTOM')
                            ] + ts))
 # === надпись финала
     # h2 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
@@ -15143,17 +15111,18 @@ def setka_16_full_made(fin):
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
-                           ('FONTSIZE', (0, 0), (-1, -1), 7),
+                           ('FONTSIZE', (0, 0), (-1, -1), 5),
                            ('FONTNAME', (1, 0), (1, 32), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 32), 7),
+                           ('FONTSIZE', (1, 0), (1, 32), 5),
+                           ('LEADING', (1, 0), (1, 32), 5), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)
                            # 10 столбец с 0 по 68 ряд (цвет места)
                            ('TEXTCOLOR', (10, 0), (10, 68), colors.red),
                         #    ('ALIGN', (10, 0), (10, 68), 'RIGHT'),
                            ('ALIGN', (9, 0), (9, 68), 'LEFT'),
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 68), colors.blue),
-                           ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
-                           ] + ts))
+                           ('VALIGN', (0, 0), (-1, -1), 'TOP'), # TOP- вверху ячеки, MIDDLE - посередине, BOTTOM - внизу
+                           ('VALIGN', (1, 0), (1, 32), 'BOTTOM')] + ts))
 # === надпись финала
     h2 = PS("normal", fontSize=10, fontName="DejaVuSerif-Italic",
             leftIndent=50, textColor=Color(1, 0, 1, 1))  # стиль параграфа (номера таблиц)
@@ -15680,10 +15649,10 @@ def setka_32_full_made(fin):
 
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
-                           ('FONTSIZE', (0, 0), (-1, -1), 7),
+                           ('FONTSIZE', (0, 0), (-1, -1), 5),
                            ('FONTNAME', (1, 0), (1, 64), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 64), 6),
-                           ('LEADING', (1, 0), (1, 64), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора) 
+                           ('FONTSIZE', (1, 0), (1, 64), 5),
+                           ('LEADING', (1, 0), (1, 64), 5), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора) 
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 68), colors.blue),
                            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -15927,10 +15896,10 @@ def setka_32_2_made(fin):
 
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
-                           ('FONTSIZE', (0, 0), (-1, -1), 6),
+                           ('FONTSIZE', (0, 0), (-1, -1), 5),
                            ('FONTNAME', (1, 0), (1, 64), "DejaVuSerif-Bold"),
-                           ('FONTSIZE', (1, 0), (1, 64), 6),
-                           ('LEADING', (1, 0), (1, 64), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)                          
+                           ('FONTSIZE', (1, 0), (1, 64), 5),
+                           ('LEADING', (1, 0), (1, 64), 5), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)                          
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 68), colors.blue),
                            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -16180,9 +16149,9 @@ def write_in_setka(data, stage, first_mesto, table):
         id_sh_name = all_list[2] # словарь {Фамилия Имя: id}
     #   ================
         flag = 0
-        for key_old in id_sh_name.keys():# вариант где в сетке нет отчество
-            flag = 1
+        for key_old in id_sh_name.keys():# вариант где в сетке нет отчество            
             if key_old is None:
+                flag = 1
                 old_keys = all_list[1] 
                 # Создание нового словаря с переименованными ключами
                 new_product = {}
