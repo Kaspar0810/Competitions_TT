@@ -3513,7 +3513,6 @@ def add_player():
     ms = "" # записвыает место в базу как пустое
     idc = Coach.get(Coach.coach == ch) # получает id тренера
     idp = 112 if flag_otc == 0 else Patronymic.get(Patronymic.patronymic == otc) # если отчество не предусмотренно то пишет отчество нет id = 112
-    # idp = Patronymic.get(Patronymic.patronymic == otc)
     # === вставляет в таблицу player_full =========
     mark = pl.find(' ')
     fam = pl[:mark]
@@ -3561,7 +3560,7 @@ def add_player():
             Coach.update(coach = ch).where(Coach.id == idc).execute()
             Player.update(player=pl, bday=bd_new, rank=rn, city = ct, region = rg, razryad = rz,
                             fio_city=fn_city, fio=fn, pay_rejting=pay_R, comment=comment, coach_id = idc, patronymic_id=idp).where(Player.id == pl_id).execute()
-
+            results = Result.select().where(Result.title_id == title_id()) & ()
         elif txt == "Добавить":
             debt = "долг" if txt_edit == "Спортсмену необходимо оплатить рейтинг!" else ""
             # ==  перевод даты рождения в вид для db
@@ -3865,6 +3864,9 @@ def find_player_in_table_players_full(fam, name, ci, bd):
     for pf in p_full:
         id_full = pf.id
         name_full = pf.player
+        otc_id = pf.patronymic_id
+        patronymics = Patronymic.select().where(Patronymic.id == otc_id).get()
+        otc_full = patronymics.patronymic
         bd_full = str(pf.bday)
         city_full = pf.city
         if (fam_name == name_full and bd == bd_full):
@@ -3873,6 +3875,24 @@ def find_player_in_table_players_full(fam, name, ci, bd):
                         "Если изменился город нажмите -ОК-.\nЕсли это другой спортсмен нажмите -Cancel-",
                                             msgBox.Ok, msgBox.Cancel)
                 if result == msgBox.Ok:
+                    # меняет в таблице -Result- город и игрока на новый
+                    pl_old = f"{name_full} {otc_full}/{city_full}"
+                    pl_new = f"{name_full} {otc_full}/{ci}" 
+                    results = Result.select().where((Result.title_id == title_id()) & ((Result.player1 == pl_old ) | (Result.player2 == pl_old)))
+                    for r in results:
+                        id_res = r.id
+                        if pl_old == r.player1 and pl_old == r.winner:
+                            Result.update(player1=pl_new).where(Result.id == id_res).execute()
+                            Result.update(winner=pl_new).where(Result.id == id_res).execute()
+                        elif pl_old == r.player2 and pl_old == r.winner:
+                            Result.update(player2=pl_new).where(Result.id == id_res).execute()
+                            Result.update(winner=pl_new).where(Result.id == id_res).execute()
+                        elif pl_old == r.player1 and pl_old == r.loser:
+                            Result.update(player1=pl_new).where(Result.id == id_res).execute()
+                            Result.update(loser=pl_new).where(Result.id == id_res).execute()
+                        elif pl_old == r.player2 and pl_old == r.loser:
+                            Result.update(player2=pl_new).where(Result.id == id_res).execute()
+                            Result.update(loser=pl_new).where(Result.id == id_res).execute()
                     city_full = ci 
                     flag_player = 1 # новый город
                 else:
@@ -6746,7 +6766,6 @@ def check_repeat_player(pl, bd):
 def select_player_in_game():
     """выводит фамилии игроков встречи"""
     tab = my_win.tabWidget.currentIndex()
-    # tab_etap = my_win.tabWidget_stage.currentIndex()
     row_num= my_win.tableView.currentIndex().row() # определиние номера строки
     numer_game = my_win.tableView.model().index(row_num, 3).data()
     if tab == 1:
@@ -11297,8 +11316,6 @@ def change_player_between_group_after_draw():
                 count_in_group = my_win.listWidget_second_group.count()
                 gr = gr_pl2
         id_system = system_id(stage)
-        # system = systems.select().where(System.stage == stage).get()
-        # system_etap_id = system.id # id этапа
 
         posev, ok = QInputDialog.getInt(my_win, "Номер посева", "Введите номер посева", min=1, max=(count_in_group + 1))
         if not ok:
@@ -19848,11 +19865,6 @@ def list_double_gamer(player_list, vid):
     catalog = 1
     change_dir(catalog)
     doc.build(story, onFirstPage=func_zagolovok)
-    # if platform == "darwin":  # OS X
-    #     os.system(f"open {view_file}")
-    # elif platform == "win32":  # Windows...
-    #     os.system(f"{view_file}")
-    # change_dir(catalog)
 
 
 def double_family():
@@ -20033,13 +20045,13 @@ def add_delete_double_player_to_list():
     if ct_1 == ct_2:
         city_main = ct_1
     para_full = f"{pl_1}-{pl_2}/{city_main}"
-    # получаем фамилия и первую букву имени
-    mark = pl_1.find(" ")
-    shot_1 = pl_1[:mark + 2]
-    mark = pl_2.find(" ")
-    shot_2 = pl_2[:mark + 2]
-
-    para_shot = f"{shot_1}.-{shot_2}."
+    # # получаем фамилия и первую букву имени
+    # mark = pl_1.find(" ")
+    # shot_1 = pl_1[:mark + 2]
+    # mark = pl_2.find(" ")
+    # shot_2 = pl_2[:mark + 2]
+    # para_shot = f"{shot_1}.-{shot_2}."
+    para_shot = f"{pl_1}-{pl_2}"
     if txt == "Добавить": 
         pl_double = Players_double(player_1=pl_1, region_1=ct_1, r_1=r_1, player_2=pl_2,
                                     region_2=ct_2, r_2=r_2, region_main=city_main, r_sum=sum_r,

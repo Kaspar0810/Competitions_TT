@@ -1,0 +1,23 @@
+2025-12-12 10:43:21,295 - ERROR - Необработанное исключение: AttributeError: type object 'Result' has no attribute 'player_1'
+2025-12-12 10:43:21,299 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 6704, in _normalize_data
+    normalized[cls._meta.combined[key]] = kwargs[key]
+               ~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'player_1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3525, in add_player
+    flag_player_full = find_player_in_table_players_full(fam, name, ci=ct, bd=bd_new)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3884, in find_player_in_table_players_full
+    Result.update(player_1=pl_new).where(Result.id == id_res).execute()
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 6711, in update
+    return ModelUpdate(cls, cls._normalize_data(__data, update))
+                            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 6706, in _normalize_data
+    normalized[getattr(cls, key)] = kwargs[key]
+               ~~~~~~~^^^^^^^^^^
+AttributeError: type object 'Result' has no attribute 'player_1'. Did you mean: 'player1'?
