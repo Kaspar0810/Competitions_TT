@@ -1,0 +1,60 @@
+2026-01-04 13:33:36,197 - ERROR - Необработанное исключение: ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:33:36,198 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3484, in add_player
+    check_age_player(znak, bd)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3727, in check_age_player
+    date_object = datetime.strptime(dr,"%d.%m.%Y")
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 673, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 452, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+                     (data_string, format))
+ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:33:53,702 - ERROR - Необработанное исключение: ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:33:53,703 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3484, in add_player
+    check_age_player(znak, bd)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3727, in check_age_player
+    date_object = datetime.strptime(dr,"%d.%m.%Y")
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 673, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 452, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+                     (data_string, format))
+ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:34:35,121 - ERROR - Необработанное исключение: ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:34:35,121 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3484, in add_player
+    check_age_player(znak, bd)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3727, in check_age_player
+    date_object = datetime.strptime(dr,"%d.%m.%Y")
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 673, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 452, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+                     (data_string, format))
+ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:34:35,317 - ERROR - Необработанное исключение: ValueError: time data '07.05.015' does not match format '%d.%m.%Y'
+2026-01-04 13:34:35,318 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3484, in add_player
+    check_age_player(znak, bd)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3727, in check_age_player
+    date_object = datetime.strptime(dr,"%d.%m.%Y")
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 673, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 452, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+                     (data_string, format))
+ValueError: time data '07.05.015' does not match format '%d.%m.%Y'

@@ -1749,7 +1749,8 @@ def control_date_R_list():
     titles = Title.get(Title.id == title_id())
     r_date = titles.r_date
     year_current = (datetime.today().strftime("%Y"))
-    month_current = int(datetime.today().strftime("%m"))
+    # month_current = int(datetime.today().strftime("%m"))
+    month_current = (datetime.today().strftime("%m"))
     date_current = f"{year_current}_{month_current}"
     if r_date != date_current:
         result = msgBox.information(my_win, "", "Загруженный R_лист, не соответсвует\n"
@@ -14473,7 +14474,7 @@ def setka_8_full_made(fin):
         last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
         fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     for i in range(0, 40):
-        # column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= места ==========
@@ -14535,26 +14536,33 @@ def setka_8_full_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i + 1, 0), (i + 1, 39), 'CENTER')
         style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
-
+     # центрировать счет в партии
+    # for i in range(3, 8, 2):
+    #     for k in range(2, 39, 2):
+    #         fn = ('ALIGN', (i, k), (i, k), 'CENTER')
+    #         style.append(fn)
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
+    
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
                            ('FONTSIZE', (0, 0), (-1, -1), 6),
                            ('FONTNAME', (1, 0), (1, 16), "DejaVuSerif-Bold"),
                            ('FONTSIZE', (1, 0), (1, 16), 6),
-                           ('LEADING', (1, 0), (1, 16), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)
+                           ('LEADING', (1, 0), (1, 16), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)                          
                         #    ('ALIGN', (1, 0), (1, 16), 'CENTER'),
                            # 10 столбец с 0 по 68 ряд (цвет места)
                            ('TEXTCOLOR', (8, 0), (8, 39), colors.red),
                            ('ALIGN', (8, 0), (8, 39), 'RIGHT'),
-                           ('ALIGN', (7, 0), (7, 39), 'LEFT'),
+                           ('ALIGN', (7, 0), (7, 39), 'LEFT'),   
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 39), colors.blue),
                            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                           ('VALIGN', (1, 0), (1, 16), 'BOTTOM')
-                           ] + ts))
+                           ('VALIGN', (1, 0), (1, 16), 'BOTTOM')] + ts))
+                          
+
+                        #    [('ALIGN', (3, 2), (3, 2), 'CENTER')]))
 # === надпись финала
     # h2 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
     #         leftIndent=50, textColor=Color(1, 0, 1, 1))  # стиль параграфа (номера таблиц)
@@ -15503,7 +15511,7 @@ def setka_32_full_made(fin):
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
     for i in range(0, strok):
-        # column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= нумерация встреч сетки ==========
@@ -15658,8 +15666,23 @@ def setka_32_full_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i, 0), (i, 206), 'CENTER')
         style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
+    # центрировать счет в партии лист-1
+    for i in range(3, 12, 2):
+        for k in range(2, 68, 2):
+            fn = ('ALIGN', (i, k), (i, k), 'CENTER')
+            style.append(fn)
+     # центрировать счет в партии лист-2
+    for i in range(5, 12, 2):
+        for k in range(75, 138, 2):
+            fn = ('ALIGN', (i, k), (i, k), 'CENTER')
+            style.append(fn)
+     # центрировать счет в партии лист-3 1-я половина
+    for i in range(3, 12, 2):
+        for k in range(139, 177, 2):
+            fn = ('ALIGN', (i, k), (i, k), 'CENTER')
+            style.append(fn)
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
