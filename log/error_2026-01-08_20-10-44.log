@@ -1,0 +1,7 @@
+2026-01-08 20:10:58,267 - ERROR - Необработанное исключение: NameError: name 'system' is not defined
+2026-01-08 20:10:58,268 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19913, in schedule_net
+    for sys in system:  # отбирает финалы с сеткой
+               ^^^^^^
+NameError: name 'system' is not defined

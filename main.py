@@ -305,6 +305,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tabWidget_2.setTabVisible(1, False)
         self.tabWidget_2.setTabVisible(2, False)
         self.tabWidget_2.setTabVisible(3, False)
+        self.tabWidget_2.setTabVisible(4, False)
 
 
     def closeEvent(self, event):
@@ -19906,7 +19907,22 @@ def double_family():
 
 
 def schedule_net():
-     my_win.tabWidget_3.setTabEnabled(2, True)
+    """Создает расписание встречи в финалах по сетке по дате времени и номеру стола"""
+    fin = []
+    system = System.select().where(System.title_id == title_id())
+    my_win.tabWidget_2.setCurrentIndex(4)
+    my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
+    my_win.tableView_schedule.show()
+    for sys in system:  # отбирает финалы с сеткой
+        if sys.stage != "Предварительный" and sys.stage != "Полуфиналы":
+            txt = sys.label_string
+            txt = txt[:5]
+            if txt == "Сетка":
+                fin.append(sys.stage)
+    fin, ok = QInputDialog.getItem(
+                    my_win, "Финалы", "Выберите финал, где создать расписание.", fin, 0, False)
+    fltr = filter.select().where(Result.number_group == fin)
+
     # book = op.Workbook()
     # worksheet = book.active
     # names_headers = ["№", "Фамилия, Имя", "Город"]
@@ -20481,6 +20497,6 @@ my_win.Button_add_double.clicked.connect(add_delete_double_player_to_list)
 my_win.Button_double_sort_R.clicked.connect(sort_double_player)
 my_win.Button_double_sort_region.clicked.connect(sort_double_player)
 
-
+# my_win.Button_made_schedule.clicked.connect(schedule_net)
 my_win.Button_pay.clicked.connect(check_pay)
 sys.exit(app.exec())

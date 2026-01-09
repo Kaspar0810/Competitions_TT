@@ -1,0 +1,7 @@
+2026-01-08 20:14:34,953 - ERROR - Необработанное исключение: NameError: name 'Syste' is not defined
+2026-01-08 20:14:34,954 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19911, in schedule_net
+    system = System.select().where(Syste.title_id == title_id())
+                                   ^^^^^
+NameError: name 'Syste' is not defined
