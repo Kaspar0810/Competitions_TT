@@ -1,0 +1,7 @@
+2026-01-11 13:59:56,201 - ERROR - Необработанное исключение: TypeError: 'datetime.date' object is not subscriptable
+2026-01-11 13:59:56,203 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20263, in check_schedule
+    year = d_start[:4]
+           ~~~~~~~^^^^
+TypeError: 'datetime.date' object is not subscriptable

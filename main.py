@@ -75,6 +75,13 @@ from PyPDF2 import PdfMerger
 from main_window import Ui_MainWindow
 from start_form import Ui_Form
 from datetime import *
+import locale
+# # Установка русской локали (для названий месяцев)
+# try:
+#     locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
+# except:
+#     locale.setlocale(locale.LC_TIME, 'Russian_Russia.1251')
+
 from PyQt5 import *
 from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, QVariant
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
@@ -276,7 +283,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menuBar()
 
         self.Button_title_made.setEnabled(False)
-        self.Button_system_made.setEnabled(False)
+        # self.Button_system_made.setEnabled(False)
         self.tabWidget.setCurrentIndex(0)  # включает вкладку титул
         # ++ отключение страниц
         self.tabWidget.setTabEnabled(1, True)
@@ -4660,6 +4667,7 @@ def page():
         my_win.comboBox_second_group.setEnabled(False)
  
         load_combo_etap_begunki()
+        load_combo_schedule_date()
         # ======
 
 
@@ -19906,13 +19914,37 @@ def double_family():
     list_duplicate_family(double_id)
 
 
+def format_mysql_date(date_str):
+    """Преобразует дату из MySQL формата (YYYY-MM-DD) в 'число месяц' Пример: 2024-01-11 → '11 января'"""
+    MONTHS_RU = {
+        1: 'января', 2: 'февраля', 3: 'марта', 4: 'апреля',
+        5: 'мая', 6: 'июня', 7: 'июля', 8: 'августа',
+        9: 'сентября', 10: 'октября', 11: 'ноября', 12: 'декабря'
+        }
+    if isinstance(date_str, datetime):
+        date_obj = date_str
+    else:
+        date_obj = datetime.strptime(str(date_str), '%Y-%m-%d')
+
+    day = date_obj.day
+    month = MONTHS_RU[date_obj.month]
+
+    return f"{day} {month}"
+
+
 def schedule_net():
     """Создает расписание встречи в финалах по сетке по дате времени и номеру стола"""
+    # player_list = Result.select().where(Result.title_id == title_id())
+    # fin = []
+    # data = []
     fin = []
+
+    # model = MyTableModel(data)
+   
     system = System.select().where(System.title_id == title_id())
-    my_win.tabWidget_2.setCurrentIndex(4)
-    my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
-    my_win.tableView_schedule.show()
+    # my_win.tabWidget_2.setCurrentIndex(4)
+    # my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
+    # my_win.tableView_schedule.show()
     for sys in system:  # отбирает финалы с сеткой
         if sys.stage != "Предварительный" and sys.stage != "Полуфиналы":
             txt = sys.label_string
@@ -19921,39 +19953,48 @@ def schedule_net():
                 fin.append(sys.stage)
     fin, ok = QInputDialog.getItem(
                     my_win, "Финалы", "Выберите финал, где создать расписание.", fin, 0, False)
-    fltr = filter.select().where(Result.number_group == fin)
 
-    # book = op.Workbook()
-    # worksheet = book.active
-    # names_headers = ["№", "Фамилия, Имя", "Город"]
-    # for m in range(1, 4):
-    #     c =  worksheet.cell(row = 1, column = m)
-    #     c.value = names_headers[m - 1]
+    player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
 
-    # k = 2    
-    # for pl in players:
-    #     fio = pl.player
-    #     gorod = pl.city
-    #     n = k - 1
-    #     c1 = worksheet.cell(row = k, column = 1)
-    #     c1.value = n
-    #     c2 = worksheet.cell(row = k, column = 2)
-    #     c2.value = fio
-    #     c3 = worksheet.cell(row = k, column = 3)
-    #     c3.value = gorod
- 
-    #     k += 1
+    fill_table_schedule(player_list)
+    # player_selected = player_list.dicts().execute()    
+    # row_count = len(player_selected)  # кол-во строк в таблице
+    # num_columns = [0, 3, 4, 5, 17, 18] # номера столбцов в таблице базы данных, откуда брать данные
+    # my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection) # выделение несколких строк по клику мышью
 
-    # t_id = Title.get(Title.id == title_id())
+    # # model.setHorizontalHeaderLabels(['№ встречи','Игрок-1', 'Игрок-2', 'дата', 'Город', 'Регион', 'Разряд'])
+    # model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время'])
+    # if row_count != 0:  # список удаленных игроков пуст если R = 0
+       
+    #     for row in range(row_count):  # добавляет данные из базы в TableWidget
+    #         item_1 = str(list(player_selected[row].values())[num_columns[0]])
+    #         item_2 = str(list(player_selected[row].values())[num_columns[1]])
+    #         item_3 = str(list(player_selected[row].values())[num_columns[2]])
+    #         item_4 = str(list(player_selected[row].values())[num_columns[3]])
+    #         item_5 = str(list(player_selected[row].values())[num_columns[4]])
+    #         if item_5 != "None":
+    #             item_5 = format_mysql_date(date_str=item_5)
+    #         item_6 = str(list(player_selected[row].values())[num_columns[5]])
+    #         # item_7 = str(list(player_selected[row].values())[num_columns[6]])
+    #         # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
+    #         data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
+    #         data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
 
-    # worksheet.column_dimensions['A'].width = 8
-    # worksheet.column_dimensions['B'].width = 25
-    # worksheet.column_dimensions['C'].width = 25
-   
-    # sex = t_id.gamer
-    # f_name = f"{sex}_двойные _фамилии.xlsx"
-    # filename, filter = QtWidgets.QFileDialog.getSaveFileName(my_win, 'Save file', f'{f_name}','Excel files (*.xlsx)')
-    # book.save(filename)
+    #     my_win.tableView_schedule.setModel(model)
+    #     font = my_win.tableView_schedule.font()
+    #     font.setPointSize(11)
+    #     my_win.tableView_schedule.setFont(font)
+    #         # my_win.tableView.setSortingEnabled(True)
+    #     my_win.tableView_schedule.horizontalHeader().setFont(QFont("Times", 12, QFont.Bold)) # делает заголовки жирный и размер 13
+    #     my_win.tableView_schedule.horizontalHeader().setStyleSheet("background-color:yellow;") # делает фон заголовков светлоголубой
+
+    #     my_win.tableView_schedule.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
+    #         # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
+    #     my_win.tableView_schedule.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
+    #     my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
+    # my_win.tableView_schedule.show()
+    my_win.lineEdit_schedule_time.setInputMask('00.00')
+    load_combo_schedule_date()
 
 
 def find_duplicate_values(double_pl_dict):
@@ -20205,6 +20246,127 @@ def sort_double_player():
     fill_table(player_list)
 
 
+def fill_table_schedule(player_list):
+    """загружает таблицу TableView расписания"""
+    data = []
+    # data_table_tmp = []
+    data_table_list = []
+    model = MyTableModel(data)
+    # system = System.select().where(System.title_id == title_id())
+    my_win.tabWidget_2.setCurrentIndex(4)
+    my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
+    # my_win.tableView_schedule.show()
+    # player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
+    player_selected = player_list.dicts().execute()    
+    row_count = len(player_selected)  # кол-во строк в таблице
+    num_columns = [0, 3, 4, 5, 17, 18] # номера столбцов в таблице базы данных, откуда брать данные
+    my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection) # выделение несколких строк по клику мышью
+    model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время'])
+    if row_count != 0:  # список удаленных игроков пуст если R = 0     
+        for row in range(row_count):  # добавляет данные из базы в TableWidget
+            item_1 = str(list(player_selected[row].values())[num_columns[0]])
+            item_2 = str(list(player_selected[row].values())[num_columns[1]])
+            item_3 = str(list(player_selected[row].values())[num_columns[2]])
+            item_4 = str(list(player_selected[row].values())[num_columns[3]])
+            item_5 = str(list(player_selected[row].values())[num_columns[4]])
+            if item_5 != "None":
+                item_5 = format_mysql_date(date_str=item_5)
+            item_6 = str(list(player_selected[row].values())[num_columns[5]])
+            # item_7 = str(list(player_selected[row].values())[num_columns[6]])
+            # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
+            data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
+            data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
+    my_win.tableView_schedule.setModel(model)
+    font = my_win.tableView_schedule.font()
+    font.setPointSize(11)
+    my_win.tableView_schedule.setFont(font)
+            # my_win.tableView.setSortingEnabled(True)
+    my_win.tableView_schedule.horizontalHeader().setFont(QFont("Times", 12, QFont.Bold)) # делает заголовки жирный и размер 13
+    my_win.tableView_schedule.horizontalHeader().setStyleSheet("background-color:yellow;") # делает фон заголовков светлоголубой
+
+    my_win.tableView_schedule.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
+            # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
+    my_win.tableView_schedule.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
+    my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
+    my_win.tableView_schedule.show()
+
+
+def load_combo_schedule_date():
+    """загружает в комбо даты встреч для расписания"""
+    date_list = []
+    my_win.comboBox_schedule_date.clear()
+    my_win.comboBox_filter_shedule_date.clear()
+    month_list = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+    titles = Title.select().where(Title.id == title_id()).get()
+    d_start = titles.data_start
+    d_end = titles.data_end
+    deadline = d_start + timedelta(days=0)
+
+    while d_end > deadline:
+        deadline += timedelta(days=1)    
+        txt = str(deadline)
+        # year = txt[:4]
+        month = int(txt[5:7])
+        day = txt[8:]
+        day_txt = day[0]
+        day_str = day[1] if day_txt == '0' else day
+        month_str = month_list[month - 1]
+        date_str = f"{day_str} {month_str}"
+        date_list.append(date_str)
+    my_win.comboBox_schedule_date.addItems(date_list)
+    my_win.comboBox_filter_shedule_date.addItems(date_list)
+
+
+def check_schedule():
+    """Изменяет спортсменов по предварительной заявке на реальных"""
+    month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
+                  "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
+    titles = Title.select().where(Title.id == title_id()).get()
+    d_start = titles.data_start
+    date_txt = my_win.comboBox_schedule_date.currentText()
+    znak = date_txt.find(" ")
+    year_txt = str(d_start)
+    day_txt = date_txt[:znak]
+    month_txt = date_txt[znak + 1:]
+    count = len(day_txt)
+    day = day_txt if count == 2 else f"0{day_txt}"
+    month = month_dict[month_txt]
+    year = year_txt[:4]
+    date_str = f"{year}-{month}-{day}"
+    indices = my_win.tableView_schedule.selectionModel().selectedRows()
+    for index in sorted(indices):
+        rows = index.row()
+        id_vst = my_win.tableView_schedule.model().index(rows, 0).data() # данные ячейки tableView
+        vst = my_win.tableView_schedule.model().index(rows, 1).data() # данные ячейки tableView
+        app = Result.update(schedule_date=date_str).where((Result.id == id_vst) & (Result.tours == vst))
+        app.execute()
+
+
+def schedule_filter():
+    """фильтрация расписания по дате и времени"""
+    schedule_date_txt = my_win.comboBox_filter_shedule_date.currentText()
+    month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
+                  "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
+    titles = Title.select().where(Title.id == title_id()).get()
+    d_start = titles.data_start
+    znak = schedule_date_txt.find(" ")
+    year_txt = str(d_start)
+    day_txt = schedule_date_txt[:znak]
+    month_txt = schedule_date_txt[znak + 1:]
+    count = len(day_txt)
+    day = day_txt if count == 2 else f"0{day_txt}"
+    month = month_dict[month_txt]
+    year = year_txt[:4]
+    date_str = f"{year}-{month}-{day}"
+    player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_str))
+    player_selected = player_list.dicts().execute()
+    fill_table_schedule(player_list)
+
+# def load_combo_schedule():
+#     """загружает комбобокс фильтра для расписания"""
+
+    # player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_txt))
+    # fill_table(player_list)
 
 # def proba():
 #     choices = Choice.select()
@@ -20284,14 +20446,13 @@ def sort_double_player():
     # db.commit()
     # cursor.close()
 # ===== создание, удаление, переименование столбцов
-    # migrator = MySQLMigrator(db) 
-    # with db.atomic():
+#    with db.atomic():
         # migrate(migrator.drop_column('choices', 'posev_super_final')) # удаление столбца
         # migrate(migrator.alter_column_type('system', 'mesta_exit', IntegerField()))
-        # migrate(migrator.rename_column('players', 'full_name', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
+        # migrate(migrator.rename_column('results', 'schedule_time', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
-        # migrate(migrator.add_column('players', 'fio', CharField(null=True))) # null=True допускает пустое значение
+        # migrate(migrator.add_column('results', 'schedule_time', DateField(null=True))) # null=True допускает пустое значение
     #     # Добавляем внешний ключ
     #     migrate(migrator.add_foreign_key_constraint(
     #         'game_lists',  # таблица куда добавляем
@@ -20416,7 +20577,7 @@ my_win.checkBox_repeat_regions.stateChanged.connect(change_choice_group)
 # при изменении чекбокса активирует кнопку создать
 my_win.checkBox.stateChanged.connect(button_title_made_enable)
 # при изменении чекбокса активирует кнопку создать
-my_win.checkBox_3.stateChanged.connect(button_system_made_enable)
+# my_win.checkBox_3.stateChanged.connect(button_system_made_enable)
 # при изменении чекбокса показывает поля для ввода счета
 my_win.checkBox_4.stateChanged.connect(change_status_visible_and_score_game)
 # при изменении чекбокса показывает поля для ввода счета финала)
@@ -20493,10 +20654,10 @@ my_win.Button_made_page_pdf.clicked.connect(made_pdf_list)
 my_win.Button_view_page_pdf.clicked.connect(view_all_page_pdf)
 my_win.Button_randevy.clicked.connect(randevy_list)
 my_win.Button_made_schedule.clicked.connect(schedule_net)
+my_win.Button_schedule_ok.clicked.connect(check_schedule)
 my_win.Button_add_double.clicked.connect(add_delete_double_player_to_list)
 my_win.Button_double_sort_R.clicked.connect(sort_double_player)
 my_win.Button_double_sort_region.clicked.connect(sort_double_player)
-
-# my_win.Button_made_schedule.clicked.connect(schedule_net)
+my_win.Button_filter_shedule.clicked.connect(schedule_filter)
 my_win.Button_pay.clicked.connect(check_pay)
 sys.exit(app.exec())

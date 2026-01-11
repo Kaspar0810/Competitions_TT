@@ -267,6 +267,8 @@ class Result(BaseModel):
     round = CharField(20)
     system_id = ForeignKeyField(System)
     sex = CharField(10)
+    schedule_date = DateField()
+    schedule_time = CharField(10)
 
     class Meta:
         db_table = "results"

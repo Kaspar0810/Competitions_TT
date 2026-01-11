@@ -1,0 +1,9 @@
+2026-01-11 16:01:10,365 - ERROR - Необработанное исключение: ValueError: Invalid format string
+2026-01-11 16:01:10,366 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19977, in schedule_net
+    item_5 = format_mysql_date(date_str=item_5)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19926, in format_mysql_date
+    return date_obj.strftime('%-d %B').lower()
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+ValueError: Invalid format string
