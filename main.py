@@ -20342,6 +20342,18 @@ def load_combo_schedule_time():
     """Заполнение комбобокса для фильтра расписания"""
     time_list = []
     my_win.comboBox_filter_schedule_time.clear()
+    gr_fin = my_win.comboBox_select_group_schedule.currentText()
+    results = Result.select().where((Result.title_id == title_id()) & (Result.number_group == gr_fin)).order_by(Result.schedule_time)
+    # result_sort = results.select()where(Result.schedule_time is Not Null).order()
+    for i in results:
+        s_time = i.schedule_time
+        if s_time is not None:
+            time_txt = str(s_time)
+            time_str = time_txt[:5]
+            if time_str not in time_list:
+                time_list.append(time_str)
+    time_list.sort()
+    my_win.comboBox_filter_schedule_time .addItems(time_list)
 
 
 def load_combo_schedule_stage():
@@ -20605,6 +20617,7 @@ my_win.comboBox_kategor_ref.currentTextChanged.connect(add_referee_to_db)
 my_win.comboBox_kategor_sec.currentTextChanged.connect(add_referee_to_db)
 
 my_win.comboBox_select_stage_schedule.currentTextChanged.connect(select_stage_for_schedule)
+my_win.comboBox_select_group_schedule.currentTextChanged.connect(load_combo_schedule_time)
 
 
 # =======  отслеживание переключение чекбоксов =========

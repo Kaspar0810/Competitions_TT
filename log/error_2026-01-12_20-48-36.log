@@ -1,0 +1,6 @@
+2026-01-12 20:48:57,211 - ERROR - Необработанное исключение: TypeError: index 0 has type 'datetime.time' but 'str' is expected
+2026-01-12 20:48:57,212 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 20351, in load_combo_schedule_time
+    my_win.comboBox_filter_schedule_time .addItems(time_list)
+TypeError: index 0 has type 'datetime.time' but 'str' is expected
