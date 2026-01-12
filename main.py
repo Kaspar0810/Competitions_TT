@@ -75,12 +75,6 @@ from PyPDF2 import PdfMerger
 from main_window import Ui_MainWindow
 from start_form import Ui_Form
 from datetime import *
-import locale
-# # Установка русской локали (для названий месяцев)
-# try:
-#     locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
-# except:
-#     locale.setlocale(locale.LC_TIME, 'Russian_Russia.1251')
 
 from PyQt5 import *
 from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, QVariant
@@ -4665,7 +4659,8 @@ def page():
         my_win.lineEdit_range_tours.hide()
         my_win.comboBox_first_group.setEnabled(False)
         my_win.comboBox_second_group.setEnabled(False)
- 
+        my_win.lineEdit_schedule_time.setInputMask('00.00')
+        load_combo_schedule_stage()
         load_combo_etap_begunki()
         load_combo_schedule_date()
         # ======
@@ -13370,6 +13365,31 @@ def begunki_made():
     os.chdir("..") # возврат на предыдущий уровень
 
 
+def select_stage_for_schedule():
+    """выбор финалов или номеров групп для фильтра расписания"""
+    group_etap_list = ["Предварительный", "1-й полуфинал", "2-й полуфинал"]
+    my_win.comboBox_select_group_schedule.clear()
+    systems = System.select().where(System.title_id == title_id())
+    group_list = ["все"]
+    stage = my_win.comboBox_select_stage_schedule.currentText()
+
+    if stage in group_etap_list:
+        id_system = system_id(stage)
+        sys_id = systems.select().where(System.id == id_system).get()
+        group = sys_id.total_group
+        group_list = [f"{i} группа" for i in range(1, group + 1)] # генератор списка
+        group_list.insert(0, "все")
+    elif stage == "Одна таблица":
+        pass
+    else:
+        for k in systems:
+            if k.stage not in group_etap_list:
+                group_list.append(k.stage)
+    my_win.comboBox_select_group_schedule.addItems(group_list)
+    my_win.comboBox_select_group_schedule.setCurrentIndex(0)
+
+
+
 def select_stage_for_begunki():
     """выбор финалов или номеров групп для печати бегунков"""
     group_etap_list = ["Предварительный", "1-й полуфинал", "2-й полуфинал"]
@@ -20271,7 +20291,8 @@ def fill_table_schedule(player_list):
             item_5 = str(list(player_selected[row].values())[num_columns[4]])
             if item_5 != "None":
                 item_5 = format_mysql_date(date_str=item_5)
-            item_6 = str(list(player_selected[row].values())[num_columns[5]])
+            item_6_txt = str(list(player_selected[row].values())[num_columns[5]])
+            item_6 = item_6_txt[:5] 
             # item_7 = str(list(player_selected[row].values())[num_columns[6]])
             # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
             data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
@@ -20286,8 +20307,9 @@ def fill_table_schedule(player_list):
 
     my_win.tableView_schedule.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
             # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
-    my_win.tableView_schedule.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
+    # my_win.tableView_schedule.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
     my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
+    my_win.tableView_schedule.hideColumn(0)
     my_win.tableView_schedule.show()
 
 
@@ -20316,9 +20338,27 @@ def load_combo_schedule_date():
     my_win.comboBox_schedule_date.addItems(date_list)
     my_win.comboBox_filter_shedule_date.addItems(date_list)
 
+def load_combo_schedule_time():
+    """Заполнение комбобокса для фильтра расписания"""
+    time_list = []
+    my_win.comboBox_filter_schedule_time.clear()
+
+
+def load_combo_schedule_stage():
+    """Заполняет комбо для фильтра этапами соревнования"""
+    my_win.comboBox_select_stage_schedule.clear()
+    my_win.comboBox_select_group_schedule.clear()
+    stage_system = ["-Выберите этап-"]
+    results = Result.select().where(Result.title_id == title_id())
+    for i in results:
+        stage = i.system_stage
+        if stage not in stage_system:
+            stage_system.append(stage)
+    my_win.comboBox_select_stage_schedule.addItems(stage_system)
+
 
 def check_schedule():
-    """Изменяет спортсменов по предварительной заявке на реальных"""
+    """Записывает в таблицу расписание встреч"""
     month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
                   "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
     titles = Title.select().where(Title.id == title_id()).get()
@@ -20333,12 +20373,16 @@ def check_schedule():
     month = month_dict[month_txt]
     year = year_txt[:4]
     date_str = f"{year}-{month}-{day}"
+    time_txt = my_win.lineEdit_schedule_time.text()
+    hour = time_txt[:2]
+    minuta = time_txt[3:]
+    time_str = f"{hour}:{minuta}"
     indices = my_win.tableView_schedule.selectionModel().selectedRows()
     for index in sorted(indices):
         rows = index.row()
         id_vst = my_win.tableView_schedule.model().index(rows, 0).data() # данные ячейки tableView
         vst = my_win.tableView_schedule.model().index(rows, 1).data() # данные ячейки tableView
-        app = Result.update(schedule_date=date_str).where((Result.id == id_vst) & (Result.tours == vst))
+        app = Result.update(schedule_date=date_str, schedule_time=time_str).where((Result.id == id_vst) & (Result.tours == vst))
         app.execute()
 
 
@@ -20359,9 +20403,13 @@ def schedule_filter():
     year = year_txt[:4]
     date_str = f"{year}-{month}-{day}"
     player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_str))
-    player_selected = player_list.dicts().execute()
+    # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
+
+# def filter_schedule():
+#     """Загружает комбобокс для фильтра расписания"""
+#     player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_txt))
 # def load_combo_schedule():
 #     """загружает комбобокс фильтра для расписания"""
 
@@ -20392,12 +20440,10 @@ def schedule_filter():
 #     #     Player.update(region=reg).execute()
 #     print("Все записи обновлены")
 # =======        
-# def proba():
-    # ========= вариант ИИ жеребьевки групп ========
-   
-    # ======================
-    # myconn = pymysql.connect(host = "localhost", user = "root", passwd = "db_pass", database = "mysql_db") 
-     # ========== создать таблицу    
+# def proba(): 
+#     # ======================
+#     myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
+    # ========== создать таблицу    
     # class Choice_double_player(BaseModel):
     #     double_player = CharField(70)    
     #     region = CharField()
@@ -20413,7 +20459,7 @@ def schedule_filter():
 
     # db.create_tables([Choice_double_player])
     # db.close()
-#    # ============ импорт новых данных в mysql (вариант перевод данных из соревновательной базы на EXCEL для работы в программе)=========
+    # ============ импорт новых данных в mysql (вариант перевод данных из соревновательной базы на EXCEL для работы в программе)=========
     # import glob
     # fname = QFileDialog.getOpenFileName(
     #     my_win, "Выбрать файл для конвертации в csv", "", "Excel files(*.xls *.xlsx)")
@@ -20446,23 +20492,15 @@ def schedule_filter():
     # db.commit()
     # cursor.close()
 # ===== создание, удаление, переименование столбцов
-#    with db.atomic():
-        # migrate(migrator.drop_column('choices', 'posev_super_final')) # удаление столбца
+    # with db.atomic():
+    #     migrate(migrator.drop_column('results', 'schedule_time')) # удаление столбца
+        # migrate(migrator.alter_column_type('system', 'mesta_exit', IntegerField()))
         # migrate(migrator.alter_column_type('system', 'mesta_exit', IntegerField()))
         # migrate(migrator.rename_column('results', 'schedule_time', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
         # migrate(migrator.add_column('results', 'schedule_time', DateField(null=True))) # null=True допускает пустое значение
-    #     # Добавляем внешний ключ
-    #     migrate(migrator.add_foreign_key_constraint(
-    #         'game_lists',  # таблица куда добавляем
-    #         'player_double_id', # новый столбец
-    #         'Players_double',    # целевая таблица на которую ссылка id
-    #         'id',       # целевой столбец
-    #         on_delete='SET NULL'  # опционально: действие при удалении
-    #         ))
-    
-
+   
 #     db.close()
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
 
@@ -20565,6 +20603,8 @@ my_win.comboBox_referee.currentTextChanged.connect(referee)
 my_win.comboBox_secretary.currentTextChanged.connect(referee)
 my_win.comboBox_kategor_ref.currentTextChanged.connect(add_referee_to_db)
 my_win.comboBox_kategor_sec.currentTextChanged.connect(add_referee_to_db)
+
+my_win.comboBox_select_stage_schedule.currentTextChanged.connect(select_stage_for_schedule)
 
 
 # =======  отслеживание переключение чекбоксов =========

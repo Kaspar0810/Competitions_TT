@@ -1,0 +1,7 @@
+2026-01-12 13:45:55,680 - ERROR - Необработанное исключение: NameError: name 'date_txt' is not defined
+2026-01-12 13:45:55,681 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 20386, in filter_schedule
+    player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_txt))
+                                                                                                   ^^^^^^^^
+NameError: name 'date_txt' is not defined

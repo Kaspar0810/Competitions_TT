@@ -4864,8 +4864,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -4877,8 +4877,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -5490,8 +5490,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6002,8 +6002,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6731,8 +6731,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6851,8 +6851,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -7402,19 +7402,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="Line" name="line_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>288</y>
-        <width>221</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
      <widget class="QPushButton" name="Button_proba">
       <property name="geometry">
        <rect>
@@ -7434,7 +7421,7 @@
         <x>5</x>
         <y>0</y>
         <width>231</width>
-        <height>161</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="font">
@@ -7465,7 +7452,7 @@
         <string>Выбор этапа</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox_select_stage_begunki_2">
+      <widget class="QComboBox" name="comboBox_select_stage_schedule">
        <property name="geometry">
         <rect>
          <x>4</x>
@@ -7482,7 +7469,7 @@
        <property name="geometry">
         <rect>
          <x>28</x>
-         <y>72</y>
+         <y>113</y>
          <width>59</width>
          <height>20</height>
         </rect>
@@ -7501,7 +7488,7 @@
        <property name="geometry">
         <rect>
          <x>125</x>
-         <y>72</y>
+         <y>112</y>
          <width>82</width>
          <height>19</height>
         </rect>
@@ -7520,7 +7507,7 @@
        <property name="geometry">
         <rect>
          <x>6</x>
-         <y>98</y>
+         <y>133</y>
          <width>105</width>
          <height>25</height>
         </rect>
@@ -7536,7 +7523,7 @@
        <property name="geometry">
         <rect>
          <x>116</x>
-         <y>98</y>
+         <y>133</y>
          <width>105</width>
          <height>25</height>
         </rect>
@@ -7546,7 +7533,7 @@
        <property name="geometry">
         <rect>
          <x>6</x>
-         <y>131</y>
+         <y>160</y>
          <width>105</width>
          <height>24</height>
         </rect>
@@ -7572,7 +7559,7 @@
        <property name="geometry">
         <rect>
          <x>117</x>
-         <y>131</y>
+         <y>160</y>
          <width>105</width>
          <height>24</height>
         </rect>
@@ -7594,6 +7581,67 @@
         <string>Сброс</string>
        </property>
       </widget>
+      <widget class="Line" name="line_22">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>357</y>
+         <width>221</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_92">
+       <property name="geometry">
+        <rect>
+         <x>25</x>
+         <y>70</y>
+         <width>181</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>Номер группы, финала</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_select_group_schedule">
+       <property name="geometry">
+        <rect>
+         <x>6</x>
+         <y>90</y>
+         <width>217</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <property name="insertPolicy">
+        <enum>QComboBox::InsertAlphabetically</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="Line" name="line_21">
+      <property name="geometry">
+       <rect>
+        <x>139</x>
+        <y>567</y>
+        <width>221</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
      </widget>
     </widget>
    </widget>
