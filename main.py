@@ -528,7 +528,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # выключает пункты меню пока не создана система
         self.choice_one_table_Action.setEnabled(False)
         self.choice_gr_Action.setEnabled(False)
-        self.choice_pf_Action.setEnabled(False)
+        self.choice_pf_Action.setEnabled(True)
         self.choice_fin_Action.setEnabled(False)
         self.choice_double_Action.setEnabled(False)
 
@@ -4461,7 +4461,7 @@ def page():
             my_win.comboBox_table_1.hide()
             my_win.comboBox_page_vid.setEnabled(False)
             my_win.Button_etap_made.setEnabled(False)
-            my_win.Button_system_made.setEnabled(False)
+            # my_win.Button_system_made.setEnabled(False)
             my_win.label_33.setText(f"Всего {total_game} игр")
             my_win.label_33.show()
             # сделать правильную сортировку по группам
@@ -5869,8 +5869,8 @@ def player_in_setka_and_write_Game_list_and_Result(fin, posev_data):
     tds_full_name_city = all_list[3]
     k = 0
     for r in tds:
-        if r != "X":
-            znak = r.find("/")
+        if r != "\nX":
+            znak = r.find("\n")
             family = r[:znak]
             id_pl = all_list[2][family]
             player_id = int(id_pl)
@@ -11140,7 +11140,9 @@ def add_item_listwidget():
             if my_win.comboBox_edit_etap1.currentText() == "Предварительный":
                 group = choices.select().where(Choice.group == gr).order_by(Choice.posev_group)
             elif my_win.comboBox_edit_etap1.currentText() == "1-й полуфинал":
-                group = choices.select().where(Choice.sf_group == gr).order_by(Choice.posev_sf)
+                group = choices.select().where((Choice.sf_group == gr) & (Choice.semi_final == 1)).order_by(Choice.posev_sf)
+            elif my_win.comboBox_edit_etap1.currentText() == "2-й полуфинал":
+                group = choices.select().where((Choice.sf_group == gr) & (Choice.semi_final == 2)).order_by(Choice.posev_sf)
             else: # финалы
                 flag_fin = 1
                 final = my_win.comboBox_first_group.currentText()
@@ -11150,7 +11152,9 @@ def add_item_listwidget():
             if my_win.comboBox_edit_etap2.currentText() == "Предварительный":
                 group = choices.select().where(Choice.group == gr).order_by(Choice.posev_group)
             elif my_win.comboBox_edit_etap2.currentText() == "1-й полуфинал":
-                group = choices.select().where(Choice.sf_group == gr).order_by(Choice.posev_sf) 
+                group = choices.select().where((Choice.sf_group == gr) & (Choice.semi_final == 1)).order_by(Choice.posev_sf) 
+            elif my_win.comboBox_edit_etap2.currentText() == "2-й полуфинал":
+                group = choices.select().where((Choice.sf_group == gr) & (Choice.semi_final == 2)).order_by(Choice.posev_sf) 
             else: # финалы
                 flag_fin = 1
                 final = my_win.comboBox_second_group.currentText()
@@ -11283,7 +11287,7 @@ def change_player_between_group_after_draw():
                 player_id = players.select().where(Player.fio_city == pl).get()               
             else:
                 region = pl[znak1 + 1:znak2]
-                player_id = players.select().where((Player.player == family_name) & (Player.region == region)).get()
+                player_id = players.select().where((Player.fio == family_name) & (Player.region == region)).get()
             pl_id = player_id.id
             full_name = player_id.fio_city
             full_name_list.append(full_name)
@@ -14503,7 +14507,7 @@ def setka_8_full_made(fin):
         last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
         fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     for i in range(0, 40):
-        column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        # column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= места ==========
@@ -14570,8 +14574,8 @@ def setka_8_full_made(fin):
     #     for k in range(2, 39, 2):
     #         fn = ('ALIGN', (i, k), (i, k), 'CENTER')
     #         style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
     
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
@@ -14718,8 +14722,8 @@ def setka_8_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i + 1, 0), (i + 1, 39), 'CENTER')
         style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
 
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
@@ -15540,7 +15544,7 @@ def setka_32_full_made(fin):
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
     for i in range(0, strok):
-        column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        # column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= нумерация встреч сетки ==========
@@ -15695,6 +15699,8 @@ def setka_32_full_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i, 0), (i, 206), 'CENTER')
         style.append(fn)
+        fn = ('VALIGN', (i, 0), (i, 206), 'MIDDLE')
+        style.append(fn)
     # центрировать счет в партии лист-1
     for i in range(3, 12, 2):
         for k in range(2, 68, 2):
@@ -15710,8 +15716,8 @@ def setka_32_full_made(fin):
         for k in range(139, 177, 2):
             fn = ('ALIGN', (i, k), (i, k), 'CENTER')
             style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
@@ -16153,7 +16159,7 @@ def write_in_setka(data, stage, first_mesto, table):
         50: [144], 51: [148], 52: [152], 53: [156], 54: [160], 55: [164], 56: [168], 57: [142], 58: [150], 59: [158], 60: [166], 61: [146],
         62: [162], 63: [154], 64: [168], 65: [172], 66: [176], 67: [174], 68: [182], 69: [179], 70: [183], 71: [187], 72: [191], 73: [181],
         74: [189], 75: [185], 76: [194], 77: [197], 78: [201], 79: [199]}
-                 # ======= dict mest
+                 # ======= dict mest (номер встречи: номер ряда)
         mesta_dict = {31: 33, 32: 61, 35: 74, 36: 84, 43: 95, 44: 106, 47: 116, 48: 126, 63: 154,
                         64: 168, 67: 174, 68: 182, 75: 185, 76: 194, 79: 199, 80: 201}
     
@@ -19093,9 +19099,11 @@ def randevy_list():
         tour = p.tours
         pl1 = p.player1
         pl2 = p.player2
-        zn1 = pl1.find("/")
+        # zn1 = pl1.find("/")
+        zn1 = pl1.find(" ")
         fio_1 = pl1[:zn1]
-        zn2 = pl2.find("/")
+        # zn2 = pl2.find("/")
+        zn2 = pl2.find(" ")
         fio_2 = pl2[:zn2]
 
         t = 8 * round
@@ -20317,7 +20325,7 @@ def load_combo_schedule_date():
     """загружает в комбо даты встреч для расписания"""
     date_list = []
     my_win.comboBox_schedule_date.clear()
-    my_win.comboBox_filter_shedule_date.clear()
+    my_win.comboBox_filter_schedule_date.clear()
     month_list = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
     titles = Title.select().where(Title.id == title_id()).get()
     d_start = titles.data_start
@@ -20336,7 +20344,7 @@ def load_combo_schedule_date():
         date_str = f"{day_str} {month_str}"
         date_list.append(date_str)
     my_win.comboBox_schedule_date.addItems(date_list)
-    my_win.comboBox_filter_shedule_date.addItems(date_list)
+    my_win.comboBox_filter_schedule_date.addItems(date_list)
 
 def load_combo_schedule_time():
     """Заполнение комбобокса для фильтра расписания"""
@@ -20400,7 +20408,8 @@ def check_schedule():
 
 def schedule_filter():
     """фильтрация расписания по дате и времени"""
-    schedule_date_txt = my_win.comboBox_filter_shedule_date.currentText()
+    schedule_date_txt = my_win.comboBox_filter_schedule_date.currentText()
+    schedule_time_txt = my_win.comboBox_filter_schedule_time.currentText()
     month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
                   "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
     titles = Title.select().where(Title.id == title_id()).get()
@@ -20414,7 +20423,12 @@ def schedule_filter():
     month = month_dict[month_txt]
     year = year_txt[:4]
     date_str = f"{year}-{month}-{day}"
-    player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_str))
+    hours_txt = schedule_time_txt[:2]
+    min_txt = schedule_time_txt[3:5]
+    sec_txt = '00'
+    time_str = f"{hours_txt}:{min_txt}:{sec_txt}"
+    results = Result.select().where(Result.title_id == title_id())
+    player_list = results.select().where((Result.schedule_date == date_str) & (Result.schedule_time == time_str))
     # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
@@ -20711,6 +20725,6 @@ my_win.Button_schedule_ok.clicked.connect(check_schedule)
 my_win.Button_add_double.clicked.connect(add_delete_double_player_to_list)
 my_win.Button_double_sort_R.clicked.connect(sort_double_player)
 my_win.Button_double_sort_region.clicked.connect(sort_double_player)
-my_win.Button_filter_shedule.clicked.connect(schedule_filter)
+my_win.Button_filter_schedule.clicked.connect(schedule_filter)
 my_win.Button_pay.clicked.connect(check_pay)
 sys.exit(app.exec())

@@ -1,6 +1,0 @@
-2026-01-12 21:20:44,860 - ERROR - Необработанное исключение: TypeError: '<' not supported between instances of 'NoneType' and 'datetime.time'
-2026-01-12 21:20:44,861 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 20353, in load_combo_schedule_time
-    time_list.sort()
-TypeError: '<' not supported between instances of 'NoneType' and 'datetime.time'

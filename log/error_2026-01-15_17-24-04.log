@@ -1,0 +1,30 @@
+2026-01-15 18:56:51,306 - ERROR - Необработанное исключение: KeyError: 'ИВАЕВ Владислав Павлович'
+2026-01-15 18:56:51,307 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5691, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8108, in made_pdf_table_for_view
+    setka_32_full_made(fin)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15618, in setka_32_full_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 16279, in write_in_setka
+    id_los = id_sh_name[pl_los]
+             ~~~~~~~~~~^^^^^^^^
+KeyError: 'ИВАЕВ Владислав Павлович'
+2026-01-15 18:56:58,630 - ERROR - Необработанное исключение: KeyError: 'ИВАЕВ Владислав Павлович'
+2026-01-15 18:56:58,631 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5691, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8108, in made_pdf_table_for_view
+    setka_32_full_made(fin)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15618, in setka_32_full_made
+    tds = write_in_setka(data, fin, first_mesto, table)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 16279, in write_in_setka
+    id_los = id_sh_name[pl_los]
+             ~~~~~~~~~~^^^^^^^^
+KeyError: 'ИВАЕВ Владислав Павлович'

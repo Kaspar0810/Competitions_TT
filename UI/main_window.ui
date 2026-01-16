@@ -4864,8 +4864,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>239</width>
-       <height>418</height>
+       <width>98</width>
+       <height>28</height>
       </rect>
      </property>
      <attribute name="label">
@@ -4877,8 +4877,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>239</width>
-       <height>418</height>
+       <width>98</width>
+       <height>28</height>
       </rect>
      </property>
      <attribute name="label">
@@ -5490,8 +5490,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>239</width>
-       <height>418</height>
+       <width>98</width>
+       <height>28</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6002,8 +6002,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>239</width>
-       <height>418</height>
+       <width>98</width>
+       <height>28</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6731,8 +6731,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>239</width>
-       <height>418</height>
+       <width>98</width>
+       <height>28</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6851,8 +6851,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>239</width>
-       <height>418</height>
+       <width>98</width>
+       <height>28</height>
       </rect>
      </property>
      <attribute name="label">
@@ -7503,7 +7503,7 @@
         <string>По времени</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox_filter_shedule_date">
+      <widget class="QComboBox" name="comboBox_filter_schedule_date">
        <property name="geometry">
         <rect>
          <x>6</x>
@@ -7529,7 +7529,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QPushButton" name="Button_filter_shedule">
+      <widget class="QPushButton" name="Button_filter_schedule">
        <property name="geometry">
         <rect>
          <x>6</x>
