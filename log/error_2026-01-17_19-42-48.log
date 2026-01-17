@@ -1,0 +1,35 @@
+2026-01-17 19:45:31,123 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-01-17 19:45:31,123 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19427, in view_all_page_pdf
+    item_name = rus_name_list[row_count]
+                ~~~~~~~~~~~~~^^^^^^^^^^^
+IndexError: list index out of range
+2026-01-17 19:46:06,760 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-01-17 19:46:06,761 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19427, in view_all_page_pdf
+    item_name = rus_name_list[row_count]
+                ~~~~~~~~~~~~~^^^^^^^^^^^
+IndexError: list index out of range
+2026-01-17 19:46:07,000 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-01-17 19:46:07,000 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19427, in view_all_page_pdf
+    item_name = rus_name_list[row_count]
+                ~~~~~~~~~~~~~^^^^^^^^^^^
+IndexError: list index out of range
+2026-01-17 19:57:27,522 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-01-17 19:57:27,522 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19427, in view_all_page_pdf
+    item_name = rus_name_list[row_count]
+                ~~~~~~~~~~~~~^^^^^^^^^^^
+IndexError: list index out of range
+2026-01-17 20:06:36,681 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-01-17 20:06:36,681 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19427, in view_all_page_pdf
+    item_name = rus_name_list[row_count]
+                ~~~~~~~~~~~~~^^^^^^^^^^^
+IndexError: list index out of range

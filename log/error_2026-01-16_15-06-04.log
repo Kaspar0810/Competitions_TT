@@ -1,0 +1,7 @@
+2026-01-16 16:20:00,757 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: '1-12'
+2026-01-16 16:20:00,759 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8513, in filter_fin
+    fltr = filter.select().where((Result.system_stage == "Финальный") & (Result.round == int(round)))
+                                                                                         ^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '1-12'

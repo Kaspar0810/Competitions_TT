@@ -1,0 +1,11 @@
+2026-01-17 08:46:41,551 - ERROR - Необработанное исключение: ValueError: 'Группы' is not in list
+2026-01-17 08:46:41,555 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1434, in open
+    go_to()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2315, in go_to
+    tab_enabled(id_title)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2108, in tab_enabled
+    ind = tab_index.index(k)
+          ^^^^^^^^^^^^^^^^^^
+ValueError: 'Группы' is not in list

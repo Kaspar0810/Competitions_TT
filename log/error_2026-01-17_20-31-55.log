@@ -1,0 +1,7 @@
+2026-01-17 20:32:21,593 - ERROR - Необработанное исключение: KeyError: 'winners_list.pdf'
+2026-01-17 20:32:21,593 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19408, in view_all_page_pdf
+    rus_name = stage_dict[text_stage]
+               ~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'winners_list.pdf'

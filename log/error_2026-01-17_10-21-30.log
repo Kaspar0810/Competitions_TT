@@ -1,0 +1,11 @@
+2026-01-17 10:21:59,393 - ERROR - Необработанное исключение: TypeError: addItems(self, texts: Iterable[Optional[str]]): argument 1 has unexpected type 'str'
+2026-01-17 10:21:59,393 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4190, in tool_page
+    page()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4576, in page
+    load_combo() # загружает фамилия игроков для поиска
+    ^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8722, in load_combo
+    my_win.comboBox_find_name.addItems(text)
+TypeError: addItems(self, texts: Iterable[Optional[str]]): argument 1 has unexpected type 'str'

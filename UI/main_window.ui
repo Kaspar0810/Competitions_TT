@@ -4290,7 +4290,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="Button_list_winner">
+          <widget class="QPushButton" name="Button_list_alf">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -4307,7 +4307,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Победители и призеры</string>
+            <string>Список по алф</string>
            </property>
           </widget>
          </item>
@@ -4332,7 +4332,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="Button_players_on_pdf_file">
+          <widget class="QPushButton" name="Button_players_itogi">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -4349,7 +4349,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Списки участников</string>
+            <string>Итоговый список</string>
            </property>
           </widget>
          </item>

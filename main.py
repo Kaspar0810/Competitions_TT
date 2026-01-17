@@ -4656,6 +4656,7 @@ def page():
         my_win.Button_made_one_file_pdf.setEnabled(False)
         my_win.Button_print_begunki.setEnabled(False)
         my_win.Button_change_player.setEnabled(False)
+        # my_win.Button_list_winner.setEnabled(False)
         my_win.lineEdit_range_tours.hide()
         my_win.comboBox_first_group.setEnabled(False)
         my_win.comboBox_second_group.setEnabled(False)
@@ -5094,6 +5095,7 @@ def _list_player_pdf(player_list):
 def list_player_pdf(player_list):
     """создание списка участников в pdf файл"""
     from reportlab.platypus import Table
+    sender = my_win.sender()
      # Подготовка стилей
     styles = getSampleStyleSheet()
     custom_style = styles['Normal'].fontName = 'DejaVuSerif'
@@ -5104,6 +5106,8 @@ def list_player_pdf(player_list):
     story = []  # Список данных таблицы участников
     elements = []  # Список Заголовки столбцов таблицы
     tit = Title.get(Title.id == title_id())
+    if sender == my_win.Button_list_alf:
+        player_list = Player.select().where((Player.title_id == title_id()) & (Player.player != "X")).order_by(Player.player)
     short_name = tit.short_name_comp
     gamer = tit.gamer
     otc = tit.otchestvo # если 1 значит в списках присутсвует отчество
@@ -5169,8 +5173,10 @@ def list_player_pdf(player_list):
     h3.spaceAfter = 10  # промежуток после заголовка
     story.append(Paragraph(f'Список участников. {gamer}', h3))
     story.append(t)
-
-    doc = SimpleDocTemplate(f"{short_name}_player_list.pdf", pagesize=A4)
+    if sender == my_win.Button_list_alf:
+        doc = SimpleDocTemplate(f"{short_name}_player_list_alf.pdf", pagesize=A4)
+    else:
+        doc = SimpleDocTemplate(f"{short_name}_player_list.pdf", pagesize=A4)
     catalog = 1
     change_dir(catalog)
     doc.build(story, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
@@ -8715,9 +8721,8 @@ def load_combo():
     my_win.comboBox_find_name_fin.clear()
     players = Player.select().where(Player.title_id == title_id())
     for i in players:  # цикл по таблице базы данных (I это id строк)
-        family = i.player
-        city = i.city
-        text.append(f"{family}/{city}")
+        txt = i.fio_city
+        text.append(txt)
     my_win.comboBox_find_name.addItems(text)
     my_win.comboBox_find_name_sf.addItems(text)
     my_win.comboBox_find_name_fin.addItems(text)
@@ -9294,7 +9299,7 @@ def choice_setka_automat(fin, flag, count_exit):
     group_last = []
     number_last = [] # посеянные номера в сетке
     reg_last = []  # посеянные регионы в сетке
-    number_posev = []  # список по порядку для посева
+    number_posev = []  # список номеров по порядку для посева
     current_region_posev = {} # в текущем посеве список регионов по порядку
     posev_data = {} # окончательные посев номер в сетке - игрок/ город
     num_id_player = {} # словарь номер сетки - id игрока
@@ -19378,7 +19383,7 @@ def view_all_page_pdf():
     pdf_file_canot_in_comp_list = ["player_list_payment.pdf", "player_list_debitor.pdf", "begunki", "player_list.pdf", 'player_list_duplicate.pdf', 'protokol_1-fin.pdf', 'protokol_2-fin.pdf'] # список, который игнорируется при составлении файла pdf соревнования
     stage_dict = {"table_group.pdf": "Предварительный",
                    "player_list_mesto.pdf": "Список участников по месту",
-                   "winners_list.pdf": "Список победителей и призеров",
+                   "player_list_itog.pdf": "Итоговый протокол победителей и призеров",
                    "player_list_alf.pdf": "Список участников по алф",
                    "title.pdf": "Титульный лист",
                    "referee_list.pdf": "ГСК",
@@ -19405,11 +19410,15 @@ def view_all_page_pdf():
         text_stage = name_files[count_mark + 1:]
         if text == 0 and text_stage not in pdf_file_canot_in_comp_list:
             pdf_files_list.append(name_files)
-            for latin_name in stage_dict.keys():
-                if text_stage == latin_name:
-                    rus_name = stage_dict[text_stage]
-                    rus_name_list.append(rus_name)
-                    break
+            # ++++++++++
+            rus_name = stage_dict[text_stage]
+            rus_name_list.append(rus_name)
+            # break
+            # for latin_name in stage_dict.keys():
+            #     if text_stage == latin_name:
+            #         rus_name = stage_dict[text_stage]
+            #         rus_name_list.append(rus_name)
+            #         break
 
     row = len(pdf_files_list)
     my_win.tableWidget.setColumnCount(3) # устанавливает колво столбцов
@@ -20714,8 +20723,8 @@ my_win.Button_down.clicked.connect(move_row_in_tablewidget)
 my_win.tableWidget.cellClicked.connect(button_move_enabled)
 my_win.Button_list_referee.clicked.connect(made_list_GSK)
 my_win.Button_list_regions.clicked.connect(made_list_regions)
-my_win.Button_list_winner.clicked.connect(made_list_winners)
-my_win.Button_players_on_pdf_file.clicked.connect(made_list_players_for_pdf_file)
+my_win.Button_list_alf.clicked.connect(list_player_pdf)
+my_win.Button_players_itogi.clicked.connect(made_list_players_for_pdf_file)
 # my_win.Button_players_on_pdf_file.clicked.connect(list_player_pdf)
 my_win.Button_made_page_pdf.clicked.connect(made_pdf_list)
 my_win.Button_view_page_pdf.clicked.connect(view_all_page_pdf)
