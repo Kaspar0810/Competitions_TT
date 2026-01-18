@@ -13609,24 +13609,12 @@ def table_made(pv, stage):
         pv = landscape(A4)
         family_col = 4.6
         center_stage = 210 # откуда начинается надпись -предварительный этап-
-        # if kg == 1 or max_pl in [10, 11, 12, 13, 14, 15, 16, 17]:
-            # ширина столбцов таблицы в зависимости от кол-во чел (1 таблица)
         wcells = 20.0 / max_pl
-        # else:
-        #     # ширина столбцов таблицы в зависимости от кол-во чел (2-ух в ряд)
-        #     wcells = 7.4 / max_pl
     else:  # книжная ориентация стр
         pv = A4
         center_stage = 140 # откуда начинается надпись -предварительный этап-
         family_col = 5.0
         wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
-        # if max_pl < 7:
-        #     family_col = 5.0
-        #     wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
-        #     # wcells = round(wcells, 2)
-        # else:
-        #     family_col = 5.0
-        #     wcells = 10.0 / max_pl  # ширина столбцов таблицы в зависимости от кол-во чел
         wcells = round(wcells, 2)
 
     col = ((wcells * cm,) * max_pl)
@@ -13714,8 +13702,10 @@ def table_made(pv, stage):
                     [('BOX', (0, 0), (-1, -1), 2, colors.black)])  # внешние границы таблицы
 
     #  ============ создание таблиц и вставка данных =================
+    # h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
+    #         leftIndent=center_stage, spacebefore=10, textColor="green")  # стиль параграфа ()
     h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
-            leftIndent=center_stage, spacebefore=10, textColor="green")  # стиль параграфа ()
+            leftIndent=60, spacebefore=10, textColor="green")  # стиль параграфа ()
 
     h2 = PS("normal", fontSize=11, fontName="DejaVuSerif-Italic",
             leftIndent=200, spacebefore=20, textColor="brown")  # стиль параграфа (номера таблиц)
@@ -13790,13 +13780,19 @@ def table_made(pv, stage):
     if stage == "Одна таблица":
         title = "Финальные соревнования. Одиночный разряд"
         name_table = f"{short_name}_one_table.pdf"
+        h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
+            leftIndent=center_stage, spacebefore=10, textColor="green")  # стиль параграфа ()
     elif stage == "Предварительный":
         title = "Квалификационные соревнования"
         name_table = f"{short_name}_table_group.pdf"
+        h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
+            leftIndent=center_stage, spacebefore=10, textColor="green")  # стиль параграфа ()
     elif stage == "1-й полуфинал" or stage == "2-й полуфинал":
         txt = stage.rfind("-")
         number_fin = stage[:txt]
-        title = stage
+        title = f"Квалификационные соревнования. {stage}."
+        h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
+            leftIndent=60, spacebefore=10, textColor="green")  # стиль параграфа ()
         name_table = f"{short_name}_{number_fin}-semifinal.pdf"
     else:
         txt = stage.rfind("-")
@@ -13805,8 +13801,10 @@ def table_made(pv, stage):
         max_pl = sys.max_player # максимальное число игроков в сетке  
         first_mesto = mesto_in_final(fin=stage)
         last_mesto = max_pl if stage == "1-й финал" else first_mesto + max_pl - 1
-        title = f'Финальные соревнования.({first_mesto}-{last_mesto} место). Одиночный разряд' # титул на таблице
+        title = f'Финальные соревнования.({first_mesto}-{last_mesto} место). Одиночный разряд.' # титул на таблице
         name_table = f"{short_name}_{number_fin}-final.pdf"
+        h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
+            leftIndent=center_stage, spacebefore=10, textColor="green")  # стиль параграфа ()
     doc = SimpleDocTemplate(name_table, pagesize=pv)
     catalog = 1
     change_dir(catalog)
@@ -13814,7 +13812,7 @@ def table_made(pv, stage):
     # if sender == my_win.indent_edit_Action:
     #     indent = change_indent_page()
     doc.leftMargin = 1 * cm
-    elements.insert(0, (Paragraph(f"{title}. {sex}", h1)))
+    elements.insert(0, (Paragraph(f"{title} {sex}.", h1)))
     doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
     os.chdir("..")
 
@@ -14065,7 +14063,9 @@ def list_regions_pdf():
     region_list = []
     tit = Title.get(Title.id == title_id())
     short_name = tit.short_name_comp
-    regions = Player.select().where((Player.title_id == title_id()) & (Player.player != "x"))
+    # regions = Player.select().where((Player.title_id == title_id()) & (Player.player != "x"))
+    reg = Player.select().where((Player.title_id == 66) | (Player.title_id == 67))
+    regions = reg.select().where(Player.player != "x")
 
     for k in regions:
         reg = k.region
@@ -19380,7 +19380,9 @@ def view_all_page_pdf():
     title = Title.get(Title.id == title_id())
     pdf_files_list = []
     rus_name_list = []
-    pdf_file_canot_in_comp_list = ["player_list_payment.pdf", "player_list_debitor.pdf", "begunki", "player_list.pdf", 'player_list_duplicate.pdf', 'protokol_1-fin.pdf', 'protokol_2-fin.pdf'] # список, который игнорируется при составлении файла pdf соревнования
+    pdf_file_canot_in_comp_list = ["player_list_payment.pdf", "player_list_debitor.pdf", "begunki",
+                                    "player_list.pdf", 'player_list_duplicate.pdf', 'protokol_1-fin.pdf', 'protokol_2-fin.pdf',
+                                    'protokol_3-fin.pdf', 'protokol_4-fin.pdf'] # список, который игнорируется при составлении файла pdf соревнования
     stage_dict = {"table_group.pdf": "Предварительный",
                    "player_list_mesto.pdf": "Список участников по месту",
                    "player_list_itog.pdf": "Итоговый протокол победителей и призеров",
@@ -19406,8 +19408,8 @@ def view_all_page_pdf():
     count_mark = len(short_name)
     all_pdf_files_list = os.listdir("table_pdf")
     for name_files in all_pdf_files_list:
-        text = name_files.find(short_name)
-        text_stage = name_files[count_mark + 1:]
+        text = name_files.find(short_name) # если 0 значит файлы есть этого соревнования
+        text_stage = name_files[count_mark + 1:] # имя файла без короткого имени соревнования
         if text == 0 and text_stage not in pdf_file_canot_in_comp_list:
             pdf_files_list.append(name_files)
             # ++++++++++
@@ -19449,8 +19451,8 @@ def made_list_regions():
     my_win.Button_made_page_pdf.setEnabled(True)
     my_win.tableWidget.clear()
     region_list = []
-    regions = Player.select().where(Player.title_id == title_id()) 
-    
+    # regions = Player.select().where(Player.title_id == title_id()) 
+    regions = Player.select().where((Player.title_id == 66) | (Player.title_id == 67))
     for k in regions:
         reg = k.region
         if reg != "":

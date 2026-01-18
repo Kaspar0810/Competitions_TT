@@ -1,292 +1,232 @@
+
 import random
-from typing import List, Dict, Tuple, Optional
 
-class Sportsman:
-    def __init__(self, id: int, region: str, rating: int):
-        self.id = id
-        self.region = region
-        self.rating = rating
+# Исходные данные
+sportsmen = [
+    ["Иванов", "Москва", 450],
+    ["Петров", "Москва", 435],
+    ["Сидоров", "Москва", 429],
+    ["Лазарев", "Москва", 480],
+    ["Зырянов", "Москва", 520],
+    ["Котов", "Свердловская обл.", 272],
+    ["Ветров", "Свердловская обл.", 654],
+    ["Лаптев", "Свердловская обл.", 320],
+    ["Малышев", "Свердловская обл.", 400],
+    ["Реутов", "Свердловская обл.", 250],
+    ["Пушкин", "Вологодская обл.", 140],
+    ["Клюкин", "Вологодская обл.", 300],
+    ["Лермонтов", "Вологодская обл.", 290],
+    ["Лапшин", "Вологодская обл.", 570],
+    ["Стеклов", "Вологодская обл.", 420],
+    ["Кротов", "Нижегородская обл.", 240],
+    ["Киселев", "Нижегородская обл.", 235],
+    ["Гусев", "Нижегородская обл.", 360],
+    ["Бондаренко", "Нижегородская обл.", 125],
+    ["Романов", "Нижегородская обл.", 255],
+    ["Гладышев", "Тюменская обл.", 710],
+    ["Павлов", "Тюменская обл.", 390],
+    ["Шибаев", "Самарская обл.", 310],
+    ["Лукин", "Самарская обл.", 410],
+    ["Стоянов", "Оренбургская обл.", 320],
+    ["Орлов", "Ивановская обл.", 515],
+    ["Ветров", "Ивановская обл.", 110],
+    ["Волков", "Иркутская обл.", 310],
+    ["Медведев", "Иркутская обл.", 160],
+    ["Зайцев", "Иркутская обл.", 260],
+    ["Лосев", "Саратовская обл.", 180],
+    ["Тихонов", "Кемеровская обл.", 460]
+    ]
 
-class TournamentDraw:
-    def __init__(self):
-    # Таблица на 32 позиции (индексы 0-31, но отображаем как 1-32)
-        self.table = [None] * 32
+# Сортируем спортсменов по рейтингу (по убыванию)
+sorted_sportsmen = sorted(sportsmen, key=lambda x: x[2], reverse=True)
 
-        # Определяем четверти
-        self.quarters = {
-        1: list(range(0, 8)), # номера 1-8
-        2: list(range(8, 16)), # номера 9-16
-        3: list(range(16, 24)), # номера 17-24
-        4: list(range(24, 32)) # номера 25-32
-        }
+# Определение четверти для номера
+def get_quarter(position):
+    if 1 <= position <= 8:
+        return 1
+    elif 9 <= position <= 16:
+        return 2
+    elif 17 <= position <= 24:
+        return 3
+    elif 25 <= position <= 32:
+        return 4
+    else:
+        return None
 
-        # Определяем посевы (номера в таблице, начиная с 0)
-        self.seeds = {
-        1: [0, 31], # 1 и 32
-        2: [15, 16], # 16 и 17
-        3: [7, 8, 23, 24], # 8, 9, 24, 25
-        4: [3, 4, 11, 12, 19, 20, 27, 28], # 4, 5, 12, 13, 20, 21, 28, 29
-        5: [i for i in range(32) if i not in [0, 31, 15, 16, 7, 8, 23, 24, 3, 4, 11, 12, 19, 20, 27, 28]]
-        }
+# Определение половины для номера
+def get_half(position):
+    if 1 <= position <= 16:
+        return 1
+    else:
+        return 2
 
-        # Половины таблицы
-        self.halves = {
-        'верхняя': list(range(0, 16)), # номера 1-16
-        'нижняя': list(range(16, 32)) # номера 17-32
-        }
+# Посевы (номера в таблице)
+seeds = {
+    1: [1, 32],
+    2: [16, 17],
+    3: [8, 9, 24, 25],
+    4: [4, 5, 12, 13, 20, 21, 28, 29],
+    5: [2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31]
+    }
 
-        # Для отслеживания распределения регионов по четвертям
-        self.region_quarters: Dict[str, List[int]] = {}
-        self.region_counts: Dict[str, int] = {}
+# Таблица для размещения спортсменов
+table = {i: None for i in range(1, 33)}
 
-def generate_sportsmen(self) -> List[Sportsman]:
-    """Генерация тестовых данных спортсменов"""
-    regions = ['Москва'] * 5 + ['Нижегородская область'] * 5 + \
-    ['Свердловская область'] * 3 + ['Ярославская область'] * 4
+# Счетчики для отслеживания распределения по четвертям
+region_quarters = {} # регион -> {четверть: количество}
 
-    # Остальные из случайных регионов
-    other_regions = ['Республика Татарстан', 'Краснодарский край',
-    'Санкт-Петербург', 'Новосибирская область', 'Ростовская область',
-    'Республика Башкортостан', 'Пермский край', 'Самарская область']
+def initialize_region_quarters():
+    """Инициализация структуры для отслеживания распределения регионов по четвертям"""
+    for sportsman in sorted_sportsmen:
+        region = sportsman[1]
+        if region not in region_quarters:
+            region_quarters[region] = {1: 0, 2: 0, 3: 0, 4: 0}
 
-    regions += [random.choice(other_regions) for _ in range(32 - len(regions))]
+def get_allowed_positions(sportsman, available_positions):
+    """Получить разрешенные позиции для спортсмена с учетом региональных ограничений"""
+    region = sportsman[1]
+    allowed_positions = []
 
-    # Сортировка по убыванию рейтинга (от сильного к слабому)
-    sportsmen = []
-    for i in range(32):
-        # Генерация рейтинга от 1000 до 2000 с убыванием
-        rating = 2000 - i * 30 + random.randint(-50, 50)
-        sportsmen.append(Sportsman(i + 1, regions[i], rating))
+    dict_region = region_quarters[region]
+    count = sum(dict_region.values()) # кол-во игроков данного регионов посеянных
 
-    return sorted(sportsmen, key=lambda x: x.rating, reverse=True)
+    if count <= 2:
+        for pos in available_positions:
+            quarter = get_half(pos)
+            if region_quarters[region][quarter] >= 4:
+                allowed_positions.append(pos)
+            else:
+            # Проверяем, можно ли разместить здесь спортсмена
+            # (в четверти меньше 4 спортсменов из этого региона)
+                if region_quarters[region][quarter] < 4:
+                    allowed_positions.append(pos)
+    else:
+        for pos in available_positions:
+            quarter = get_quarter(pos)
+            if region_quarters[region][quarter] >= 4:
+                allowed_positions.append(pos)
+            else:
+            # Проверяем, можно ли разместить здесь спортсмена
+            # (в четверти меньше 4 спортсменов из этого региона)
+                if region_quarters[region][quarter] < 4:
+                    allowed_positions.append(pos)
+# Если в этой четверти уже есть 4 или более спортсменов из региона,
+# то ограничение не действует
+    
+    
+        # if region_quarters[region][quarter] >= 4:
+        #     allowed_positions.append(pos)
+        # else:
+        # # Проверяем, можно ли разместить здесь спортсмена
+        # # (в четверти меньше 4 спортсменов из этого региона)
+        #     if region_quarters[region][quarter] < 4:
+        #         allowed_positions.append(pos)
 
-def get_quarter_for_position(self, position: int) -> int:
-    """Определить четверть для позиции в таблице"""
-    for quarter, positions in self.quarters.items():
-        if position in positions:
-            return quarter
-    return 0
+    return allowed_positions
 
-def can_place_in_quarter(self, region: str, quarter: int) -> bool:
-    """Можно ли разместить спортсмена из региона в указанной четверти"""
-    if region not in self.region_quarters:
-        return True
+# Инициализируем структуру для отслеживания регионов
+initialize_region_quarters()
 
-    # Если регион уже есть в этой четверти, проверяем количество
-    quarters_with_region = self.region_quarters[region]
-    if quarter in quarters_with_region:
-    # Проверяем, сколько уже спортсменов этого региона в четверти
-        count_in_quarter = quarters_with_region.count(quarter)
-        return count_in_quarter < 1 # Не более 1 на четверть для первых 4 спортсменов
+# Посев 1: позиции 1 и 32
+table[1] = sorted_sportsmen[0] # Самый сильный спортсмен
+region_quarters[sorted_sportsmen[0][1]][1] += 1
 
-    return True
+table[32] = sorted_sportsmen[1] # Второй по силе спортсмен
+region_quarters[sorted_sportsmen[1][1]][4] += 1
 
-def update_region_tracking(self, region: str, position: int):
-    """Обновить отслеживание распределения регионов"""
-    quarter = self.get_quarter_for_position(position)
+# Обработанные спортсмены
+used_sportsmen = [0, 1]
+available_sportsmen_indices = [i for i in range(len(sorted_sportsmen)) if i not in used_sportsmen]
 
-    if region not in self.region_quarters:
-        self.region_quarters[region] = []
-        self.region_counts[region] = 0
+# for seed_number in available_sportsmen_indices:
+    # Функция для жеребьевки посева
+def draw_seed(seed_number, sportsmen_indices):
+    """Жеребьевка для посева"""
+    positions = seeds[seed_number].copy()
+    random.shuffle(positions) # Перемешиваем позиции
 
-        self.region_quarters[region].append(quarter)
-        self.region_counts[region] += 1
+    # Для каждого спортсмена в посеве
+    for i, sportsman_idx in enumerate(sportsmen_indices):
+        sportsman = sorted_sportsmen[sportsman_idx]
 
-def place_sportsmen(self, sportsmen: List[Sportsman], seed: int, seed_positions: List[int]):
-    """Разместить спортсменов на позиции посева"""
-    # Количество спортсменов в этом посеве
-    num_sportsmen = len(seed_positions)
+        # Получаем доступные позиции
+        available_positions = positions.copy()
 
-    # Если это 1-й посев (фиксированное размещение)
-    if seed == 1:
-        self.table[seed_positions[0]] = sportsmen[0] # Самый сильный
-        self.table[seed_positions[1]] = sportsmen[1] # Второй по силе
-        self.update_region_tracking(sportsmen[0].region, seed_positions[0])
-        self.update_region_tracking(sportsmen[1].region, seed_positions[1])
-        return sportsmen[2:]
+        # Получаем разрешенные позиции с учетом региональных ограничений
+        allowed_positions = get_allowed_positions(sportsman, available_positions)
 
-    # Для остальных посевов
-    sportsmen_to_place = sportsmen[:num_sportsmen]
-    remaining_sportsmen = sportsmen[num_sportsmen:]
-
-    # Перемешиваем позиции для случайного распределения
-    random.shuffle(seed_positions)
-
-    # Пытаемся разместить с учетом ограничений
-    placed = [False] * num_sportsmen
-
-    for attempt in range(100): # Максимум 100 попыток
-        all_placed = True
-
-    for i, sportsman in enumerate(sportsmen_to_place):
-        if placed[i]:
-            continue
-
-    # Проверяем доступные позиции для этого спортсмена
-    available_positions = []
-
-    for pos in seed_positions:
-        if self.table[pos] is not None:
-            continue
-
-        quarter = self.get_quarter_for_position(pos)
-
-        # Проверяем ограничения по регионам
-        if self.region_counts.get(sportsman.region, 0) < 4:
-            # Для первых 4 спортсменов региона - ограничение по четвертям
-            if not self.can_place_in_quarter(sportsman.region, quarter):
-                continue
-
-        # Для 2-го посева проверяем разные половины для спортсменов из одного региона
-        if seed == 2 and len(sportsmen_to_place) == 2:
-            other_idx = 0 if i == 1 else 1
-            other_sportsman = sportsmen_to_place[other_idx]
-
-        if sportsman.region == other_sportsman.region:
-            # Определяем половину позиции
-            half = 'верхняя' if pos < 16 else 'нижняя'
-
-        # Ищем позицию в другой половине для второго спортсмена
-        if placed[other_idx]:
-            # Если другой уже размещен, проверяем, что этот в другой половине
-            other_pos = seed_positions[other_idx]
-        if (pos < 16 and other_pos < 16) or (pos >= 16 and other_pos >= 16):
-            continue
-
-        available_positions.append(pos)
-
-        if available_positions:
-            # Выбираем позицию
-            chosen_pos = random.choice(available_positions)
-            self.table[chosen_pos] = sportsman
-            self.update_region_tracking(sportsman.region, chosen_pos)
-            placed[i] = True
+        # Если есть разрешенные позиции, выбираем первую
+        if allowed_positions:
+            position = allowed_positions[0]
+            positions.remove(position)
         else:
-            all_placed = False
+        # Если нет разрешенных позиций, берем любую доступную
+            position = available_positions[0]
+            positions.remove(position)
 
-        if all_placed:
-            break
+        # Размещаем спортсмена в таблице
+        table[position] = sportsman
 
-        # Если не все размещены, сбрасываем и пробуем снова
-        if not all_placed and attempt < 99:
-            for i, pos in enumerate(seed_positions):
-                if placed[i]:
-                    sportsman = self.table[pos]
-        if sportsman:
-            # Удаляем из отслеживания
-            region  = sportsman.region
-        quarter = self.get_quarter_for_position(pos)
-        if region in self.region_quarters and quarter in self.region_quarters[region]:
-            self.region_quarters[region].remove(quarter)
-            self.region_counts[region] -= 1
-            self.table[pos] = None
-            placed = [False] * num_sportsmen
-            random.shuffle(seed_positions)
+        # Обновляем счетчик для региона в соответствующей четверти
+        quarter = get_quarter(position)
+        region_quarters[sportsman[1]][quarter] += 1
 
-    return remaining_sportsmen
+        # Помечаем спортсмена как использованного
+        used_sportsmen.append(sportsman_idx)
 
-def draw(self) -> List[Optional[Sportsman]]:
-    """Провести жеребьевку"""
-    # Генерация спортсменов
-    sportsmen = self.generate_sportsmen()
+# Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
+draw_seed(2, [2, 3])
 
-    print("Спортсмены (отсортированы по рейтингу):")
-    for i, s in enumerate(sportsmen, 1):
-        print(f"{i:2d}. ID: {s.id:2d}, Регион: {s.region:25s}, Рейтинг: {s.rating}")
-    print()
+# Посев 3: спортсмены 5, 6, 7, 8 (индексы 4, 5, 6, 7)
+draw_seed(3, [4, 5, 6, 7])
 
-    # Посевная жеребьевка
-    remaining_sportsmen = sportsmen
+# Посев 4: спортсмены 9, 10, 11, 12, 13, 14, 15, 16 (индексы 8-15)
+draw_seed(4, list(range(8, 16)))
 
-    for seed_num in range(1, 6):
-        seed_positions = self.seeds[seed_num]
-    print(f"Посев {seed_num} (позиции {[p+1 for p in seed_positions]}):")
+    # Посев 5: оставшиеся спортсмены (индексы 16-31)
+remaining_indices = [i for i in range(len(sorted_sportsmen)) if i not in used_sportsmen]
+draw_seed(5, remaining_indices)
 
-    remaining_sportsmen = self.place_sportsmen(
-    remaining_sportsmen, seed_num, seed_positions.copy()
-    )
+    # Вывод результатов
+print("Результаты жеребьевки:")
+print("-" * 80)
+print(f"{'Позиция':<8} {'Фамилия':<15} {'Регион':<25} {'Рейтинг':<8} {'Четверть':<10}")
+print("-" * 80)
 
-    # Выводим размещение для этого посева
-    for pos in seed_positions:
-        if self.table[pos]:
-            print(f" Позиция {pos+1:2d}: {self.table[pos].region:25s} (ID: {self.table[pos].id:2d})")
-    print()
+for position in range(1, 33):
+    sportsman = table[position]
+    quarter = get_quarter(position)
+print(f"{position:<8} {sportsman[0]:<15} {sportsman[1]:<25} {sportsman[2]:<8} {quarter:<10}")
 
-    return self.table
+print("\nРаспределение по четвертям:")
+for region in region_quarters:
+    print(f"{region}:")
+for quarter in [1, 2, 3, 4]:
+    count = region_quarters[region][quarter]
+    print(f" Четверть {quarter}: {count} спортсменов")
 
-def print_draw(self):
-    """Вывести итоговую таблицу жеребьевки"""
-    print("\n" + "="*70)
-    print("ИТОГОВАЯ ТАБЛИЦА ЖЕРЕБЬЕВКИ")
-    print("="*70)
+    # Проверка корректности распределения
+print("\nПроверка распределения:")
+for region in region_quarters:
+    for quarter in [1, 2, 3, 4]:
+        if region_quarters[region][quarter] > 4:
+            print(f"Внимание: в регионе {region} в четверти {quarter} больше 4 спортсменов ({region_quarters[region][quarter]})")
+        elif region_quarters[region][quarter] <= 4:
+            print(f"OK: в регионе {region} в четверти {quarter} {region_quarters[region][quarter]} спортсменов")
+print(table)
 
-    for i in range(32):
-        s = self.table[i]
-        if s:
-            quarter = self.get_quarter_for_position(i)
-            print(f"Позиция {i+1:2d} (четверть {quarter}): "
-            f"ID: {s.id:2d}, Регион: {s.region:25s}, Рейтинг: {s.rating}")
-        else:
-            print(f"Позиция {i+1:2d}: ПУСТО")
+# Этот код выполняет следующее:
 
-    print("\n" + "="*70)
-    print("РАСПРЕДЕЛЕНИЕ ПО ЧЕТВЕРТЯМ:")
-    print("="*70)
-
-    # Анализ распределения
-    region_analysis: Dict[str, Dict[int, int]] = {}
-
-    for i, s in enumerate(self.table):
-        if s:
-            quarter = self.get_quarter_for_position(i)
-        if s.region not in region_analysis:
-            region_analysis[s.region] = {1: 0, 2: 0, 3: 0, 4: 0}
-            region_analysis[s.region][quarter] += 1
-
-    for region, quarters in region_analysis.items():
-        total = sum(quarters.values())
-        quarters_str = ', '.join([f"{q}:{count}" for q, count in quarters.items()])
-        print(f"{region:30s} - всего {total:2d}: [{quarters_str}]")
-
-    # Запуск жеребьевки
-if __name__ == "__main__":
-    tournament = TournamentDraw()
-    draw()# tournament.draw()
-    tournament.print_draw()
-    # ```
-
-# Пояснение алгоритма:
-
-# 1. Структура данных:
-
-# · Sportsman - класс спортсмена с ID, регионом и рейтингом
-# · TournamentDraw - основной класс для жеребьевки
-
-# 2. Ключевые элементы:
-
-# · Четверти: 1-8, 9-16, 17-24, 25-32
-# · Посевы: 5 уровней распределения позиций
-# · Половины таблицы: верхняя (1-16) и нижняя (17-32)
-
-# 3. Алгоритм жеребьевки:
-
-# 1. Генерация 32 спортсменов с разными регионами и рейтингами
-# 2. Сортировка по рейтингу (от сильного к слабому)
-# 3. Последовательное размещение по посевам:
-# · 1-й посев: фиксированное размещение самых сильных
-# · 2-й посев: случайное распределение с проверкой половин для одинаковых регионов
-# · 3-й посев: случайное распределение по 4 позициям
-# · 4-й и 5-й посевы: размещение с учетом ограничений по четвертям
-
-# 4. Ограничения:
-
-# · Первые 4 спортсмена из одного региона должны быть в разных четвертях
-# · Во 2-м посеве спортсмены из одного региона должны попасть в разные половины
-# · Если региона больше 4 спортсменов, ограничения снимаются
-
-# 5. Особенности реализации:
-
-# · Используется backtracking (повторные попытки) при невозможности размещения
-# · Ведется учет распределения регионов по четвертям
-# · Случайность обеспечивается random.shuffle()
-
+# 1. Сортировка спортсменов: все спортсмены сортируются по рейтингу в порядке убывания.
+# 2. Определение посевов: номера в таблице распределены по посевам согласно условию.
+# 3. Жеребьевка:
+# · Посев 1: самый сильный спортсмен идет на позицию 1, второй по силе - на позицию 32.
+# · Посев 2: спортсмены 3 и 4 случайным образом распределяются на позиции 16 и 17 с учетом региональных ограничений.
+# · Посев 3: спортсмены 5-8 распределяются на позиции 8, 9, 24, 25.
+# · Посев 4: спортсмены 9-16 распределяются на позиции 4, 5, 12, 13, 20, 21, 28, 29.
+# · Посев 5: оставшиеся спортсмены занимают все остальные позиции.
+# 4. Региональные ограничения:
+# · Счетчик отслеживает количество спортсменов из каждого региона в каждой четверти.
+# · Если в четверти уже есть 4 спортсмена из одного региона, ограничение не действует.
+# · В противном случае спортсмены из одного региона распределяются по разным четвертям.
+# 5. Вывод результатов: таблица с распределением спортсменов по позициям и статистика по регионам.
