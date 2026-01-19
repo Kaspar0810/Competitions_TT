@@ -9290,7 +9290,7 @@ def rank_mesto_out_in_group_or_semifinal_to_final(fin):
                     break
     return nums
 
-def new_choice_setka(full_posev, count_exit):
+def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     """вариант жеребьевки сетки предложенный AI"""
     # Сортируем спортсменов по рейтингу (по убыванию)
     
@@ -9298,35 +9298,38 @@ def new_choice_setka(full_posev, count_exit):
 
     # Определение четверти для номера
     def get_quarter(position):
-        if 1 <= position <= 8:
+        if 1 <= position <= posevs_num[0] / 4:
             return 1
-        elif 9 <= position <= 16:
+        elif (posevs_num[0] / 4) + 1 <= position <= posevs_num[0] / 2:
             return 2
-        elif 17 <= position <= 24:
+        elif (posevs_num[0] / 2) + 1 <= position <= posevs_num[0] / 4 * 3:
             return 3
-        elif 25 <= position <= 32:
+        elif (posevs_num[0] / 4 * 3) + 1 <= position <= posevs_num[0]:
             return 4
         else:
             return None
 
     # Определение половины для номера
     def get_half(position):
-        if 1 <= position <= 16:
+        if 1 <= position <= posevs_num[0] / 2:
             return 1
         else:
             return 2
 
+    count_posev = len(posevs_num[1])
     # Посевы (номера в таблице)
-    seeds = {
-    1: [1, 32],
-    2: [16, 17],
-    3: [8, 9, 24, 25],
-    4: [4, 5, 12, 13, 20, 21, 28, 29],
-    5: [2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31]
-    }
+    seeds = {}
+    for k in range(1, count_posev + 1):
+        seeds[k] = posevs_num[1][k - 1]
+   
+    # удаляет из последнего посева свободные номера
+    if len(free_num) > 0:
+        latest_sev = seeds[count_posev]
+        for h in free_num:
+            latest_sev.remove(h)
 
     # Таблица для размещения спортсменов
-    table = {i: None for i in range(1, 33)}
+    table = {i: None for i in range(1, posevs_num[0] + 1)}
 
     # Структуры для отслеживания распределения
     region_half = {} # регион -> {половина: количество}
@@ -9349,7 +9352,7 @@ def new_choice_setka(full_posev, count_exit):
     region_half[sorted_sportsmen[0][1]][1] += 1
     region_quarter[sorted_sportsmen[0][1]][1] += 1
 
-    table[32] = sorted_sportsmen[1] # Второй по силе спортсмен
+    table[posevs_num] = sorted_sportsmen[1] # Второй по силе спортсмен
     region_half[sorted_sportsmen[1][1]][2] += 1
     region_quarter[sorted_sportsmen[1][1]][4] += 1
 
@@ -9443,10 +9446,15 @@ def new_choice_setka(full_posev, count_exit):
 
             # Отладочный вывод
             print(f"Посев {seed_num}: {sportsman[0]} ({region}) -> позиция {position} (четверть {quarter}, половина {half})")
+    # Индексы спортсменов по посевам
+    seeds_athletes_indices = [[0, 1], [2, 3], [4, 5, 6, 7], list(range(8, 16)),list(range(16, 32)) ]
 
-    # Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
-    print("\n=== Посев 2 ===")
-    draw_seed(2, [2, 3])
+    p = 1
+    for p in range(2, count_posev + 1):
+        # Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
+        print(f"\n=== Посев {p} ===")
+        draw_seed(p, seeds_athletes_indices[p - 1])
+        p += 1
 
     # Посев 3: спортсмены 5, 6, 7, 8 (индексы 4, 5, 6, 7)
     print("\n=== Посев 3 ===")
@@ -9546,26 +9554,26 @@ def choice_setka_automat(fin, flag, count_exit):
     max_player = system.max_player
     stage_exit = system.stage_exit
   
-    posevs = setka_choice_number(fin, count_exit) # выбор номеров сетки для посева
-    player_net = posevs[0] # максимальное число игроков в сетке
- 
-    if fin == "Суперфинал" or fin == "Одна таблица":
-        count_exit = 1
+    posevs_num = setka_choice_number(fin, count_exit) # выбор номеров сетки для посева
+    player_net = posevs_num[0] # максимальное число игроков в сетке
+    # count_posev = len(posevs[1])
+    # if fin == "Суперфинал" or fin == "Одна таблица":
+    #     count_exit = 1
 
-    if count_exit == 1:
-        posev_1 = posevs[1]
-    elif count_exit == 2:
-        posev_1 = posevs[1]
-        posev_2 = posevs[2]
-    elif count_exit == 3:
-        posev_1 = posevs[1]
-        posev_2 = posevs[2]
-        posev_3 = posevs[3]
-    elif count_exit == 4:
-        posev_1 = posevs[1]
-        posev_2 = posevs[2]
-        posev_3 = posevs[3]
-        posev_4 = posevs[4]
+    # if count_exit == 1:
+    #     posev_1 = posevs[1]
+    # elif count_exit == 2:
+    #     posev_1 = posevs[1]
+    #     posev_2 = posevs[2]
+    # elif count_exit == 3:
+    #     posev_1 = posevs[1]
+    #     posev_2 = posevs[2]
+    #     posev_3 = posevs[3]
+    # elif count_exit == 4:
+    #     posev_1 = posevs[1]
+    #     posev_2 = posevs[2]
+    #     posev_3 = posevs[3]
+    #     posev_4 = posevs[4]
 
     free_seats = 0 # кол-во свободных мест в сетке
     step = 0
@@ -9676,11 +9684,11 @@ def choice_setka_automat(fin, flag, count_exit):
                 if count_exit == 1:
                     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
                 else:
-                    full_posev.sort(key=lambda k: k[7], k[6], reverse=True) # сортировка списка участников сначала по месту в группе а потом по рейтингу
+                    full_posev.sort(key=lambda k: (k[7], k[6])) # сортировка списка участников сначала по месту в группе а потом по рейтингу
             # elif count_exit != 1 or fin != "1-й финал":
             #     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу 
 
-        num_id_player = new_choice_setka(full_posev, count_exit) # функция жеребьевки при выходе из группы или ПФ 1 чел (Интернет)
+        num_id_player = new_choice_setka(full_posev, count_exit, free_num, posevs_num) # функция жеребьевки при выходе из группы или ПФ 1 чел (Интернет)
     # if step > 99:
         del_num_list = []  
         for i in num_id_player.keys():
