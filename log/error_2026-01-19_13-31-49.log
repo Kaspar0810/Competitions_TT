@@ -1,0 +1,14 @@
+2026-01-19 13:35:08,967 - ERROR - Необработанное исключение: TypeError: 'NoneType' object is not subscriptable
+2026-01-19 13:35:08,970 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 18670, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9576, in choice_setka_automat
+    new_choice_setka(full_posev)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9432, in new_choice_setka
+    print(f"{i+1:2d}: {a[0]} {a[1]}, {a[2]}")
+                       ~^^^
+TypeError: 'NoneType' object is not subscriptable

@@ -1,0 +1,14 @@
+2026-01-19 12:44:59,778 - ERROR - Необработанное исключение: AssertionError: 
+2026-01-19 12:44:59,779 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 18666, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9572, in choice_setka_automat
+    new_choice_setka(full_posev)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9338, in new_choice_setka
+    assert len(sorted_athletes) == 32
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

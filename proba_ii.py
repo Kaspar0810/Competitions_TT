@@ -45,11 +45,11 @@ assert len(sorted_athletes) == 32
 
 # Определим четверти
 quarters_positions = [
-list(range(0, 8)), # 1-я четверть
-list(range(8, 16)), # 2-я четверть
-list(range(16, 24)), # 3-я четверть
-list(range(24, 32)) # 4-я четверть
-]
+    list(range(0, 8)), # 1-я четверть
+    list(range(8, 16)), # 2-я четверть
+    list(range(16, 24)), # 3-я четверть
+    list(range(24, 32)) # 4-я четверть
+    ]
 
 # Функция определения четверти по индексу
 def get_quarter(pos):
@@ -74,13 +74,7 @@ seeds_positions = [
     ]
 
 # Индексы спортсменов по посевам
-seeds_athletes_indices = [
-    [0, 1], # Посев 1
-    [2, 3], # Посев 2
-    [4, 5, 6, 7], # Посев 3
-    list(range(8, 16)), # Посев 4
-    list(range(16, 32)) # Посев 5
-    ]
+seeds_athletes_indices = [[0, 1], [2, 3], [4, 5, 6, 7], list(range(8, 16)),list(range(16, 32)) ]
 
 # Инициализация таблицы
 table = [None] * 32
@@ -110,9 +104,9 @@ for seed_idx in range(5):
     positions = seeds_positions[seed_idx][:]
     athletes_to_place = [sorted_athletes[i] for i in seeds_athletes_indices[seed_idx]]
 
-# # Перемешиваем позиции и спортсменов для случайности
-# random.shuffle(positions)
-# random.shuffle(athletes_to_place)
+# Перемешиваем позиции и спортсменов для случайности
+random.shuffle(positions)
+random.shuffle(athletes_to_place)
 
 # Для каждого спортсмена пробуем найти подходящую позицию
 for athlete in athletes_to_place:
