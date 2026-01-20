@@ -9317,11 +9317,8 @@ def rank_mesto_out_in_group_or_semifinal_to_final(fin):
 
 def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     """вариант жеребьевки сетки предложенный AI"""
-    # Сортируем спортсменов по рейтингу (по убыванию)
-    
-    sorted_sportsmen = full_posev
 
-    # sorted_sportsmen = sorted(full_posev, key=lambda x: x[6], reverse=True)
+    sorted_sportsmen = full_posev
 
     # Определение четверти для номера
     def get_quarter(position):
@@ -9489,40 +9486,8 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     # Если есть свободные номера в сетке ставим на них "Х"
     if count_free > 0:
         for h in free_num:
-            table[h] = "X"
+            table[h] = ["X"]
 
-    # # Вывод результатов
-    # print("\n" + "="*80)
-    # print("ИТОГОВАЯ ТАБЛИЦА ЖЕРЕБЬЁВКИ:")
-    # print("="*80)
-    # print(f"{'Позиция':< posevs_num[0] / 4} {'Фамилия':< (posevs_num[0] / 2) - 1} {'Регион':<25} {'Рейтинг':<8} {'Четверть':<10} {'Половина':<8 posevs_num[0] / 4}")
-    # print("-"*80)
-
-    # for position in range(1, posevs_num[0] + 1):
-    #     sportsman = table[position]
-    #     quarter = get_quarter(position)
-    #     half = get_half(position)
-    # print(f"{position:<8} {sportsman[0]:<15} {sportsman[1]:<25} {sportsman[2]:<8} {quarter:<10} {half:<8}")
-
-    # Статистика по регионам
-    # print("\n" + "="*80)
-    # print("СТАТИСТИКА ПО РЕГИОНАМ:")
-    # print("="*80)
-
-    # for region in sorted(region_quarter.keys()):
-    #     print(f"\n{region}:")
-    # print(f" Всего спортсменов: {sum(region_quarter[region].values())}")
-
-    # # По половинам
-    # print(f" По половинам: Первая - {region_half[region][1]}, Вторая - {region_half[region][2]}")
-
-    # По четвертям
-    # for q in [1, 2, 3, 4]:
-    #     count = region_quarter[region][q]
-    # if count > 0:
-    #     print(f" Четверть {q}: {count} спортсменов")
-
-    # Проверка правильности распределения
     print("\n" + "="*80)
     print("ПРОВЕРКА РАСПРЕДЕЛЕНИЯ:")
     print("="*80)
@@ -9636,7 +9601,6 @@ def choice_setka_automat(fin, flag, count_exit):
         else: # финалы по сетке начиная со 2-ого и т.д.
             if stage_exit == "Предварительный": # откуда выход в финал
                 if flag == 3:
-                #    choice_posev = choice.select().where(Choice.mesto_group == nums[n]) 
                     choice_posev = choice.select().where(Choice.mesto_group.in_(nums)) 
                 else:
                     if count_exit > 1:
@@ -9648,9 +9612,9 @@ def choice_setka_automat(fin, flag, count_exit):
                 if flag == 3:
                     choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums)))
                 else:
-                    choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final == nums[n]))
+                    # choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final == nums[n]))
                     # nums = [3, 4]
-                    # choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums)))
+                    choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums)))
                 real_all_player_in_final = len(choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums))))
         count_player_in_final = len(choice_posev) # количество игроков в отдельном посева
         # ищет свободные номера только в последнем посеве        
@@ -9660,7 +9624,9 @@ def choice_setka_automat(fin, flag, count_exit):
             free_num = free_place_in_setka(max_player, real_all_player_in_final)
             del_num = 1 # флаг, что есть свободные номера
         full_posev.clear()
-        for posevs in choice_posev: # отбор из базы данных согласно местам в группе для жеребьевки сетки
+
+        # отбор из базы данных согласно местам в группе для жеребьевки сетки
+        for posevs in choice_posev: 
             psv = []
         
             family = posevs.family
@@ -9693,6 +9659,7 @@ def choice_setka_automat(fin, flag, count_exit):
 
             full_posev.append(psv)
 
+            # сортировка списка участников в зависимости от выхода
             if fin == "Суперфинал":
                 full_posev.sort(key=lambda k: k[7]) # сортировка списка участников по месту в 1-ом финале
             elif count_exit == 1 or fin == "Одна таблица":
@@ -9706,17 +9673,22 @@ def choice_setka_automat(fin, flag, count_exit):
                 if count_exit == 1:
                     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
                 else:
-                    full_posev.sort(key=lambda k: (k[7], k[6]), reverse=True) # сортировка списка участников сначала по месту в группе а потом по рейтингу
+                    # сортировка списка участников сначала по месту в группе(возрастание) а потом по рейтингу (убывание)
+                    full_posev.sort(key=lambda k:(k[7], -k[6])) 
             # elif count_exit != 1 or fin != "1-й финал":
             #     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу 
-
-        num_id_player = new_choice_setka(full_posev, count_exit, free_num, posevs_num) # функция жеребьевки при выходе из группы или ПФ 1 чел (Интернет)
+        # ======== функция жеребьевки при выходе из группы или ПФ 1 чел (Интернет)
+        num_id_player = new_choice_setka(full_posev, count_exit, free_num, posevs_num) 
     # if step > 99:
         del_num_list = []  
         for i in num_id_player.keys():
             tmp_list = list(num_id_player[i])
-            if len(tmp_list) == 1:
-                del_num_list.append(i)                    
+            # if len(tmp_list) == 1:                
+            #     del_num_list.append(i)
+            if tmp_list[0] == "X":
+                # players = Player.select().where((Player.title_id == title_id()) & (Player.player == "X")).get() 
+                # id_pl_x = players.id
+                posev_data[i] = "X"
             else:
                 id = tmp_list[0]
                 pl_id = Player.get(Player.id == id)
@@ -9730,15 +9702,15 @@ def choice_setka_automat(fin, flag, count_exit):
                         choice_final.final = fin
                         choice_final.posev_final = i
                     choice_final.save()
-        if len(del_num_list) > 0:
-            for e in del_num_list:
-                del num_id_player[e]
-        key_set = set(num_id_player.keys()) # получаем сет всех ключей (номеров сетки)
-        all_num_set = [j for j in range(1, player_net + 1)]
-        free_number = set((all_num_set))
-        free_number.difference_update(key_set) # вычитаем из всех номеров те которые посеяны и остается номера -X-
-        for h in free_number:
-            posev_data[h] = "X"
+        # if len(del_num_list) > 0:
+        #     for e in del_num_list:
+        #         del num_id_player[e]
+        # key_set = set(num_id_player.keys()) # получаем сет всех ключей (номеров сетки)
+        # all_num_set = [j for j in range(1, player_net + 1)]
+        # free_number = set((all_num_set))
+        # free_number.difference_update(key_set) # вычитаем из всех номеров те которые посеяны и остается номера -X-
+        # for h in free_number:
+        #     posev_data[h] = "X"
         n += 1 # добавил в связи со сменой цикла
     return posev_data
 
