@@ -1,7 +1,0 @@
-2026-01-18 10:45:29,813 - ERROR - Необработанное исключение: KeyError: 'protokol_3-fin.pdf'
-2026-01-18 10:45:29,814 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19416, in view_all_page_pdf
-    rus_name = stage_dict[text_stage]
-               ~~~~~~~~~~^^^^^^^^^^^^
-KeyError: 'protokol_3-fin.pdf'

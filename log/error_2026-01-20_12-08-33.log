@@ -1,0 +1,7 @@
+2026-01-20 12:10:47,179 - ERROR - Необработанное исключение: NameError: name 'new_fio_ful' is not defined
+2026-01-20 12:10:47,182 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 3576, in add_player
+    Result.update(player1=new_fio_full).where(Result.id == p).execute()
+                          ^^^^^^^^^^^
+NameError: name 'new_fio_ful' is not defined

@@ -1,7 +1,0 @@
-2026-01-18 12:17:10,543 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'column_label' where it is not associated with a value
-2026-01-18 12:17:10,546 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19469, in made_list_regions
-    my_win.tableWidget.setHorizontalHeaderLabels(column_label) # заголовки столбцов в tableWidget
-                                                 ^^^^^^^^^^^^
-UnboundLocalError: cannot access local variable 'column_label' where it is not associated with a value

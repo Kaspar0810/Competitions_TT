@@ -1,7 +1,0 @@
-2026-01-17 21:02:49,217 - ERROR - Необработанное исключение: TypeError: object of type 'bool' has no len()
-2026-01-17 21:02:49,217 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5114, in list_player_pdf
-    count = len(player_list)  # количество записей в базе
-            ^^^^^^^^^^^^^^^^
-TypeError: object of type 'bool' has no len()

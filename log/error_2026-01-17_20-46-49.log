@@ -1,7 +1,0 @@
-2026-01-17 20:46:50,067 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'Button_list_itogi'
-2026-01-17 20:46:50,076 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 20721, in <module>
-    my_win.Button_list_itogi.clicked.connect(made_list_players_for_pdf_file)
-    ^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'MainWindow' object has no attribute 'Button_list_itogi'

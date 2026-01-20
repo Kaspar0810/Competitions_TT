@@ -3533,7 +3533,8 @@ def add_player():
     if flag_player == 2: # новый спортсмен
         player_full = Players_full(player=pl, bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc, patronymic_id=idp, sex=sex).save()
     elif flag_player == 0 or flag_player == 1: # спортсмен есть но изменился город
-        Players_full.update(bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc).where(Players_full.id == flag_player_full[0]).execute()
+        Players_full.update(bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc, patronymic_id=idp).where(Players_full.id == flag_player_full[0]).execute()
+
     # ==== определяет завявка предварительная или нет
     title = Title.select().where(Title.id == title_id()).get()
     data_start = title.data_start
@@ -3563,7 +3564,31 @@ def add_player():
             Coach.update(coach = ch).where(Coach.id == idc).execute()
             Player.update(player=pl, bday=bd_new, rank=rn, city = ct, region = rg, razryad = rz,
                             fio_city=fn_city, fio=fn, pay_rejting=pay_R, comment=comment, coach_id = idc, patronymic_id=idp).where(Player.id == pl_id).execute()
-            results = Result.select().where(Result.title_id == title_id()) & ()
+            results = Result.select().where(Result.title_id == title_id())
+            #  =========== вариант с изменением отчества в -result- и -choice-
+            new_fio_full = f"{fn}/{ct}" # фамилия и город игрока для редактирования в -Results-
+            choices = Choice.select().where(Choice.player_choice_id == pl_id).get()
+            id_choice = choices.id
+            old_family = choices.family
+            old_fio_full = f"{old_family}/{ct}" # вариант фамилия до изменения для поиска в Резульататах
+            player_1 = results.select().where(Result.player1 == old_fio_full)
+            if len(player_1)> 0:
+                for p in player_1:
+                    Result.update(player1=new_fio_full).where(Result.id == p).execute()
+            player_2 = results.select().where(Result.player2 == old_fio_full)
+            if len(player_2)> 0:
+                for p in player_2:
+                    Result.update(player2=new_fio_full).where(Result.id == p).execute()
+            player_win = results.select().where(Result.winner == old_fio_full)
+            if len(player_win)> 0:
+                for p in player_win:
+                    Result.update(winner=new_fio_full).where(Result.id == p).execute() 
+            player_los = results.select().where(Result.loser == old_fio_full)
+            if len(player_los)> 0:
+                for p in player_los:
+                    Result.update(loser=new_fio_full).where(Result.id == p).execute() 
+            # обновляет таблицу -Choice- новые ФИО
+            Choice.update(family=fn).where(Choice.id == id_choice).execute() 
         elif txt == "Добавить":
             debt = "долг" if txt_edit == "Спортсмену необходимо оплатить рейтинг!" else ""
             # ==  перевод даты рождения в вид для db
