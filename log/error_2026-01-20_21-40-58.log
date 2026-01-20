@@ -1,0 +1,13 @@
+2026-01-20 21:41:42,131 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-01-20 21:41:42,133 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19082, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9955, in choice_setka_automat
+    num_id_player = new_16_choice_setka(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9374, in new_16_choice_setka
+    count_sev = len(posevs_num[f])
+                    ~~~~~~~~~~^^^
+IndexError: list index out of range

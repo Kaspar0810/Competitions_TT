@@ -9235,16 +9235,6 @@ def out_red(text):
     return(text)      
 
 
-# def progress_bar(step_bar):
-#     """прогресс бар""" 
-#     msgBox = QMessageBox 
-#     my_win.progressBar.setValue(step_bar)
-#     if step_bar >= 99:
-#        result = msgBox.information(my_win, "Уведомление", "Жеребьевка завершена, проверьте ее результаты!", msgBox.Ok)
-#        if result == msgBox.Ok:
-#             my_win.progressBar.setValue(0)
-#     return step_bar
-
 
 def check_one_region_in_choice(fin):
     """Проверка на спортсменов одного регионоа в жеребьевке"""
@@ -9315,7 +9305,293 @@ def rank_mesto_out_in_group_or_semifinal_to_final(fin):
                     break
     return nums
 
-def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
+def new_16_choice_setka(full_posev, count_exit, free_num, posevs_num):
+    """вариант жеребьевки сетки предложенный AI"""
+
+    import random
+
+# Исходные данные с группами и местами
+# sportsmen = [
+# ["Иванов", "Москва", 450, "1 группа", "1 место"],
+# ["Петров", "Москва", 435, "1 группа", "2 место"],
+# ["Сидоров", "Москва", 429, "2 группа", "1 место"],
+# ["Лазарев", "Москва", 480, "2 группа", "2 место"],
+# ["Зырянов", "Москва", 520, "3 группа", "1 место"],
+# ["Котов", "Свердловская обл.", 272, "3 группа", "2 место"],
+# ["Ветров", "Свердловская обл.", 654, "4 группа", "1 место"],
+# ["Лаптев", "Свердловская обл.", 320, "4 группа", "2 место"],
+# ["Малышев", "Свердловская обл.", 400, "5 группа", "1 место"],
+# ["Реутов", "Свердловская обл.", 250, "5 группа", "2 место"],
+# ["Пушкин", "Вологодская обл.", 140, "6 группа", "1 место"],
+# ["Клюкин", "Вологодская обл.", 300, "6 группа", "2 место"],
+# ["Лермонтов", "Вологодская обл.", 290, "7 группа", "1 место"],
+# ["Лапшин", "Вологодская обл.", 570, "7 группа", "2 место"],
+# ["Стеклов", "Вологодская обл.", 420, "8 группа", "1 место"],
+# ["Кротов", "Нижегородская обл.", 240, "8 группа", "2 место"],
+# ["Киселев", "Нижегородская обл.", 235, "9 группа", "1 место"],
+# ["Гусев", "Нижегородская обл.", 360, "9 группа", "2 место"],
+# ["Бондаренко", "Нижегородская обл.", 125, "10 группа", "1 место"],
+# ["Романов", "Нижегородская обл.", 255, "10 группа", "2 место"],
+# ["Гладышев", "Тюменская обл.", 710, "11 группа", "1 место"],
+# ["Павлов", "Тюменская обл.", 390, "11 группа", "2 место"],
+# ["Шибаев", "Самарская обл.", 310, "12 группа", "1 место"],
+# ["Лукин", "Самарская обл.", 410, "12 группа", "2 место"],
+# ["Стоянов", "Оренбургская обл.", 320, "13 группа", "1 место"],
+# ["Орлов", "Ивановская обл.", 515, "13 группа", "2 место"],
+# ["Ветров", "Ивановская обл.", 110, "14 группа", "1 место"],
+# ["Волков", "Иркутская обл.", 310, "14 группа", "2 место"],
+# ["Медведев", "Иркутская обл.", 160, "15 группа", "1 место"],
+# ["Зайцев", "Иркутская обл.", 260, "15 группа", "2 место"],
+# ["Лосев", "Саратовская обл.", 180, "16 группа", "1 место"],
+# ["Тихонов", "Кемеровская обл.", 460, "16 группа", "2 место"]
+# ]
+    sportsmen = full_posev
+    # Определение четверти для номера
+    def get_quarter(position):
+        if 1 <= position <= posevs_num[0] / 4:
+            return 1
+        elif (posevs_num[0] / 4) + 1 <= position <= posevs_num[0] / 2:
+            return 2
+        elif (posevs_num[0] / 2) + 1 <= position <= posevs_num[0] / 4 * 3:
+            return 3
+        elif (posevs_num[0] / 4 * 3) + 1 <= position <= posevs_num[0]:
+            return 4
+        else:
+            return None
+
+    # Определение половины для номера
+    def get_half(position):
+        if 1 <= position <= posevs_num[0] / 2:
+            return 1
+        else:
+            return 2
+
+    count_posev = len(posevs_num)
+    # Посевы (номера в таблице)
+    seeds = {}
+    r = 1
+    for f in range(1, count_posev):
+        count_sev = len(posevs_num[f])
+        for k in range(1, count_sev + 1):
+            seeds[r] = posevs_num[f][k - 1]
+            r += 1
+    # Шаг 1: Сортировка спортсменов
+    # Сначала по занятому месту (1-е место, затем 2-е место)
+    # Затем спортсменов, занявших 1-е место, по рейтингу (по убыванию)
+
+    # Разделяем спортсменов на тех, кто занял 1-е и 2-е места
+    first_place = [s for s in sportsmen if s[7] == 1]
+    second_place = [s for s in sportsmen if s[7] == 2]
+
+    # Сортируем спортсменов, занявших 1-е место, по рейтингу (по убыванию)
+    first_place_sorted = sorted(first_place, key=lambda x: x[6], reverse=True)
+
+    # Сортируем спортсменов, занявших 2-е место (можно по рейтингу или оставить как есть)
+    second_place_sorted = second_place # можно отсортировать по рейтингу, если нужно
+
+    # Создаем общий отсортированный список: сначала все 1-е места, затем все 2-е места
+    sorted_sportsmen = first_place_sorted + second_place_sorted
+
+    # Выводим отсортированных спортсменов
+    print("Отсортированные спортсмены:")
+    print("-" * 100)
+    print(f"{'Фамилия':<15} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10}")
+    print("-" * 100)
+    for s in sorted_sportsmen:
+        print(f"{s[0]:<15} {s[1]:<20} {s[2]:<8} {s[3]:<10} {s[4]:<10}")
+
+    # Таблица для размещения спортсменов
+    table = {i: None for i in range(1, posevs_num[0] + 1)}
+
+    # Структуры для отслеживания распределения
+    group_position = {} # группа -> позиция спортсмена с 1-м местом
+
+    # Шаг 2: Посев спортсменов, занявших 1-е место
+    print("\n" + "="*100)
+    print("ШАГ 2: Посев спортсменов, занявших 1-е место")
+    print("="*100)
+
+    # Создаем список индексов спортсменов с 1-м местом
+    first_place_indices = list(range(len(first_place_sorted)))
+    used_indices = []
+
+    # Функция для жеребьевки спортсменов с 1-м местом
+    def draw_first_place():
+        """Жеребьевка спортсменов с 1-м местом согласно предыдущему заданию"""
+        # Распределение по посевам
+        seed_assignment = {}
+        for seed_num in seeds:
+            seed_assignment[seed_num] = []
+
+        # Назначаем спортсменов по силе в соответствующие посевы
+        for i, sportsman_idx in enumerate(first_place_indices):
+            if i == 0: # Самый сильный - посев 1
+                seed_assignment[1].append(sportsman_idx)
+            elif i == 1: # Второй по силе - тоже посев 1
+                seed_assignment[1].append(sportsman_idx)
+            elif i in [2, 3]: # 3-й и 4-й - посев 2
+                seed_assignment[2].append(sportsman_idx)
+            elif i in [4, 5, 6, 7]: # 5-8-й - посев 3
+                seed_assignment[3].append(sportsman_idx)
+            elif i in range(8, 16): # 9-16-й - посев 4
+                seed_assignment[4].append(sportsman_idx)
+            else: # Остальные - посев 5
+                seed_assignment[5].append(sportsman_idx)
+
+        # Жеребьевка для каждого посева число заменить на кол-во подпосевов
+        for seed_num in [1, 2, 3, 4, 5]:
+            positions = seeds[seed_num].copy()
+            random.shuffle(positions)
+
+            for sportsman_idx in seed_assignment[seed_num]:
+                sportsman = sorted_sportsmen[sportsman_idx]
+
+                # Берем первую доступную позицию
+                position = positions.pop(0)
+
+                # Размещаем спортсмена в таблице
+                table[position] = sportsman
+
+                # Сохраняем позицию спортсмена с 1-м местом для его группы
+                group = sportsman[3]
+                group_position[group] = position
+
+                # Отмечаем как использованного
+                used_indices.append(sportsman_idx)
+
+                print(f" {sportsman[0]} ({sportsman[1]}, {sportsman[3]}) -> позиция {position} (четверть {get_quarter(position)})")
+
+        # Выполняем жеребьевку спортсменов с 1-м местом
+    draw_first_place()
+
+    # Шаг 3: Посев спортсменов, занявших 2-е место
+    print("\n" + "="*100)
+    print("ШАГ 3: Посев спортсменов, занявших 2-е место")
+    print("="*100)
+
+    # Создаем список индексов спортсменов с 2-м местом
+    second_place_indices = list(range(len(first_place_sorted), len(sorted_sportsmen)))
+
+    # Определяем доступные позиции
+    all_positions = list(range(1, 33))
+    occupied_positions = [pos for pos, val in table.items() if val is not None]
+    available_positions = [pos for pos in all_positions if pos not in occupied_positions]
+
+    print(f"Доступно позиций для спортсменов с 2-м местом: {len(available_positions)}")
+
+    # Жеребьевка спортсменов с 2-м местом
+    for sportsman_idx in second_place_indices:
+        sportsman = sorted_sportsmen[sportsman_idx]
+        group = sportsman[3]
+
+    # Получаем позицию спортсмена с 1-м местом из той же группы
+    first_place_pos = group_position.get(group)
+
+    if first_place_pos:
+        half_of_first = get_half(first_place_pos)
+
+    # Определяем доступные позиции в противоположной половине
+    opposite_half_positions = []
+    for pos in available_positions:
+        if get_half(pos) != half_of_first:
+            opposite_half_positions.append(pos)
+
+    # Если есть позиции в противоположной половине, выбираем случайную
+    if opposite_half_positions:
+        position = random.choice(opposite_half_positions)
+    else:
+        # Если нет позиций в противоположной половине, выбираем любую доступную
+        position = random.choice(available_positions)
+        # else:
+        #     # Если почему-то нет позиции для спортсмена с 1-м местом из этой группы
+        #     position = random.choice(available_positions)
+
+    # Размещаем спортсмена в таблице
+    table[position] = sportsman
+    available_positions.remove(position)
+
+    print(f" {sportsman[0]} ({sportsman[1]}, {sportsman[3]}) -> позиция {position}")
+    print(f" (спортсмен с 1-м местом из группы на позиции {first_place_pos} -> противоположная половина)")
+
+    # Вывод итоговой таблицы
+    print("\n" + "="*100)
+    print("ИТОГОВАЯ ТАБЛИЦА РАСПРЕДЕЛЕНИЯ")
+    print("="*100)
+    print(f"{'Позиция':<8} {'Фамилия':<15} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10} {'Четверть':<10} {'Половина':<8}")
+    print("-" * 100)
+
+    for position in range(1, 33):
+        sportsman = table[position]
+        quarter = get_quarter(position)
+        half = get_half(position)
+        print(f"{position:<8} {sportsman[0]:<15} {sportsman[1]:<20} {sportsman[2]:<8} {sportsman[3]:<10} {sportsman[4]:<10} {quarter:<10} {half:<8}")
+
+    # Проверка правильности распределения
+    print("\n" + "="*100)
+    print("ПРОВЕРКА РАСПРЕДЕЛЕНИЯ СПОРТСМЕНОВ ИЗ ОДНОЙ ГРУППЫ")
+    print("="*100)
+
+    # Группируем спортсменов по группам
+    group_members = {}
+    for position in range(1, 33):
+        sportsman = table[position]
+        group = sportsman[3]
+        if group not in group_members:
+            group_members[group] = []
+            group_members[group].append((sportsman[0], position, sportsman[4]))
+
+    # Проверяем каждую группу
+    all_correct = True
+    for group, members in sorted(group_members.items(), key=lambda x: int(x[0].split()[0])):
+        if len(members) == 2:
+            member1, pos1, place1 = members[0]
+            member2, pos2, place2 = members[1]
+
+    half1 = get_half(pos1)
+    half2 = get_half(pos2)
+
+    if half1 == half2:
+        print(f"⚠ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
+        print(f" ОШИБКА: Оба спортсмена в одной половине!")
+        all_correct = False
+    else:
+        print(f"✓ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
+        print(f" OK: Спортсмены в разных половинах таблицы")
+    # else:
+    #     print(f"⚠ Группа {group}: неожиданное количество спортсменов - {len(members)}")
+
+    if all_correct:
+        print("\n✓ Все спортсмены из одной группы распределены в разные половины таблицы!")
+    else:
+        print("\n⚠ Нарушены правила распределения спортсменов из одной группы!")
+
+    # Статистика
+    print("\n" + "="*100)
+    print("СТАТИСТИКА РАСПРЕДЕЛЕНИЯ")
+    print("="*100)
+
+# # Подсчет по половинам для каждой группы
+# print("\nРаспределение по половинам для каждой группы:")
+# for group in sorted(group_members.keys(), key=lambda x: int(x.split()[0])):
+# members = group_members[group]
+# half1_count = sum(1 for _, pos, _ in members if get_half(pos) == 1)
+# half2_count = sum(1 for _, pos, _ in members if get_half(pos) == 2)
+
+# print(f" Группа {group}: Первая половина - {half1_count} спортсменов, Вторая половина - {half2_count} спортсменов")
+
+# # Подсчет общего количества спортсменов в каждой половине
+# total_half1 = sum(1 for pos in range(1, 33) if get_half(pos) == 1 and table[pos] is not None)
+# total_half2 = sum(1 for pos in range(1, 33) if get_half(pos) == 2 and table[pos] is not None)
+
+# print(f"\nОбщее распределение:")
+# print(f" Первая половина (позиции 1-16): {total_half1} спортсменов")
+# print(f" Вторая половина (позиции 17-32): {total_half2} спортсменов")
+
+# # Проверка заполненности таблицы
+# print(f"\nВсего размещено спортсменов: {len([pos for pos in range(1, 33) if table[pos] is not None])}")
+# print(f"Всего доступных позиций: 32")
+
+def _new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     """вариант жеребьевки сетки предложенный AI"""
 
     sorted_sportsmen = full_posev
@@ -9517,8 +9793,6 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
         return table
 
 
-
-
 def choice_setka_automat(fin, flag, count_exit):
     """автоматическая жеребьевка сетки, fin - финал, count_exit - сколько выходят в финал
     flag - флаг вида жеребьевки ручная или автомат""" 
@@ -9678,9 +9952,9 @@ def choice_setka_automat(fin, flag, count_exit):
             # elif count_exit != 1 or fin != "1-й финал":
             #     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу 
         # ======== функция жеребьевки при выходе из группы или ПФ 1 чел (Интернет)
-        num_id_player = new_choice_setka(full_posev, count_exit, free_num, posevs_num) 
+        num_id_player = new_16_choice_setka(full_posev, count_exit, free_num, posevs_num) 
     # if step > 99:
-        del_num_list = []  
+        # del_num_list = []  
         for i in num_id_player.keys():
             tmp_list = list(num_id_player[i])
             # if len(tmp_list) == 1:                
@@ -10993,7 +11267,6 @@ def view_table_choice_double(fam_city, number_net, num_id_player):
         my_win.tableView_net.setGridStyle(QtCore.Qt.DashDotLine) # вид линии сетки 
         my_win.tableView_net.setModel(model)
         my_win.tableView_net.show()
-
 
 # ==== вариант парных =============
 def setka_choice_number(fin, count_exit):
