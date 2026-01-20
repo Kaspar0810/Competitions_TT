@@ -9294,7 +9294,9 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     """вариант жеребьевки сетки предложенный AI"""
     # Сортируем спортсменов по рейтингу (по убыванию)
     
-    sorted_sportsmen = sorted(full_posev, key=lambda x: x[6], reverse=True)
+    sorted_sportsmen = full_posev
+
+    # sorted_sportsmen = sorted(full_posev, key=lambda x: x[6], reverse=True)
 
     # Определение четверти для номера
     def get_quarter(position):
@@ -9323,7 +9325,8 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
         seeds[k] = posevs_num[1][k - 1]
    
     # удаляет из последнего посева свободные номера
-    if len(free_num) > 0:
+    count_free = len(free_num)
+    if count_free > 0:
         latest_sev = seeds[count_posev]
         for h in free_num:
             latest_sev.remove(h)
@@ -9352,7 +9355,7 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     region_half[sorted_sportsmen[0][1]][1] += 1
     region_quarter[sorted_sportsmen[0][1]][1] += 1
 
-    table[posevs_num] = sorted_sportsmen[1] # Второй по силе спортсмен
+    table[posevs_num[0]] = sorted_sportsmen[1] # Второй по силе спортсмен
     region_half[sorted_sportsmen[1][1]][2] += 1
     region_quarter[sorted_sportsmen[1][1]][4] += 1
 
@@ -9448,7 +9451,9 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
             print(f"Посев {seed_num}: {sportsman[0]} ({region}) -> позиция {position} (четверть {quarter}, половина {half})")
     # Индексы спортсменов по посевам
     seeds_athletes_indices = [[0, 1], [2, 3], [4, 5, 6, 7], list(range(8, 16)),list(range(16, 32)) ]
-
+    # Удаляем из индексов спортсменов последний, если не полный состав жеребьевки
+    for i in range(count_free):
+        seeds_athletes_indices[count_posev - 1].pop()
     p = 1
     for p in range(2, count_posev + 1):
         # Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
@@ -9456,49 +9461,41 @@ def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
         draw_seed(p, seeds_athletes_indices[p - 1])
         p += 1
 
-    # Посев 3: спортсмены 5, 6, 7, 8 (индексы 4, 5, 6, 7)
-    print("\n=== Посев 3 ===")
-    draw_seed(3, [4, 5, 6, 7])
+    # Если есть свободные номера в сетке ставим на них "Х"
+    if count_free > 0:
+        for h in free_num:
+            table[h] = "X"
 
-    # Посев 4: спортсмены 9, 10, 11, 12, 13, 14, 15, 16 (индексы 8-15)
-    print("\n=== Посев 4 ===")
-    draw_seed(4, list(range(8, 16)))
+    # # Вывод результатов
+    # print("\n" + "="*80)
+    # print("ИТОГОВАЯ ТАБЛИЦА ЖЕРЕБЬЁВКИ:")
+    # print("="*80)
+    # print(f"{'Позиция':< posevs_num[0] / 4} {'Фамилия':< (posevs_num[0] / 2) - 1} {'Регион':<25} {'Рейтинг':<8} {'Четверть':<10} {'Половина':<8 posevs_num[0] / 4}")
+    # print("-"*80)
 
-    # Посев 5: оставшиеся спортсмены (индексы 16-31)
-    print("\n=== Посев 5 ===")
-    remaining_indices = [i for i in range(len(sorted_sportsmen)) if i not in used_sportsmen_indices]
-    draw_seed(5, remaining_indices)
-
-    # Вывод результатов
-    print("\n" + "="*80)
-    print("ИТОГОВАЯ ТАБЛИЦА ЖЕРЕБЬЁВКИ:")
-    print("="*80)
-    print(f"{'Позиция':<8} {'Фамилия':<15} {'Регион':<25} {'Рейтинг':<8} {'Четверть':<10} {'Половина':<8}")
-    print("-"*80)
-
-    for position in range(1, 33):
-        sportsman = table[position]
-        quarter = get_quarter(position)
-        half = get_half(position)
-    print(f"{position:<8} {sportsman[0]:<15} {sportsman[1]:<25} {sportsman[2]:<8} {quarter:<10} {half:<8}")
+    # for position in range(1, posevs_num[0] + 1):
+    #     sportsman = table[position]
+    #     quarter = get_quarter(position)
+    #     half = get_half(position)
+    # print(f"{position:<8} {sportsman[0]:<15} {sportsman[1]:<25} {sportsman[2]:<8} {quarter:<10} {half:<8}")
 
     # Статистика по регионам
-    print("\n" + "="*80)
-    print("СТАТИСТИКА ПО РЕГИОНАМ:")
-    print("="*80)
+    # print("\n" + "="*80)
+    # print("СТАТИСТИКА ПО РЕГИОНАМ:")
+    # print("="*80)
 
-    for region in sorted(region_quarter.keys()):
-        print(f"\n{region}:")
-    print(f" Всего спортсменов: {sum(region_quarter[region].values())}")
+    # for region in sorted(region_quarter.keys()):
+    #     print(f"\n{region}:")
+    # print(f" Всего спортсменов: {sum(region_quarter[region].values())}")
 
-    # По половинам
-    print(f" По половинам: Первая - {region_half[region][1]}, Вторая - {region_half[region][2]}")
+    # # По половинам
+    # print(f" По половинам: Первая - {region_half[region][1]}, Вторая - {region_half[region][2]}")
 
     # По четвертям
-    for q in [1, 2, 3, 4]:
-        count = region_quarter[region][q]
-    if count > 0:
-        print(f" Четверть {q}: {count} спортсменов")
+    # for q in [1, 2, 3, 4]:
+    #     count = region_quarter[region][q]
+    # if count > 0:
+    #     print(f" Четверть {q}: {count} спортсменов")
 
     # Проверка правильности распределения
     print("\n" + "="*80)
@@ -9684,7 +9681,7 @@ def choice_setka_automat(fin, flag, count_exit):
                 if count_exit == 1:
                     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу
                 else:
-                    full_posev.sort(key=lambda k: (k[7], k[6])) # сортировка списка участников сначала по месту в группе а потом по рейтингу
+                    full_posev.sort(key=lambda k: (k[7], k[6]), reverse=True) # сортировка списка участников сначала по месту в группе а потом по рейтингу
             # elif count_exit != 1 or fin != "1-й финал":
             #     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу 
 
