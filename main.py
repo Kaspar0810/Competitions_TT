@@ -10017,7 +10017,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         for i in range(count_free):
             seeds_athletes_indices[count_posev - 1].pop()
         p = 1
-        for p in range(2, count_posev + 1):
+        for p in range(2, count_sev + 1):
             # Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
             print(f"\n=== Посев {p} ===")
             draw_seed(p, seeds_athletes_indices[p - 1])
@@ -10099,8 +10099,8 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
 
         def initialize_region_tracking():
             """Инициализация структур для отслеживания распределения регионов"""
-            for sportsman in sorted_sportsmen:
-                region = sportsman[1]
+            for sportsman in sorted_sportsmen_all:
+                region = sportsman[2]
                 if region not in region_half:
                     region_half[region] = {1: 0, 2: 0}
                 if region not in region_quarter:
@@ -10110,13 +10110,13 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         initialize_region_tracking()
 
         # Посев 1: позиции 1 и 32
-        table[1] = sorted_sportsmen[0] # Самый сильный спортсмен
-        region_half[sorted_sportsmen[0][1]][1] += 1
-        region_quarter[sorted_sportsmen[0][1]][1] += 1
+        table[1] = sorted_sportsmen_all[0] # Самый сильный спортсмен
+        region_half[sorted_sportsmen_all[0][2]][1] += 1
+        region_quarter[sorted_sportsmen_all[0][2]][1] += 1
 
-        table[posevs_num[0]] = sorted_sportsmen[1] # Второй по силе спортсмен
-        region_half[sorted_sportsmen[1][1]][2] += 1
-        region_quarter[sorted_sportsmen[1][1]][4] += 1
+        table[posevs_num[0]] = sorted_sportsmen_all[1] # Второй по силе спортсмен
+        region_half[sorted_sportsmen_all[1][2]][2] += 1
+        region_quarter[sorted_sportsmen_all[1][2]][4] += 1
 
         # Обработанные спортсмены
         used_sportsmen_indices = [0, 1]
@@ -10125,51 +10125,81 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         # Функция для определения, куда можно разместить спортсмена
         def get_allowed_positions_for_sportsman(sportsman, available_positions, seed_num):
             """Определить разрешенные позиции для спортсмена"""
-            region = sportsman[1]
+            region = sportsman[2]
             allowed_positions = []
 
             for pos in available_positions:
                 half = get_half(pos)
                 quarter = get_quarter(pos)
+            # ==================================================
+                # Если это второй спортсмен из региона
+                count_in_half = region_half[region][half]
+                count_in_quarter = region_quarter[region][quarter]
 
-        # Для 2-го посева: если спортсмен из того же региона,
-        # который уже есть в половине, то уйти в другую половину
-                if seed_num == 2:
+                if count_in_half == 0:
+                    pos = availble_positions[0]
+                elif count_in_half == 1:
                     if region_half[region][half] > 0:
                         continue # Пропускаем эту позицию - регион уже есть в этой половине
                     else:
                         allowed_positions.append(pos)
-
-                        # Для 3-го посева:
-                elif seed_num == 3:
-                # Если это второй спортсмен из региона
-                    count_in_half = region_half[region][half]
-                    count_in_quarter = region_quarter[region][quarter]
-
-                    # 2-й спортсмен из региона должен уйти в другую половину
+                elif count_in_half == 1:
                     if sum(region_half[region].values()) == 1:
                         if half == 1 and region_half[region][1] > 0:
                             continue # Уже есть в первой половине, нужно во вторую
                         elif half == 2 and region_half[region][2] > 0:
                             continue # Уже есть во второй половине, нужно в первую
-
-                    # 3-й и 4-й спортсмены из региона должны быть в разных четвертях
+                # elif count_in_half > 1:
                     elif sum(region_quarter[region].values()) >= 2 and sum(region_quarter[region].values()) < 4:
                         if region_quarter[region][quarter] > 0:
                             continue # В этой четверти уже есть спортсмен из этого региона
-
                     allowed_positions.append(pos)
-
-                # Для 4-го и 5-го посевов: если уже 4 или более спортсменов в четверти,
-                # ограничение не действует
-                elif seed_num >= 4:
+                if count_in_quarter > 2:
                     if region_quarter[region][quarter] >= 4:
                         allowed_positions.append(pos)
                     else:
                     # Проверяем, можно ли разместить (в четверти меньше 4)
-                        allowed_positions.append(pos)
+                        allowed_positions.append(pos)  
+            return allowed_positions    
+            # =====================================================
+            # Для 2-го посева: если спортсмен из того же региона,
+            # который уже есть в половине, то уйти в другую половину
+                # if seed_num == 2:
+                #     if region_half[region][half] > 0:
+                #         continue # Пропускаем эту позицию - регион уже есть в этой половине
+                #     else:
+                #         allowed_positions.append(pos)
 
-                return allowed_positions 
+                #         # Для 3-го посева:
+                # elif seed_num == 3:
+                # # Если это второй спортсмен из региона
+                #     count_in_half = region_half[region][half]
+                #     count_in_quarter = region_quarter[region][quarter]
+
+                    # # 2-й спортсмен из региона должен уйти в другую половину
+                    # if sum(region_half[region].values()) == 1:
+                    #     if half == 1 and region_half[region][1] > 0:
+                    #         continue # Уже есть в первой половине, нужно во вторую
+                    #     elif half == 2 and region_half[region][2] > 0:
+                    #         continue # Уже есть во второй половине, нужно в первую
+
+                    # 3-й и 4-й спортсмены из региона должны быть в разных четвертях
+                    # elif sum(region_quarter[region].values()) >= 2 and sum(region_quarter[region].values()) < 4:
+                    #     if region_quarter[region][quarter] > 0:
+                    #         continue # В этой четверти уже есть спортсмен из этого региона
+
+                    # allowed_positions.append(pos)
+
+                # Для 4-го и 5-го посевов: если уже 4 или более спортсменов в четверти,
+                # ограничение не действует
+                # elif seed_num >= 4:
+                #     if region_quarter[region][quarter] >= 4:
+                #         allowed_positions.append(pos)
+                #     else:
+                #     # Проверяем, можно ли разместить (в четверти меньше 4)
+                #         allowed_positions.append(pos)
+
+                # return allowed_positions 
             
         def draw_seed(seed_num, sportsmen_indices):    
             """Жеребьевка для посева"""
@@ -10178,8 +10208,8 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
 
             # Для каждого спортсмена в посеве
             for sportsman_idx in sportsmen_indices:
-                sportsman = sorted_sportsmen[sportsman_idx]
-                region = sportsman[1]
+                sportsman = sorted_sportsmen_all[sportsman_idx]
+                region = sportsman[2]
 
                 # Получаем разрешенные позиции с учетом правил
                 allowed_positions = get_allowed_positions_for_sportsman(sportsman, positions, seed_num)
@@ -10235,7 +10265,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         print("="*100)
 
         # Создаем список индексов спортсменов с 2-м местом
-        second_place_indices = list(range(len(first_place_sorted), len(sorted_sportsmen)))
+        second_place_indices = list(range(len(first_place_sorted), len(sorted_sportsmen_all)))
 
         # Определяем доступные позиции
         all_positions = list(range(1, posevs_num[0] + 1))
