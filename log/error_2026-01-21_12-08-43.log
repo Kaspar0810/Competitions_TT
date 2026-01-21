@@ -1,0 +1,13 @@
+2026-01-21 12:12:14,614 - ERROR - Необработанное исключение: TypeError: new_16_choice_setka.<locals>.draw_seed() missing 2 required positional arguments: 'seed_num' and 'sportsmen_indices'
+2026-01-21 12:12:14,638 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19185, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10058, in choice_setka_automat
+    num_id_player = new_16_choice_setka(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9569, in new_16_choice_setka
+    draw_seed()
+    ~~~~~~~~~^^
+TypeError: new_16_choice_setka.<locals>.draw_seed() missing 2 required positional arguments: 'seed_num' and 'sportsmen_indices'

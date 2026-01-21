@@ -1,0 +1,32 @@
+2026-01-21 13:46:50,762 - ERROR - Необработанное исключение: NameError: cannot access free variable 'group_position' where it is not associated with a value in enclosing scope
+2026-01-21 13:46:50,764 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19192, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10065, in choice_setka_automat
+    num_id_player = new_16_choice_setka(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9507, in new_16_choice_setka
+    draw_seed(p, seeds_athletes_indices[p - 1])
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9482, in draw_seed
+    group_position[group] = position
+    ^^^^^^^^^^^^^^
+NameError: cannot access free variable 'group_position' where it is not associated with a value in enclosing scope
+2026-01-21 13:47:10,266 - ERROR - Необработанное исключение: NameError: cannot access free variable 'group_position' where it is not associated with a value in enclosing scope
+2026-01-21 13:47:10,267 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19192, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10065, in choice_setka_automat
+    num_id_player = new_16_choice_setka(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9507, in new_16_choice_setka
+    draw_seed(p, seeds_athletes_indices[p - 1])
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9482, in draw_seed
+    group_position[group] = position
+    ^^^^^^^^^^^^^^
+NameError: cannot access free variable 'group_position' where it is not associated with a value in enclosing scope

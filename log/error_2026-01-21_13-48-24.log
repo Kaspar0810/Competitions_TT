@@ -1,0 +1,16 @@
+2026-01-21 13:48:43,009 - ERROR - Необработанное исключение: NameError: cannot access free variable 'used_indices' where it is not associated with a value in enclosing scope
+2026-01-21 13:48:43,011 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1121, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19193, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10066, in choice_setka_automat
+    num_id_player = new_16_choice_setka(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9508, in new_16_choice_setka
+    draw_seed(p, seeds_athletes_indices[p - 1])
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9485, in draw_seed
+    used_indices.append(sportsman_idx)
+    ^^^^^^^^^^^^
+NameError: cannot access free variable 'used_indices' where it is not associated with a value in enclosing scope
