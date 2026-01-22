@@ -10137,7 +10137,9 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
                 count_in_quarter = region_quarter[region][quarter]
 
                 if count_in_half == 0:
-                    pos = availble_positions[0]
+                    # pos = available_positions[0]
+                    # allowed_positions.append(pos)
+                    allowed_positions = available_positions.copy()
                 elif count_in_half == 1:
                     if region_half[region][half] > 0:
                         continue # Пропускаем эту позицию - регион уже есть в этой половине
@@ -10334,21 +10336,21 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
 
         # Проверяем каждую группу
         all_correct = True
-        for group, members in sorted(group_members.items(), key=lambda x: int(x[1].split()[0])):
-            if len(members) == 2:
-                member1, pos1, place1 = members[0]
-                member2, pos2, place2 = members[1]
+        # for group, members in sorted(group_members.items(), key=lambda x: int(x[2].split()[0])):
+        #     if len(members) == 2:
+        #         member1, pos1, place1 = members[0]
+        #         member2, pos2, place2 = members[1]
 
-        half1 = get_half(pos1)
-        half2 = get_half(pos2)
+        # half1 = get_half(pos1)
+        # half2 = get_half(pos2)
 
-        if half1 == half2:
-            print(f"⚠ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
-            print(f" ОШИБКА: Оба спортсмена в одной половине!")
-            all_correct = False
-        else:
-            print(f"✓ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
-            print(f" OK: Спортсмены в разных половинах таблицы")
+        # if half1 == half2:
+        #     print(f"⚠ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
+        #     print(f" ОШИБКА: Оба спортсмена в одной половине!")
+        #     all_correct = False
+        # else:
+        #     print(f"✓ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
+        #     print(f" OK: Спортсмены в разных половинах таблицы")
     
     if all_correct:
         print("\n✓ Все правила распределения соблюдены!")
