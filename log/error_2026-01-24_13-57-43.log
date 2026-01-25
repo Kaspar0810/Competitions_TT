@@ -1,0 +1,18 @@
+2026-01-24 13:58:14,397 - ERROR - Необработанное исключение: TypeError: list indices must be integers or slices, not tuple
+2026-01-24 13:58:14,398 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1124, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20088, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10961, in choice_setka_automat
+    num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10258, in choice_net_automat
+    placement = draw_32_groups(sportsmen_data)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10082, in draw_32_groups
+    if check_region_constraints(placement, sportsmen_data):
+       ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9894, in check_region_constraints
+    region = sportsmen_data[sportsman_idx][1]
+             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not tuple

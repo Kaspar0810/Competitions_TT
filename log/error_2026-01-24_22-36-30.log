@@ -1,0 +1,17 @@
+2026-01-24 22:41:13,888 - ERROR - Необработанное исключение: KeyError: 5
+2026-01-24 22:41:13,890 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1124, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20089, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10962, in choice_setka_automat
+    num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10254, in choice_net_automat
+    placement = draw_16_groups(sorted_sportsmen)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10108, in draw_16_groups
+    seeds = get_seed_groups()
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9840, in get_seed_groups
+    seeds[5] = [num for num in seeds[5] if num not in used_numbers]
+                               ~~~~~^^^
+KeyError: 5
