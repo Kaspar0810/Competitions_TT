@@ -9513,6 +9513,7 @@ def _new_choice_setka(full_posev, count_exit, free_num, posevs_num):
 
 def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums):
     """"Жеребьевка сетки новый вариант"""
+    import collections
     # === колво посевов ====
     count_free = len(free_num)
     sportsmen_data = sorted_sportsmen
@@ -9530,15 +9531,14 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
         count_sev = len(posevs_num[f])
         for k in range(1, count_sev + 1):
             seeds[r] = posevs_num[f][k - 1]
-            if r == count_sev:
-                # удаляет из последнего посева свободные номера
-                count_free = len(free_num)
-                if count_free > 0:
-                    for h in free_num:
-                        seeds[r].remove(h)
-            r += 1
-    first = nums[0]
-    second = nums[1]
+            r += 1   
+    count_free = len(free_num)
+    if count_free > 0:
+        for h in free_num:
+            [last] = collections.deque(seeds, maxlen=1) # определяет последний ключ в словаре
+            seeds[last].remove(h)   
+
+    first = nums[0] # наименшее место при выходе из группы
     # ======= определяем seed_order =======
     # Определяем посевы
     def get_seed_groups(count_exit) -> Dict[int, List[int]]:
@@ -9667,27 +9667,10 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
         count_posevs = len(posevs_num[1])
 
         placement = {i: None for i in range(1, posevs_num[0] + 1)}
-        # count_posev = len(posevs_num)
-
-        # # Посевы (номера в таблице)
-        # seeds = {}
-        # r = 1
-        # for f in range(1, count_posev):
-        #     count_sev = len(posevs_num[f])
-        #     for k in range(1, count_sev + 1):
-        #         seeds[r] = posevs_num[f][k - 1]
-        #         if r == count_sev:
-        #             # удаляет из последнего посева свободные номера
-        #             count_free = len(free_num)
-        #             if count_free > 0:
-        #                 # latest_sev = seeds[count_posev]
-        #                 for h in free_num:
-        #                     seeds[r].remove(h)
-        #         r += 1
+   
  
         for attempt in range(max_attempts):
             # Инициализируем размещение
-            # placement = {i: None for i in range(1, posevs_num[0] + 1)}
 
             # Словарь для отслеживания использования четвертей регионами
             region_quarter_usage = defaultdict(set)
@@ -9740,7 +9723,6 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
 
                 # Для посевов 3, 4, 5 используем улучшенный алгоритм
                 for seed_num in range(3, count_posevs + 1):
-                # for seed_num in [3, 4, 5]:
                     seed_positions = seeds[seed_num]
                     # ===== вариант число спортсменов в данном посев ==
                     count_sev = len(seed_positions)
@@ -9806,15 +9788,6 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
                 if len(upd_available_indices) == 0:
                     return placement
 
-                # # Проверяем все условия
-                # if check_region_constraints(placement, sportsmen_data):
-                #     # Дополнительная проверка: все спортсмены размещены
-                #     if all(idx is not None for idx in placement.values()):
-                #         return placement
-
-        # print(f"Не удалось найти подходящее распределение за {max_attempts} попыток")
-        # return None
-
     def draw_16_groups(sportsmen_data: List[List]) -> Dict[int, int]:
         """Жеребьевка для 16 групп"""
         # Разделяем на занявших 1-е и 2-е места
@@ -9845,9 +9818,6 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
         region_quarter_usage = defaultdict(set)
 
         # Посев для первых мест
-        # seed_order = [1, 2, 3, 4, 5]
-        # seed_order = range(seed_order_sum)
-
         for seed_num in range(1, seed_order + 1):
             seed_positions = seeds[seed_num]
             available_positions = [pos for pos in seed_positions if placement[pos] is None]
@@ -9944,43 +9914,43 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
 
         return placement
 
-    def print_results(placement: Dict[int, int], sportsmen_data: List[List], title: str):
-        """Выводит результаты жеребьевки"""
-        print(f"\n{'='*80}")
-        print(f"{title}")
-        print(f"{'='*80}")
-        print(f"{'Номер':<6} {'Фамилия':<12} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10} {'Половина':<8} {'Четверть':<8}")
-        print(f"{'-'*90}")
+    # def print_results(placement: Dict[int, int], sportsmen_data: List[List], title: str):
+    #     """Выводит результаты жеребьевки"""
+    #     print(f"\n{'='*80}")
+    #     print(f"{title}")
+    #     print(f"{'='*80}")
+    #     print(f"{'Номер':<6} {'Фамилия':<12} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10} {'Половина':<8} {'Четверть':<8}")
+    #     print(f"{'-'*90}")
 
-        for table_num in sorted(placement.keys()):
-            sportsman_idx = placement[table_num]
-        if sportsman_idx is not None:
-            sportsman = sportsmen_data[sportsman_idx]
-            half = get_half(table_num)
-            quarter = get_quarter(table_num)
-            print(f"{table_num:<6} {sportsman[0]:<12} {sportsman[1]:<20} {sportsman[2]:<8} {sportsman[3]:<10} {sportsman[4]:<10} {half:<8} {quarter:<8}")
-        else:
-            print(f"{table_num:<6} {'-':<12} {'-':<20} {'-':<8} {'-':<10} {'-':<10} {get_half(table_num):<8} {get_quarter(table_num):<8}")
+    #     for table_num in sorted(placement.keys()):
+    #         sportsman_idx = placement[table_num]
+    #     if sportsman_idx is not None:
+    #         sportsman = sportsmen_data[sportsman_idx]
+    #         half = get_half(table_num)
+    #         quarter = get_quarter(table_num)
+    #         print(f"{table_num:<6} {sportsman[0]:<12} {sportsman[1]:<20} {sportsman[2]:<8} {sportsman[3]:<10} {sportsman[4]:<10} {half:<8} {quarter:<8}")
+    #     else:
+    #         print(f"{table_num:<6} {'-':<12} {'-':<20} {'-':<8} {'-':<10} {'-':<10} {get_half(table_num):<8} {get_quarter(table_num):<8}")
 
-        print(f"{'='*90}")
+    #     print(f"{'='*90}")
 
-        # Выводим статистику по регионам
-        print("\nСтатистика по регионам:")
-        print(f"{'Регион':<20} {'Кол-во':<8} {'Размещение по четвертям':<30}")
-        print(f"{'-'*60}")
+    #     # Выводим статистику по регионам
+    #     print("\nСтатистика по регионам:")
+    #     print(f"{'Регион':<20} {'Кол-во':<8} {'Размещение по четвертям':<30}")
+    #     print(f"{'-'*60}")
 
-        region_stats = defaultdict(lambda: {'count': 0, 'quarters': set()})
-        for table_num, sportsman_idx in placement.items():
-            if sportsman_idx is not None:
-                sportsman = sportsmen_data[sportsman_idx]
-                region = sportsman[1]
-                region_stats[region]['count'] += 1
-                region_stats[region]['quarters'].add(get_quarter(table_num))
+    #     region_stats = defaultdict(lambda: {'count': 0, 'quarters': set()})
+    #     for table_num, sportsman_idx in placement.items():
+    #         if sportsman_idx is not None:
+    #             sportsman = sportsmen_data[sportsman_idx]
+    #             region = sportsman[1]
+    #             region_stats[region]['count'] += 1
+    #             region_stats[region]['quarters'].add(get_quarter(table_num))
 
-        for region, stats in sorted(region_stats.items()):
-            quarters = sorted(stats['quarters'])
-            quarters_str = ', '.join(map(str, quarters))
-            print(f"{region:<20} {stats['count']:<8} {quarters_str:<30}")
+    #     for region, stats in sorted(region_stats.items()):
+    #         quarters = sorted(stats['quarters'])
+    #         quarters_str = ', '.join(map(str, quarters))
+    #         print(f"{region:<20} {stats['count']:<8} {quarters_str:<30}")
 
     table = {} 
     if count_exit == 1:    
@@ -10892,17 +10862,17 @@ def  __choice_net_automat():
 def choice_setka_automat(fin, flag, count_exit):
     """автоматическая жеребьевка сетки, fin - финал, count_exit - сколько выходят в финал
     flag - флаг вида жеребьевки ручная или автомат""" 
-    msgBox = QMessageBox 
+    # msgBox = QMessageBox 
     full_posev = []  # список полного списка участников 1-ого посева
-    group_last = []
-    number_last = [] # посеянные номера в сетке
-    reg_last = []  # посеянные регионы в сетке
-    number_posev = []  # список номеров по порядку для посева
-    current_region_posev = {} # в текущем посеве список регионов по порядку
+    # group_last = []
+    # number_last = [] # посеянные номера в сетке
+    # reg_last = []  # посеянные регионы в сетке
+    # number_posev = []  # список номеров по порядку для посева
+    # current_region_posev = {} # в текущем посеве список регионов по порядку
     posev_data = {} # окончательные посев номер в сетке - игрок/ город
     num_id_player = {} # словарь номер сетки - id игрока
-    possible_number = {}
-    flag_stop_manual_choice = 0 # флаг окончания ручной жеребьевки
+    # possible_number = {}
+    # flag_stop_manual_choice = 0 # флаг окончания ручной жеребьевки
     #===================================
     id_system = system_id(stage=fin)
     system = System.select().where((System.title_id == title_id()) & (System.id == id_system)).get()
@@ -10912,7 +10882,7 @@ def choice_setka_automat(fin, flag, count_exit):
     stage_exit = system.stage_exit
   
     posevs_num = setka_choice_number(fin, count_exit) # выбор номеров сетки для посева
-    player_net = posevs_num[0] # максимальное число игроков в сетке
+    # player_net = posevs_num[0] # максимальное число игроков в сетке
     # count_posev = len(posevs[1])
     # if fin == "Суперфинал" or fin == "Одна таблица":
     #     count_exit = 1
@@ -10932,8 +10902,8 @@ def choice_setka_automat(fin, flag, count_exit):
     #     posev_3 = posevs[3]
     #     posev_4 = posevs[4]
 
-    free_seats = 0 # кол-во свободных мест в сетке
-    step = 0
+    # free_seats = 0 # кол-во свободных мест в сетке
+    # step = 0
     del_num = 0
     free_num = []
     real_all_player_in_final = []
@@ -10982,15 +10952,14 @@ def choice_setka_automat(fin, flag, count_exit):
                 if flag == 3:
                     choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums)))
                 else:
-                    # choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final == nums[n]))
-                    # nums = [3, 4]
                     choice_posev = choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums)))
                 real_all_player_in_final = len(choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums))))
-        count_player_in_final = len(choice_posev) # количество игроков в отдельном посева
+        # count_player_in_final = len(choice_posev) # количество игроков в отдельном посева
         # ищет свободные номера только в последнем посеве        
         # if real_all_player_in_final != max_player:
         max_player = full_net_player(player_in_final=max_player)
-        if real_all_player_in_final != max_player and n == end_posev - 1:
+        # if real_all_player_in_final != max_player and n == end_posev - 1:
+        if max_player > real_all_player_in_final:
             free_num = free_place_in_setka(max_player, real_all_player_in_final)
             del_num = 1 # флаг, что есть свободные номера
         full_posev.clear()

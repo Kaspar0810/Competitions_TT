@@ -1,0 +1,13 @@
+2026-01-26 21:34:01,274 - ERROR - Необработанное исключение: ValueError: list.remove(x): x not in list
+2026-01-26 21:34:01,275 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1124, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20148, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 11021, in choice_setka_automat
+    num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num, nums)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9538, in choice_net_automat
+    seeds[r].remove(h)
+    ~~~~~~~~~~~~~~~^^^
+ValueError: list.remove(x): x not in list
