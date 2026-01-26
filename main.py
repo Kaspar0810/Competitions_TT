@@ -9827,7 +9827,7 @@ def _new_choice_setka(full_posev, count_exit, free_num, posevs_num):
 def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
     """"Жеребьевка сетки новый вариант"""
     # === колво посевов ====
-
+    count_free = len(free_num)
     sportsmen_data = sorted_sportsmen
 
     # Определяем посевы
@@ -9954,18 +9954,33 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         # Сортируем по рейтингу (по убыванию)
         sorted_sportsmen = sorted(enumerate(sportsmen_data), key=lambda x: x[1][6], reverse=True)
         sorted_indices = [idx for idx, _ in sorted_sportsmen]
-        count_sev = len(posevs_num[1])
-        seeds = get_seed_groups(count_exit)
+        count_posevs = len(posevs_num[1])
 
+        placement = {i: None for i in range(1, posevs_num[0] + 1)}
+        count_posev = len(posevs_num)
+
+        # Посевы (номера в таблице)
+        seeds = {}
+        r = 1
+        for f in range(1, count_posev):
+            count_sev = len(posevs_num[f])
+            for k in range(1, count_sev + 1):
+                seeds[r] = posevs_num[f][k - 1]
+                if r == count_sev:
+                    # удаляет из последнего посева свободные номера
+                    count_free = len(free_num)
+                    if count_free > 0:
+                        # latest_sev = seeds[count_posev]
+                        for h in free_num:
+                            seeds[r].remove(h)
+                r += 1
+ 
         for attempt in range(max_attempts):
             # Инициализируем размещение
-            placement = {i: None for i in range(1, posevs_num[0] + 1)}
+            # placement = {i: None for i in range(1, posevs_num[0] + 1)}
 
             # Словарь для отслеживания использования четвертей регионами
             region_quarter_usage = defaultdict(set)
-
-            # Обрабатываем каждый посев по порядку
-            # seed_order = [1, 2, 3, 4, 5]
 
             # Для 1-го посева
             seed_num = 1
@@ -10014,14 +10029,13 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
                 available_indices = [idx for idx in sorted_indices if idx not in used_indices]
 
                 # Для посевов 3, 4, 5 используем улучшенный алгоритм
-                # for seed_num in range(3, count_sev + 1):
-                for seed_num in [3, 4, 5]:
+                for seed_num in range(3, count_posevs + 1):
+                # for seed_num in [3, 4, 5]:
                     seed_positions = seeds[seed_num]
                     # ===== вариант число спортсменов в данном посев ==
                     count_sev = len(seed_positions)
                     upd_available_indices = available_indices[:count_sev]
-                    # ==================================================
-
+ 
                     # Получаем доступные четверти для этого посева
                     # available_quarters_for_seed = get_available_quarters_for_seed(seed_num, seeds)
 
@@ -10065,8 +10079,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
                                 # Сортируем по наименьшему количеству доступных четвертей
                                 possible_sportsmen.sort(key=lambda x: x[1])
                                 sportsman_idx = possible_sportsmen[0][0]
-                                
-
+                             
                         # Размещаем спортсмена
                         placement[pos] = sportsman_idx
 
@@ -10080,15 +10093,17 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
                             # ======
                             unplaced_indices.remove(sportsman_idx)
                             upd_available_indices.remove(sportsman_idx)
+                if len(upd_available_indices) == 0:
+                    return placement
 
-        # Проверяем все условия
-        if check_region_constraints(placement, sportsmen_data):
-            # Дополнительная проверка: все спортсмены размещены
-            if all(idx is not None for idx in placement.values()):
-                return placement
+                # # Проверяем все условия
+                # if check_region_constraints(placement, sportsmen_data):
+                #     # Дополнительная проверка: все спортсмены размещены
+                #     if all(idx is not None for idx in placement.values()):
+                #         return placement
 
-        print(f"Не удалось найти подходящее распределение за {max_attempts} попыток")
-        return None
+        # print(f"Не удалось найти подходящее распределение за {max_attempts} попыток")
+        # return None
 
     def draw_16_groups(sportsmen_data: List[List]) -> Dict[int, int]:
         """Жеребьевка для 16 групп"""
@@ -10267,9 +10282,17 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
     player_list = list(placement.values())
     k = 1
     for player_id in player_list:
-        player = sorted_sportsmen[player_id]
-        table[k] = player
+        if player_id is None:
+           if count_free > 0:
+              table[k] = ["X"]  
+        else:
+            player = sorted_sportsmen[player_id]
+            table[k] = player
         k += 1
+    # # Если есть свободные номера в сетке ставим на них "Х"
+    # if count_free > 0:
+    #     for h in free_num:
+    #         table[h] = ["X"]
     return table
 
 
