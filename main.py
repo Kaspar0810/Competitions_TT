@@ -9309,319 +9309,6 @@ def rank_mesto_out_in_group_or_semifinal_to_final(fin):
     return nums
 
 
-def _new_16_choice_setka(full_posev, count_exit, free_num, posevs_num):
-    """вариант жеребьевки сетки предложенный AI"""
-    import random
-
-    sportsmen = full_posev
-    # Определение четверти для номера
-    def get_quarter(position):
-        if 1 <= position <= posevs_num[0] / 4:
-            return 1
-        elif (posevs_num[0] / 4) + 1 <= position <= posevs_num[0] / 2:
-            return 2
-        elif (posevs_num[0] / 2) + 1 <= position <= posevs_num[0] / 4 * 3:
-            return 3
-        elif (posevs_num[0] / 4 * 3) + 1 <= position <= posevs_num[0]:
-            return 4
-        else:
-            return None
-
-    # Определение половины для номера
-    def get_half(position):
-        if 1 <= position <= posevs_num[0] / 2:
-            return 1
-        else:
-            return 2
-
-    count_posev = len(posevs_num)
-    # Посевы (номера в таблице)
-    seeds = {}
-    r = 1
-    for f in range(1, count_posev):
-        count_sev = len(posevs_num[f])
-        for k in range(1, count_sev + 1):
-            seeds[r] = posevs_num[f][k - 1]
-            r += 1
-    # Шаг 1: Сортировка спортсменов
-    # Сначала по занятому месту (1-е место, затем 2-е место)
-    # Затем спортсменов, занявших 1-е место, по рейтингу (по убыванию)
-
-    # Разделяем спортсменов на тех, кто занял 1-е и 2-е места
-    first_place = [s for s in sportsmen if s[7] == 1]
-    second_place = [s for s in sportsmen if s[7] == 2]
-
-    # Сортируем спортсменов, занявших 1-е место, по рейтингу (по убыванию)
-    first_place_sorted = sorted(first_place, key=lambda x: x[6], reverse=True)
-
-    # Сортируем спортсменов, занявших 2-е место (можно по рейтингу или оставить как есть)
-    second_place_sorted = second_place # можно отсортировать по рейтингу, если нужно
-
-    # Создаем общий отсортированный список: сначала все 1-е места, затем все 2-е места
-    sorted_sportsmen = first_place_sorted + second_place_sorted
-
-    # Выводим отсортированных спортсменов
-    print("Отсортированные спортсмены:")
-    print("-" * 100)
-    print(f"{'Фамилия':<15} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10}")
-    print("-" * 100)
-    for s in sorted_sportsmen:
-        print(f"{s[0]:<15} {s[1]:<20} {s[2]:<8} {s[3]:<10} {s[4]:<10}")
-
-    # удаляет из последнего посева свободные номера
-    count_free = len(free_num)
-    if count_free > 0:
-        latest_sev = seeds[count_posev]
-        for h in free_num:
-            latest_sev.remove(h)
-
-    # Таблица для размещения спортсменов
-    table = {i: None for i in range(1, posevs_num[0] + 1)}
-    # ========== от старой функции ===========
-    # Структуры для отслеживания распределения
-    region_half = {} # регион -> {половина: количество}
-    region_quarter = {} # регион -> {четверть: количество}
-
-    def initialize_region_tracking():
-        """Инициализация структур для отслеживания распределения регионов"""
-        for sportsman in sorted_sportsmen:
-            region = sportsman[1]
-            if region not in region_half:
-                region_half[region] = {1: 0, 2: 0}
-            if region not in region_quarter:
-                region_quarter[region] = {1: 0, 2: 0, 3: 0, 4: 0}
-
-    # Инициализируем структуры для отслеживания
-    initialize_region_tracking()
-
-    # Посев 1: позиции 1 и 32
-    table[1] = sorted_sportsmen[0] # Самый сильный спортсмен
-    region_half[sorted_sportsmen[0][1]][1] += 1
-    region_quarter[sorted_sportsmen[0][1]][1] += 1
-
-    table[posevs_num[0]] = sorted_sportsmen[1] # Второй по силе спортсмен
-    region_half[sorted_sportsmen[1][1]][2] += 1
-    region_quarter[sorted_sportsmen[1][1]][4] += 1
-
-    # Обработанные спортсмены
-    used_sportsmen_indices = [0, 1]
-    group_position = {} # группа -> позиция спортсмена с 1-м местом
-    used_indices = []
-    # Функция для определения, куда можно разместить спортсмена
-    def get_allowed_positions_for_sportsman(sportsman, available_positions, seed_num):
-        """Определить разрешенные позиции для спортсмена"""
-        region = sportsman[1]
-        allowed_positions = []
-
-        for pos in available_positions:
-            half = get_half(pos)
-            quarter = get_quarter(pos)
-
-    # Для 2-го посева: если спортсмен из того же региона,
-    # который уже есть в половине, то уйти в другую половину
-            if seed_num == 2:
-                if region_half[region][half] > 0:
-                    continue # Пропускаем эту позицию - регион уже есть в этой половине
-                else:
-                    allowed_positions.append(pos)
-
-                    # Для 3-го посева:
-            elif seed_num == 3:
-            # Если это второй спортсмен из региона
-                count_in_half = region_half[region][half]
-                count_in_quarter = region_quarter[region][quarter]
-
-                # 2-й спортсмен из региона должен уйти в другую половину
-                if sum(region_half[region].values()) == 1:
-                    if half == 1 and region_half[region][1] > 0:
-                        continue # Уже есть в первой половине, нужно во вторую
-                    elif half == 2 and region_half[region][2] > 0:
-                        continue # Уже есть во второй половине, нужно в первую
-
-                # 3-й и 4-й спортсмены из региона должны быть в разных четвертях
-                elif sum(region_quarter[region].values()) >= 2 and sum(region_quarter[region].values()) < 4:
-                    if region_quarter[region][quarter] > 0:
-                        continue # В этой четверти уже есть спортсмен из этого региона
-
-                allowed_positions.append(pos)
-
-            # Для 4-го и 5-го посевов: если уже 4 или более спортсменов в четверти,
-            # ограничение не действует
-            elif seed_num >= 4:
-                if region_quarter[region][quarter] >= 4:
-                    allowed_positions.append(pos)
-                else:
-                # Проверяем, можно ли разместить (в четверти меньше 4)
-                    allowed_positions.append(pos)
-
-            return allowed_positions 
-        
-    def draw_seed(seed_num, sportsmen_indices):    
-        """Жеребьевка для посева"""
-        positions = seeds[seed_num].copy()
-        random.shuffle(positions) # Перемешиваем позиции
-
-        # Для каждого спортсмена в посеве
-        for sportsman_idx in sportsmen_indices:
-            sportsman = sorted_sportsmen[sportsman_idx]
-            region = sportsman[1]
-
-            # Получаем разрешенные позиции с учетом правил
-            allowed_positions = get_allowed_positions_for_sportsman(sportsman, positions, seed_num)
-
-            # Если есть разрешенные позиции, выбираем случайную
-            if allowed_positions:
-                position = random.choice(allowed_positions)
-            else:
-                # Если нет разрешенных позиций, берем любую доступную
-                position = positions[0]
-
-            # Удаляем выбранную позицию из доступных
-            positions.remove(position)
-
-            # Размещаем спортсмена в таблице
-            table[position] = sportsman
-            # ==================
-            # Сохраняем позицию спортсмена с 1-м местом для его группы
-            
-            group = sportsman[3]
-            group_position[group] = position
-            # Отмечаем как использованного
-            used_indices.append(sportsman_idx)
-            # ++++++++++++++++
-
-            # Обновляем счетчики
-            half = get_half(position)
-            quarter = get_quarter(position)
-            region_half[region][half] += 1
-            region_quarter[region][quarter] += 1
-
-            # Помечаем спортсмена как использованного
-            used_sportsmen_indices.append(sportsman_idx)
-
-            # Отладочный вывод
-            print(f"Посев {seed_num}: {sportsman[0]} ({region}) -> позиция {position} (четверть {quarter}, половина {half})")
-    # Индексы спортсменов по посевам
-    seeds_athletes_indices = [[0, 1], [2, 3], [4, 5, 6, 7], list(range(8, 16)),list(range(16, 32)) ]
-    # Удаляем из индексов спортсменов последний, если не полный состав жеребьевки
-    for i in range(count_free):
-        seeds_athletes_indices[count_posev - 1].pop()
-    p = 1
-    for p in range(2, count_posev + 2):
-        # Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
-        print(f"\n=== Посев {p} ===")
-        draw_seed(p, seeds_athletes_indices[p - 1])
-        p += 1
-    # Создаем список индексов спортсменов с 1-м местом
-    first_place_indices = list(range(len(first_place_sorted)))
- 
-    # Шаг 3: Посев спортсменов, занявших 2-е место
-    print("\n" + "="*100)
-    print("ШАГ 3: Посев спортсменов, занявших 2-е место")
-    print("="*100)
-
-    # Создаем список индексов спортсменов с 2-м местом
-    second_place_indices = list(range(len(first_place_sorted), len(sorted_sportsmen)))
-
-    # Определяем доступные позиции
-    all_positions = list(range(1, 33))
-    occupied_positions = [pos for pos, val in table.items() if val is not None]
-    available_positions = [pos for pos in all_positions if pos not in occupied_positions]
-
-    print(f"Доступно позиций для спортсменов с 2-м местом: {len(available_positions)}")
-
-    # Жеребьевка спортсменов с 2-м местом
-    for sportsman_idx in second_place_indices:
-        sportsman = sorted_sportsmen[sportsman_idx]
-        group = sportsman[3]
-
-        # Получаем позицию спортсмена с 1-м местом из той же группы
-        first_place_pos = group_position.get(group)
-
-        if first_place_pos:
-            half_of_first = get_half(first_place_pos)
-
-            # Определяем доступные позиции в противоположной половине
-            opposite_half_positions = []
-            for pos in available_positions:
-                if get_half(pos) != half_of_first:
-                    opposite_half_positions.append(pos)
-
-        # Если есть позиции в противоположной половине, выбираем случайную
-        if opposite_half_positions:
-            position = random.choice(opposite_half_positions)
-        else:
-            # Если нет позиций в противоположной половине, выбираем любую доступную
-            position = random.choice(available_positions)
-
-        # Размещаем спортсмена в таблице
-        table[position] = sportsman
-        available_positions.remove(position)
-
-    print(f" {sportsman[0]} ({sportsman[1]}, {sportsman[3]}) -> позиция {position}")
-    print(f" (спортсмен с 1-м местом из группы на позиции {first_place_pos} -> противоположная половина)")
-
-    # Вывод итоговой таблицы
-    print("\n" + "="*100)
-    print("ИТОГОВАЯ ТАБЛИЦА РАСПРЕДЕЛЕНИЯ")
-    print("="*100)
-    print(f"{'Позиция':<8} {'Фамилия':<15} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10} {'Четверть':<10} {'Половина':<8}")
-    print("-" * 100)
-
-    for position in range(1, 33):
-        sportsman = table[position]
-        quarter = get_quarter(position)
-        half = get_half(position)
-        print(f"{position:<8} {sportsman[0]:<15} {sportsman[1]:<20} {sportsman[2]:<8} {sportsman[3]:<10} {sportsman[4]:<10} {quarter:<10} {half:<8}")
-
-    # Проверка правильности распределения
-    print("\n" + "="*100)
-    print("ПРОВЕРКА РАСПРЕДЕЛЕНИЯ СПОРТСМЕНОВ ИЗ ОДНОЙ ГРУППЫ")
-    print("="*100)
-
-    # Группируем спортсменов по группам
-    group_members = {}
-    for position in range(1, 33):
-        sportsman = table[position]
-        group = sportsman[3]
-        if group not in group_members:
-            group_members[group] = []
-            group_members[group].append((sportsman[0], position, sportsman[4]))
-
-    # Проверяем каждую группу
-    all_correct = True
-    for group, members in sorted(group_members.items(), key=lambda x: int(x[0].split()[0])):
-        if len(members) == 2:
-            member1, pos1, place1 = members[0]
-            member2, pos2, place2 = members[1]
-
-    half1 = get_half(pos1)
-    half2 = get_half(pos2)
-
-    if half1 == half2:
-        print(f"⚠ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
-        print(f" ОШИБКА: Оба спортсмена в одной половине!")
-        all_correct = False
-    else:
-        print(f"✓ Группа {group}: {member1} (позиция {pos1}, половина {half1}) и {member2} (позиция {pos2}, половина {half2})")
-        print(f" OK: Спортсмены в разных половинах таблицы")
-
-    if all_correct:
-        print("\n✓ Все спортсмены из одной группы распределены в разные половины таблицы!")
-    else:
-        print("\n⚠ Нарушены правила распределения спортсменов из одной группы!")
-
-    # # Статистика
-    # print("\n" + "="*100)
-    # print("СТАТИСТИКА РАСПРЕДЕЛЕНИЯ")
-    # print("="*100)
-
-
-def new_choice_setka(full_posev, count_exit, free_num, posevs_num):
-    """"old"""
-    pass
-
-
 def _new_choice_setka(full_posev, count_exit, free_num, posevs_num):
     """вариант жеребьевки сетки предложенный AI"""
 
@@ -9824,12 +9511,35 @@ def _new_choice_setka(full_posev, count_exit, free_num, posevs_num):
         return table
 
 
-def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
+def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums):
     """"Жеребьевка сетки новый вариант"""
     # === колво посевов ====
     count_free = len(free_num)
     sportsmen_data = sorted_sportsmen
-
+    # =======================
+    seed_order_list = []
+    count_posev = len(posevs_num)
+    for t in range(1, count_posev):
+        sev = len(posevs_num[t])
+        seed_order_list.append(sev)
+    seed_order = sum(seed_order_list)
+    # Посевы (номера в таблице)
+    seeds = {}
+    r = 1
+    for f in range(1, count_posev):
+        count_sev = len(posevs_num[f])
+        for k in range(1, count_sev + 1):
+            seeds[r] = posevs_num[f][k - 1]
+            if r == count_sev:
+                # удаляет из последнего посева свободные номера
+                count_free = len(free_num)
+                if count_free > 0:
+                    for h in free_num:
+                        seeds[r].remove(h)
+            r += 1
+    first = nums[0]
+    second = nums[1]
+    # ======= определяем seed_order =======
     # Определяем посевы
     def get_seed_groups(count_exit) -> Dict[int, List[int]]:
         """Возвращает распределение номеров по посевам"""
@@ -9957,23 +9667,23 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         count_posevs = len(posevs_num[1])
 
         placement = {i: None for i in range(1, posevs_num[0] + 1)}
-        count_posev = len(posevs_num)
+        # count_posev = len(posevs_num)
 
-        # Посевы (номера в таблице)
-        seeds = {}
-        r = 1
-        for f in range(1, count_posev):
-            count_sev = len(posevs_num[f])
-            for k in range(1, count_sev + 1):
-                seeds[r] = posevs_num[f][k - 1]
-                if r == count_sev:
-                    # удаляет из последнего посева свободные номера
-                    count_free = len(free_num)
-                    if count_free > 0:
-                        # latest_sev = seeds[count_posev]
-                        for h in free_num:
-                            seeds[r].remove(h)
-                r += 1
+        # # Посевы (номера в таблице)
+        # seeds = {}
+        # r = 1
+        # for f in range(1, count_posev):
+        #     count_sev = len(posevs_num[f])
+        #     for k in range(1, count_sev + 1):
+        #         seeds[r] = posevs_num[f][k - 1]
+        #         if r == count_sev:
+        #             # удаляет из последнего посева свободные номера
+        #             count_free = len(free_num)
+        #             if count_free > 0:
+        #                 # latest_sev = seeds[count_posev]
+        #                 for h in free_num:
+        #                     seeds[r].remove(h)
+        #         r += 1
  
         for attempt in range(max_attempts):
             # Инициализируем размещение
@@ -10112,7 +9822,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         second_place = []
 
         for idx, sportsman in enumerate(sportsmen_data):
-            if 1 == sportsman[7]:
+            if first == sportsman[7]: # заменить на универсальную
                 first_place.append((idx, sportsman))
             else:
                 second_place.append((idx, sportsman))
@@ -10129,17 +9839,16 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
             group_pairs[group].append(idx)
 
         # Размещаем занявших 1-е место
-        placement = {i: None for i in range(1, 33)}
-        # seeds = get_seed_groups()
-        seeds = get_seed_groups(count_exit)
+        placement = {i: None for i in range(1, posevs_num[0] + 1)}
 
         # Для хранения использования четвертей регионами
         region_quarter_usage = defaultdict(set)
 
         # Посев для первых мест
-        seed_order = [1, 2, 3, 4, 5]
+        # seed_order = [1, 2, 3, 4, 5]
+        # seed_order = range(seed_order_sum)
 
-        for seed_num in seed_order:
+        for seed_num in range(1, seed_order + 1):
             seed_positions = seeds[seed_num]
             available_positions = [pos for pos in seed_positions if placement[pos] is None]
 
@@ -10289,10 +9998,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
             player = sorted_sportsmen[player_id]
             table[k] = player
         k += 1
-    # # Если есть свободные номера в сетке ставим на них "Х"
-    # if count_free > 0:
-    #     for h in free_num:
-    #         table[h] = ["X"]
+
     return table
 
 
@@ -11342,7 +11048,7 @@ def choice_setka_automat(fin, flag, count_exit):
             # elif count_exit != 1 or fin != "1-й финал":
             #     full_posev.sort(key=lambda k: k[6], reverse=True) # сортировка списка участников по рейтингу 
         # ======== функция жеребьевки при выходе из группы или ПФ 1 чел (Интернет)
-        num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num) 
+        num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num, nums) 
     # if step > 99:
         # del_num_list = []  
         for i in num_id_player.keys():
