@@ -9669,15 +9669,33 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
 
         # Размещаем занявших 2-е место
         # === перед посевом 2-х мест прописываем Х, если не полный состав
+        fir_half = []
+        sec_half = []
+
+        for f in free_num:
+            if f < (posevs_num[0] / 2):
+                fir_half.append(f)
+            else:
+                sec_half.append(f)
+        fir_half.sort()
+        sec_half.sort(reverse = True)
+        # сортируем свободные места сначала номера одной половины затем другой
         for group in group_pairs.keys():
             list_id = group_pairs[group]
             count = len(list_id)
             if count == 1:
                 num_pl = list_id[0]
-                key = next(key for key, value in placement.items() if value == num_pl)
-                half_sev = get_half(key)
-                num_for_free = free_num[1] if half_sev == 1 else free_num[0]
-        placement[num_for_free] = "X"
+                key = next(key for key, value in placement.items() if value == num_pl) # номер в таблице где посеян NUM_PL (ID игрока)
+                half_sev = get_half(key) # в какой половине он находится (1 или 2)
+                if half_sev == 1:
+                    num_for_free = sec_half[0]
+                    placement[num_for_free] = "X"
+                    sec_half.remove(num_for_free)
+                else:
+                    num_for_free = fir_half[0]
+                    placement[num_for_free] = "X"
+                    fir_half.remove(num_for_free)
+      
         # =====================================
         for second_idx, second_sportsman in second_place:
             group = second_sportsman[3]
@@ -10717,7 +10735,8 @@ def choice_setka_automat(fin, flag, count_exit): # вариант жеребье
                     choice_posev = choice.select().where(Choice.mesto_group.in_(nums)) 
                 else:
                     if count_exit > 1:
-                        choice_posev = choice.select().where(Choice.mesto_group == nums[n])
+                        # choice_posev = choice.select().where(Choice.mesto_group == nums[n])
+                        choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
                     else:
                         choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
                 real_all_player_in_final = len(choice.select().where(Choice.mesto_group.in_(nums))) # реальное число игроков в сетке
@@ -12320,7 +12339,9 @@ def free_place_in_setka(max_player, real_all_player_in_final, count_exit):
             k = free_number[i]
             free_num.append(k)
     elif count_exit == 2:
-        for i in range (0, count * count_exit):
+        # если свободных мест не четное число, то добавляем до четного (+1), чтоб был выбор ухода от свей группы
+        z = count if count % 2 == 0 else count + 1
+        for i in range (0, z):
             k = free_number[i]
             free_num.append(k)
     return free_num
