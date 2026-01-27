@@ -9309,213 +9309,10 @@ def rank_mesto_out_in_group_or_semifinal_to_final(fin):
     return nums
 
 
-def _new_choice_setka(full_posev, count_exit, free_num, posevs_num):
-    """вариант жеребьевки сетки предложенный AI"""
-
-    sorted_sportsmen = full_posev
-
-    # Определение четверти для номера
-    def get_quarter(position):
-        if 1 <= position <= posevs_num[0] / 4:
-            return 1
-        elif (posevs_num[0] / 4) + 1 <= position <= posevs_num[0] / 2:
-            return 2
-        elif (posevs_num[0] / 2) + 1 <= position <= posevs_num[0] / 4 * 3:
-            return 3
-        elif (posevs_num[0] / 4 * 3) + 1 <= position <= posevs_num[0]:
-            return 4
-        else:
-            return None
-
-    # Определение половины для номера
-    def get_half(position):
-        if 1 <= position <= posevs_num[0] / 2:
-            return 1
-        else:
-            return 2
-
-    count_posev = len(posevs_num[1])
-    # Посевы (номера в таблице)
-    seeds = {}
-    for k in range(1, count_posev + 1):
-        seeds[k] = posevs_num[1][k - 1]
-   
-    # удаляет из последнего посева свободные номера
-    count_free = len(free_num)
-    if count_free > 0:
-        latest_sev = seeds[count_posev]
-        for h in free_num:
-            latest_sev.remove(h)
-
-    # Таблица для размещения спортсменов
-    table = {i: None for i in range(1, posevs_num[0] + 1)}
-
-    # Структуры для отслеживания распределения
-    region_half = {} # регион -> {половина: количество}
-    region_quarter = {} # регион -> {четверть: количество}
-
-    def initialize_region_tracking():
-        """Инициализация структур для отслеживания распределения регионов"""
-        for sportsman in sorted_sportsmen:
-            region = sportsman[1]
-            if region not in region_half:
-                region_half[region] = {1: 0, 2: 0}
-            if region not in region_quarter:
-                region_quarter[region] = {1: 0, 2: 0, 3: 0, 4: 0}
-
-    # Инициализируем структуры для отслеживания
-    initialize_region_tracking()
-
-    # Посев 1: позиции 1 и 32
-    table[1] = sorted_sportsmen[0] # Самый сильный спортсмен
-    region_half[sorted_sportsmen[0][1]][1] += 1
-    region_quarter[sorted_sportsmen[0][1]][1] += 1
-
-    table[posevs_num[0]] = sorted_sportsmen[1] # Второй по силе спортсмен
-    region_half[sorted_sportsmen[1][1]][2] += 1
-    region_quarter[sorted_sportsmen[1][1]][4] += 1
-
-    # Обработанные спортсмены
-    used_sportsmen_indices = [0, 1]
-
-    # Функция для определения, куда можно разместить спортсмена
-    def get_allowed_positions_for_sportsman(sportsman, available_positions, seed_num):
-        """Определить разрешенные позиции для спортсмена"""
-        region = sportsman[1]
-        allowed_positions = []
-
-        for pos in available_positions:
-            half = get_half(pos)
-            quarter = get_quarter(pos)
-
-    # Для 2-го посева: если спортсмен из того же региона,
-    # который уже есть в половине, то уйти в другую половину
-            if seed_num == 2:
-                if region_half[region][half] > 0:
-                    continue # Пропускаем эту позицию - регион уже есть в этой половине
-                else:
-                    allowed_positions.append(pos)
-
-                    # Для 3-го посева:
-            elif seed_num == 3:
-            # Если это второй спортсмен из региона
-                count_in_half = region_half[region][half]
-                count_in_quarter = region_quarter[region][quarter]
-
-                # 2-й спортсмен из региона должен уйти в другую половину
-                if sum(region_half[region].values()) == 1:
-                    if half == 1 and region_half[region][1] > 0:
-                        continue # Уже есть в первой половине, нужно во вторую
-                    elif half == 2 and region_half[region][2] > 0:
-                        continue # Уже есть во второй половине, нужно в первую
-
-                # 3-й и 4-й спортсмены из региона должны быть в разных четвертях
-                elif sum(region_quarter[region].values()) >= 2 and sum(region_quarter[region].values()) < 4:
-                    if region_quarter[region][quarter] > 0:
-                        continue # В этой четверти уже есть спортсмен из этого региона
-
-                allowed_positions.append(pos)
-
-            # Для 4-го и 5-го посевов: если уже 4 или более спортсменов в четверти,
-            # ограничение не действует
-            elif seed_num >= 4:
-                if region_quarter[region][quarter] >= 4:
-                    allowed_positions.append(pos)
-                else:
-                # Проверяем, можно ли разместить (в четверти меньше 4)
-                    allowed_positions.append(pos)
-
-            return allowed_positions
-
-    # Функция для жеребьевки посева
-    def draw_seed(seed_num, sportsmen_indices):
-        """Жеребьевка для посева"""
-        positions = seeds[seed_num].copy()
-        random.shuffle(positions) # Перемешиваем позиции
-
-        # Для каждого спортсмена в посеве
-        for sportsman_idx in sportsmen_indices:
-            sportsman = sorted_sportsmen[sportsman_idx]
-            region = sportsman[1]
-
-            # Получаем разрешенные позиции с учетом правил
-            allowed_positions = get_allowed_positions_for_sportsman(sportsman, positions, seed_num)
-
-            # Если есть разрешенные позиции, выбираем случайную
-            if allowed_positions:
-                position = random.choice(allowed_positions)
-            else:
-                # Если нет разрешенных позиций, берем любую доступную
-                position = positions[0]
-
-            # Удаляем выбранную позицию из доступных
-            positions.remove(position)
-
-            # Размещаем спортсмена в таблице
-            table[position] = sportsman
-
-            # Обновляем счетчики
-            half = get_half(position)
-            quarter = get_quarter(position)
-            region_half[region][half] += 1
-            region_quarter[region][quarter] += 1
-
-            # Помечаем спортсмена как использованного
-            used_sportsmen_indices.append(sportsman_idx)
-
-            # Отладочный вывод
-            print(f"Посев {seed_num}: {sportsman[0]} ({region}) -> позиция {position} (четверть {quarter}, половина {half})")
-    # Индексы спортсменов по посевам
-    seeds_athletes_indices = [[0, 1], [2, 3], [4, 5, 6, 7], list(range(8, 16)),list(range(16, 32)) ]
-    # Удаляем из индексов спортсменов последний, если не полный состав жеребьевки
-    for i in range(count_free):
-        seeds_athletes_indices[count_posev - 1].pop()
-    p = 1
-    for p in range(2, count_posev + 1):
-        # Посев 2: спортсмены 3 и 4 (индексы 2 и 3)
-        print(f"\n=== Посев {p} ===")
-        draw_seed(p, seeds_athletes_indices[p - 1])
-        p += 1
-
-    # Если есть свободные номера в сетке ставим на них "Х"
-    if count_free > 0:
-        for h in free_num:
-            table[h] = ["X"]
-
-    print("\n" + "="*80)
-    print("ПРОВЕРКА РАСПРЕДЕЛЕНИЯ:")
-    print("="*80)
-
-    all_correct = True
-    for region in region_quarter:
-        for q in [1, 2, 3, 4]:
-            count = region_quarter[region][q]
-            if count > 4:
-                print(f"⚠ Внимание: в регионе '{region}' в четверти {q} больше 4 спортсменов ({count})")
-                all_correct = False
-            elif count <= 4:
-                print(f"✓ Регион '{region}', четверть {q}: {count} спортсменов - OK")
-
-            # Проверка для 2-го посева
-            print("\nПроверка для 2-го посева (спортсмены из одного региона в разных половинах):")
-            for region in region_half:
-                if region_half[region][1] > 0 and region_half[region][2] > 0:
-                    # Проверяем спортсменов 3 и 4
-                    print(f" Регион '{region}': есть в обеих половинах - OK")
-
-        if all_correct:
-            print("\n✓ Все правила распределения соблюдены!")
-        else:
-            print("\n⚠ Нарушены некоторые правила распределения!")
-
-        return table
-
-
 def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums):
     """"Жеребьевка сетки новый вариант"""
     import collections
     # === колво посевов ====
-    count_free = len(free_num)
     sportsmen_data = sorted_sportsmen
     # =======================
     seed_order_list = []
@@ -9532,34 +9329,29 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
         for k in range(1, count_sev + 1):
             seeds[r] = posevs_num[f][k - 1]
             r += 1   
-    count_free = len(free_num)
-    if count_free > 0:
-        for h in free_num:
-            [last] = collections.deque(seeds, maxlen=1) # определяет последний ключ в словаре
-            seeds[last].remove(h)   
-
+ 
     first = nums[0] # наименшее место при выходе из группы
     # ======= определяем seed_order =======
     # Определяем посевы
-    def get_seed_groups(count_exit) -> Dict[int, List[int]]:
-        """Возвращает распределение номеров по посевам"""
-        # if count_exit == 2
-        # count_posev = len(posevs_num[1])
-        # Посевы (номера в таблице)
-        seeds = {}
-        n = 1
-        for l in range(0, count_exit):
-            count_posev = len(posevs_num[l + 1])
-            for k in range(1, count_posev + 1):
-                seeds[n] = posevs_num[1 + l][k - 1]
-                n += 1
-        # Убираем из 5-го посева номера, которые уже есть в предыдущих посевах
-        used_numbers = set()
-        for seed_num in range(1, 5):
-            used_numbers.update(seeds[seed_num])
-            seeds[5] = [num for num in seeds[5] if num not in used_numbers]
+    # def get_seed_groups(count_exit) -> Dict[int, List[int]]:
+    #     """Возвращает распределение номеров по посевам"""
+    #     # if count_exit == 2
+    #     # count_posev = len(posevs_num[1])
+    #     # Посевы (номера в таблице)
+    #     seeds = {}
+    #     n = 1
+    #     for l in range(0, count_exit):
+    #         count_posev = len(posevs_num[l + 1])
+    #         for k in range(1, count_posev + 1):
+    #             seeds[n] = posevs_num[1 + l][k - 1]
+    #             n += 1
+    #     # Убираем из 5-го посева номера, которые уже есть в предыдущих посевах
+    #     used_numbers = set()
+    #     for seed_num in range(1, 5):
+    #         used_numbers.update(seeds[seed_num])
+    #         seeds[5] = [num for num in seeds[5] if num not in used_numbers]
 
-        return seeds
+    #     return seeds
 
      # Определение половины для номера
    
@@ -9578,67 +9370,67 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
         else:
             return 4
 
-    def get_quarter_from_number(number: int) -> int:
-        """Определяет четверть для номера таблицы (альтернативная реализация)"""
-        if 1 <= number <= posevs_num[0] / 4:
-            return 1
-        elif (posevs_num[0] / 4) + 1 <= number <= posevs_num[0] / 2:
-            return 2
-        elif (posevs_num[0] / 2) + 1 <= number <= posevs_num[0] / 4 * 3:
-            return 3
-        elif (posevs_num[0] / 4 * 3) + 1 <= number <= posevs_num[0]:
-            return 4
-        else:
-            return 0
+    # def get_quarter_from_number(number: int) -> int:
+    #     """Определяет четверть для номера таблицы (альтернативная реализация)"""
+    #     if 1 <= number <= posevs_num[0] / 4:
+    #         return 1
+    #     elif (posevs_num[0] / 4) + 1 <= number <= posevs_num[0] / 2:
+    #         return 2
+    #     elif (posevs_num[0] / 2) + 1 <= number <= posevs_num[0] / 4 * 3:
+    #         return 3
+    #     elif (posevs_num[0] / 4 * 3) + 1 <= number <= posevs_num[0]:
+    #         return 4
+    #     else:
+    #         return 0
 
-    def check_region_constraints(placement: Dict[int, int], sportsmen_data: List[List]) -> bool:
-        """Проверяет выполнение условий по регионам"""
-        region_counts = {}
-        region_positions = {}
+    # def check_region_constraints(placement: Dict[int, int], sportsmen_data: List[List]) -> bool:
+    #     """Проверяет выполнение условий по регионам"""
+    #     region_counts = {}
+    #     region_positions = {}
 
-        # Собираем информацию о регионах и позициях
-        for table_num, sportsman_idx in placement.items():
-            if sportsman_idx is None:
-                continue
-            region = sportsmen_data[sportsman_idx][1]
+    #     # Собираем информацию о регионах и позициях
+    #     for table_num, sportsman_idx in placement.items():
+    #         if sportsman_idx is None:
+    #             continue
+    #         region = sportsmen_data[sportsman_idx][1]
 
-        if region not in region_counts:
-            region_counts[region] = 0
-            region_positions[region] = []
+    #     if region not in region_counts:
+    #         region_counts[region] = 0
+    #         region_positions[region] = []
 
-        region_counts[region] += 1
-        region_positions[region].append(table_num)
+    #     region_counts[region] += 1
+    #     region_positions[region].append(table_num)
 
-        # Проверяем условия
-        for region, count in region_counts.items():
-            positions = region_positions[region]
+    #     # Проверяем условия
+    #     for region, count in region_counts.items():
+    #         positions = region_positions[region]
 
-            if count == 2:
-                # Должны быть в разных половинах
-                halves = [get_half(pos) for pos in positions]
-                if len(set(halves)) != 2:
-                    return False
+    #         if count == 2:
+    #             # Должны быть в разных половинах
+    #             halves = [get_half(pos) for pos in positions]
+    #             if len(set(halves)) != 2:
+    #                 return False
 
-            elif count == 3 or count == 4:
-                # Должны быть в разных четвертях
-                quarters = [get_quarter(pos) for pos in positions]
-                if len(set(quarters)) != count:
-                    return False
+    #         elif count == 3 or count == 4:
+    #             # Должны быть в разных четвертях
+    #             quarters = [get_quarter(pos) for pos in positions]
+    #             if len(set(quarters)) != count:
+    #                 return False
 
-        # Для более 4 человек ограничений нет
+    #     # Для более 4 человек ограничений нет
 
-        return True
+    #     return True
 
-    def get_available_quarters_for_seed(seed_num: int, seeds: Dict[int, List[int]]) -> List[int]:
-        """Возвращает доступные четверти для посева"""
-        seed_positions = seeds[seed_num]
-        quarters = [get_quarter(pos) for pos in seed_positions]
-        return list(set(quarters))
+    # def get_available_quarters_for_seed(seed_num: int, seeds: Dict[int, List[int]]) -> List[int]:
+    #     """Возвращает доступные четверти для посева"""
+    #     seed_positions = seeds[seed_num]
+    #     quarters = [get_quarter(pos) for pos in seed_positions]
+    #     return list(set(quarters))
 
-    def get_positions_by_quarter(quarter: int, seeds: Dict[int, List[int]], seed_num: int) -> List[int]:
-        """Возвращает позиции в указанной четверти для заданного посева"""
-        seed_positions = seeds[seed_num]
-        return [pos for pos in seed_positions if get_quarter(pos) == quarter]
+    # def get_positions_by_quarter(quarter: int, seeds: Dict[int, List[int]], seed_num: int) -> List[int]:
+    #     """Возвращает позиции в указанной четверти для заданного посева"""
+    #     seed_positions = seeds[seed_num]
+    #     return [pos for pos in seed_positions if get_quarter(pos) == quarter]
 
     def calculate_available_quarters_counts(sportsmen_indices: List[int],
         sportsmen_data: List[List],
@@ -9659,7 +9451,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
 
         return counts
 
-    def draw_32_groups(sportsmen_data: List[List], max_attempts: int = 1000) -> Optional[Dict[int, int]]:
+    def draw_32_groups(sportsmen_data: List[List], free_num, max_attempts: int = 1000) -> Optional[Dict[int, int]]:
         """Жеребьевка для 32 групп с улучшенным алгоритмом"""
         # Сортируем по рейтингу (по убыванию)
         sorted_sportsmen = sorted(enumerate(sportsmen_data), key=lambda x: x[1][6], reverse=True)
@@ -9668,7 +9460,6 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
 
         placement = {i: None for i in range(1, posevs_num[0] + 1)}
    
- 
         for attempt in range(max_attempts):
             # Инициализируем размещение
 
@@ -9721,6 +9512,12 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
                 used_indices = [idx for idx in placement.values() if idx is not None]
                 available_indices = [idx for idx in sorted_indices if idx not in used_indices]
 
+                # Для отсутвующих игроков ставих X на номера в сетке
+                count_free = len(free_num)
+                if count_free > 0:
+                    for h in free_num:
+                        [last] = collections.deque(seeds, maxlen=1) # определяет последний ключ в словаре
+                        seeds[last].remove(h)  
                 # Для посевов 3, 4, 5 используем улучшенный алгоритм
                 for seed_num in range(3, count_posevs + 1):
                     seed_positions = seeds[seed_num]
@@ -9788,7 +9585,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
                 if len(upd_available_indices) == 0:
                     return placement
 
-    def draw_16_groups(sportsmen_data: List[List]) -> Dict[int, int]:
+    def draw_16_groups(sportsmen_data: List[List], free_num) -> Dict[int, int]:
         """Жеребьевка для 16 групп"""
         # Разделяем на занявших 1-е и 2-е места
         first_place = []
@@ -9801,7 +9598,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
                 second_place.append((idx, sportsman))
 
         # Сортируем занявших 1-е место по рейтингу (по убыванию)
-        first_place_sorted = sorted(first_place, key=lambda x: x[1][2], reverse=True)
+        first_place_sorted = sorted(first_place, key=lambda x: x[1][6], reverse=True)
 
         # Определяем пары (группы) - кто с кем был в группе
         group_pairs = {}
@@ -9818,7 +9615,8 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
         region_quarter_usage = defaultdict(set)
 
         # Посев для первых мест
-        for seed_num in range(1, seed_order + 1):
+        # for seed_num in range(1, seed_order + 1):
+        for seed_num in range(1, seed_order):
             seed_positions = seeds[seed_num]
             available_positions = [pos for pos in seed_positions if placement[pos] is None]
 
@@ -9829,6 +9627,10 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
                 continue
 
             # Для каждой позиции в посеве
+            # ------- проба случайности =======
+            if seed_num > 1:
+                random.shuffle(available_positions)
+            # ================================
             for pos in available_positions:
                 if not unplaced_first:
                     break
@@ -9866,6 +9668,17 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
                 unplaced_first.remove(suitable_idx)
 
         # Размещаем занявших 2-е место
+        # === перед посевом 2-х мест прописываем Х, если не полный состав
+        for group in group_pairs.keys():
+            list_id = group_pairs[group]
+            count = len(list_id)
+            if count == 1:
+                num_pl = list_id[0]
+                key = next(key for key, value in placement.items() if value == num_pl)
+                half_sev = get_half(key)
+                num_for_free = free_num[1] if half_sev == 1 else free_num[0]
+        placement[num_for_free] = "X"
+        # =====================================
         for second_idx, second_sportsman in second_place:
             group = second_sportsman[3]
 
@@ -9896,7 +9709,7 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
             target_half = 2 if partner_half == 1 else 1
             available_positions = []
 
-            for pos in range(1, 33):
+            for pos in range(1, posevs_num[0] + 1):
                 if placement[pos] is None:
                     if get_half(pos) == target_half:
                         available_positions.append(pos)
@@ -9908,62 +9721,23 @@ def choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num, nums)
 
         # Заполняем оставшиеся позиции оставшимися спортсменами
         remaining_sportsmen = [idx for idx, _ in enumerate(sportsmen_data) if idx not in placement.values()]
-        for pos in range(1, 33):
+        for pos in range(1, posevs_num[0] + 1):
             if placement[pos] is None and remaining_sportsmen:
                 placement[pos] = remaining_sportsmen.pop(0)
 
         return placement
 
-    # def print_results(placement: Dict[int, int], sportsmen_data: List[List], title: str):
-    #     """Выводит результаты жеребьевки"""
-    #     print(f"\n{'='*80}")
-    #     print(f"{title}")
-    #     print(f"{'='*80}")
-    #     print(f"{'Номер':<6} {'Фамилия':<12} {'Регион':<20} {'Рейтинг':<8} {'Группа':<10} {'Место':<10} {'Половина':<8} {'Четверть':<8}")
-    #     print(f"{'-'*90}")
-
-    #     for table_num in sorted(placement.keys()):
-    #         sportsman_idx = placement[table_num]
-    #     if sportsman_idx is not None:
-    #         sportsman = sportsmen_data[sportsman_idx]
-    #         half = get_half(table_num)
-    #         quarter = get_quarter(table_num)
-    #         print(f"{table_num:<6} {sportsman[0]:<12} {sportsman[1]:<20} {sportsman[2]:<8} {sportsman[3]:<10} {sportsman[4]:<10} {half:<8} {quarter:<8}")
-    #     else:
-    #         print(f"{table_num:<6} {'-':<12} {'-':<20} {'-':<8} {'-':<10} {'-':<10} {get_half(table_num):<8} {get_quarter(table_num):<8}")
-
-    #     print(f"{'='*90}")
-
-    #     # Выводим статистику по регионам
-    #     print("\nСтатистика по регионам:")
-    #     print(f"{'Регион':<20} {'Кол-во':<8} {'Размещение по четвертям':<30}")
-    #     print(f"{'-'*60}")
-
-    #     region_stats = defaultdict(lambda: {'count': 0, 'quarters': set()})
-    #     for table_num, sportsman_idx in placement.items():
-    #         if sportsman_idx is not None:
-    #             sportsman = sportsmen_data[sportsman_idx]
-    #             region = sportsman[1]
-    #             region_stats[region]['count'] += 1
-    #             region_stats[region]['quarters'].add(get_quarter(table_num))
-
-    #     for region, stats in sorted(region_stats.items()):
-    #         quarters = sorted(stats['quarters'])
-    #         quarters_str = ', '.join(map(str, quarters))
-    #         print(f"{region:<20} {stats['count']:<8} {quarters_str:<30}")
-
     table = {} 
     if count_exit == 1:    
-        placement = draw_32_groups(sportsmen_data)
+        placement = draw_32_groups(sportsmen_data, free_num)
     elif count_exit == 2:
-        placement = draw_16_groups(sorted_sportsmen)
+        placement = draw_16_groups(sorted_sportsmen, free_num)
 
     player_list = list(placement.values())
     k = 1
     for player_id in player_list:
-        if player_id is None:
-           if count_free > 0:
-              table[k] = ["X"]  
+        if player_id == "X" or player_id is None:
+            table[k] = ["X"]  
         else:
             player = sorted_sportsmen[player_id]
             table[k] = player
@@ -10509,7 +10283,6 @@ def _choice_net_automat(sorted_sportsmen, count_exit, free_num, posevs_num):
         print("\n⚠ Нарушены некоторые правила распределения!")
 
     return table
-
 def  __choice_net_automat():
     """Последний код жеребьвки сгенирированный AI"""
     import random
@@ -10859,7 +10632,7 @@ def  __choice_net_automat():
 
 
 
-def choice_setka_automat(fin, flag, count_exit):
+def choice_setka_automat(fin, flag, count_exit): # вариант жеребьевки сетки автомат (на 32 участинка, выход из группы 1 или 2, полная или без 1-ого игрока)
     """автоматическая жеребьевка сетки, fin - финал, count_exit - сколько выходят в финал
     flag - флаг вида жеребьевки ручная или автомат""" 
     # msgBox = QMessageBox 
@@ -10960,7 +10733,7 @@ def choice_setka_automat(fin, flag, count_exit):
         max_player = full_net_player(player_in_final=max_player)
         # if real_all_player_in_final != max_player and n == end_posev - 1:
         if max_player > real_all_player_in_final:
-            free_num = free_place_in_setka(max_player, real_all_player_in_final)
+            free_num = free_place_in_setka(max_player, real_all_player_in_final, count_exit)
             del_num = 1 # флаг, что есть свободные номера
         full_posev.clear()
 
@@ -11371,7 +11144,7 @@ def choice_setka_automat(fin, flag, count_exit):
     # return posev_data
 
 
-def _choice_setka_automat(fin, flag, count_exit):
+def _choice_setka_automat(fin, flag, count_exit): # вариант жеребьевки сетки автомат перввичный 
     """автоматическая жеребьевка сетки, fin - финал, count_exit - сколько выходят в финал
     flag - флаг вида жеребьевки ручная или автомат""" 
     msgBox = QMessageBox 
@@ -12523,7 +12296,7 @@ def _setka_choice_number(fin, count_exit):
     return posevs
 
 
-def free_place_in_setka(max_player, real_all_player_in_final):
+def free_place_in_setka(max_player, real_all_player_in_final, count_exit):
     """вычеркиваем свободные номера в сетке"""
     free_num = []
     free_number_8 = [2, 7, 6, 3]
@@ -12541,10 +12314,15 @@ def free_place_in_setka(max_player, real_all_player_in_final):
         free_number = free_number_24
     elif max_player == 32:
         free_number = free_number_32
-
-    for i in range (0, count):
-        k = free_number[i]
-        free_num.append(k)
+    # если нет одного игрока, но выходят два из группы, то есть выбор из двух вариантов     
+    if count_exit == 1:
+        for i in range (0, count):
+            k = free_number[i]
+            free_num.append(k)
+    elif count_exit == 2:
+        for i in range (0, count * count_exit):
+            k = free_number[i]
+            free_num.append(k)
     return free_num
     
 
