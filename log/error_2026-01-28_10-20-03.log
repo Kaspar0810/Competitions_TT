@@ -1,0 +1,15 @@
+2026-01-28 10:20:41,652 - ERROR - Необработанное исключение: TypeError: unsupported operand type(s) for //: 'list' and 'int'
+2026-01-28 10:20:41,658 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1124, in choice
+    posev_data = player_choice_in_setka(fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19930, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 10801, in choice_setka_automat
+    num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num, nums)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9742, in choice_net_automat
+    placement = draw_out_groups_two_person(sorted_sportsmen, free_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9675, in draw_out_groups_two_person
+    if n <= posevs_num // 2:
+            ~~~~~~~~~~~^^~~
+TypeError: unsupported operand type(s) for //: 'list' and 'int'
