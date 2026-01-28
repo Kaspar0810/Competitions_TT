@@ -225,34 +225,6 @@ class MyTableModel(QAbstractTableModel):
                         else:
                             return QtGui.QBrush(QtCore.Qt.black)
 
-# ==== вариант из ИИ ===
-class _MyTableModel(QAbstractTableModel):
-    def __init__(self, data, headers, parent=None):
-        super().__init__(parent)
-        self._data = data          # Данные: список списков
-        self._headers = headers    # Заголовки столбцов
- 
-    def rowCount(self, parent=None):
-        return len(self._data)
- 
-    def columnCount(self, parent=None):
-        return len(self._data[0]) if self._data else 0
- 
-    def data(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
-        if not index.isValid():
-            return QVariant()
- 
-        if role == QtCore.Qt.ItemDataRole.DisplayRole:
-            return self._data[index.row()][index.column()]
-        return QVariant()
- 
-    def headerData(self, section, orientation, role=QtCore.Qt.ItemDataRole.DisplayRole):
-        if role == QtCore.Qt.ItemDataRole.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
-                return self._headers[section]
-            elif orientation == QtCore.Qt.Vertical:
-                return section + 1  # Нумерация строк с 1
-        return QVariant()
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
@@ -1266,16 +1238,11 @@ my_win.center()
 
 # ===========
 frame = QFrame(my_win)
-# frame.setFrameShape(QFrame.Box)
-# frame.setFrameStyle(QFrame.WinPanel | QFrame.Sunken)
 frame.setFrameStyle(QFrame.Box | QFrame.Sunken)
 frame.setGeometry(10, 25, 242, 30)
 
 buttons_layout = QHBoxLayout(frame) # располагает кнопки внутри горизонтально layout
 buttons_layout.setContentsMargins(2, 2, 2, 2)  # Отступы от краев фрайма кнопок 
-
-
-
 
 font = QFont('Times New Roman', 10)
 Button_turnir_1 = QPushButton("-#-") # (в каком виджете размещена)
@@ -1343,7 +1310,6 @@ def update_player_list():
     player_list = Player.select().where(Player.title_id == title_id())
     for pl in player_list:
         player = pl.player
-        # r_old = pl.rank
         bd = pl.bday
         city = pl.city
         id_pl = pl.id
@@ -1354,9 +1320,6 @@ def update_player_list():
             if bd == bd_r and city == city_r:
                 r_new = gamer.r_list
                 Player.update(rank=r_new).where(Player.id == id_pl).execute()
-                # return
-
-
 
 
 
@@ -1497,8 +1460,6 @@ class StartWindow(QMainWindow, Ui_Form):
         fir_window.Button_open.setEnabled(True)
         fir_window.Button_view_pdf.setEnabled(True)
 
-    def r_load(self):
-        pass
 
     def load_old(self):
         """загружает в комбобокс архивные соревнования"""
@@ -1956,7 +1917,6 @@ def button_comp_enabled():
     pf_list = ["1-й полуфинал", "2-й полуфинал"]
     index_list = []
     systems = System.select().where(System.title_id == id_title)
-    # if len(systems) == 1:
 
     for s in systems:
         flag = s.choice_flag
@@ -3383,27 +3343,6 @@ def fill_table_results():
     fill_table(player_list)
 
 
-# def fill_table_choice():
-#     """заполняет таблицу жеребьевки"""
-#     gamer = my_win.lineEdit_title_gamer.text()
-#     player_choice = Choice.select().where(Choice.title_id == title_id()).order_by(Choice.rank.desc())
-#     choice_list = player_choice.dicts().execute()
-#     row_count = len(choice_list)  # кол-во строк в таблице
-#     if row_count != 0:
-#         column_count = len(choice_list[0])  # кол-во столбцов в таблице
-#         # вставляет в таблицу необходимое кол-во строк
-#         my_win.tableWidget.setRowCount(row_count)
-#         for row in range(row_count):  # добавляет данные из базы в TableWidget
-#             for column in range(column_count):
-#                 item = str(list(choice_list[row].values())[column])
-#                 my_win.tableWidget.setItem(
-#                     row, column, QTableWidgetItem(str(item)))
-#         # ставит размер столбцов согласно записям
-#         my_win.tableWidget.resizeColumnsToContents()
-#         for i in range(0, row_count):  # отсортировывает номера строк по порядку
-#             my_win.tableWidget.setItem(i, 0, QTableWidgetItem(str(i + 1)))
-
-
 def fill_table_after_choice():
     """заполняет TableWidget после жеребьевки групп"""
     choice = Choice.select().where(Choice.title_id == title_id())
@@ -3531,8 +3470,7 @@ def add_player():
     flag_player_full = find_player_in_table_players_full(fam, name, ci=ct, bd=bd_new)
     # =========== вариант с доб нового игрока в player_full
     flag_player = 2 if flag_player_full is None else flag_player_full[5]
-    # flag_player = flag_player_full[5]
-    # if flag_player_full is None and flag_player == 2:
+   
     if flag_player == 2: # новый спортсмен
         player_full = Players_full(player=pl, bday=bd_new, city=ct, region=rg, razryad=rz, coach_id=idc, patronymic_id=idp, sex=sex).save()
     elif flag_player == 0 or flag_player == 1: # спортсмен есть но изменился город
@@ -3677,9 +3615,7 @@ def find_otchestvo():
     """ищет отчество в базе данных"""
     txt = my_win.label_63.text()
     my_win.listWidget.clear()
-    # if txt == "":
-    #     return
-    # else:
+
     sex_list = ["Девочки", "Девушки", "Юниорки", "Женщины"]
     my_win.label_63.setText("Отчество")
     titles = Title.select().where(Title.id == title_id()).get()
@@ -3854,7 +3790,6 @@ def dclick_in_listwidget():
         flag_player = 2 if flag_player_full is None else flag_player_full[5]
         # flag_player = flag_player_full[5] # если 0 то спортсмен есть в базе, 1 есть в базе, но у него другой город, 2 новый спортсмен с таким же именем и др
         if flag_player == 0 or flag_player == 1: # если 0, то значит спортсмен есть в базе player_full
-            # if player_full is not None:
             coaches = Coach.get(Coach.id == flag_player_full[1])
             coach = coaches.coach
             my_win.lineEdit_coach.setText(coach)
@@ -3928,7 +3863,6 @@ def find_player_in_table_players_full(fam, name, ci, bd):
                     flag_player = 1 # новый город
                 else:
                     flag_player = 2 # новый спортсмен
-            # else:
             coach_full = pf.coach_id
             raz_full = pf.razryad
             patronymic_full = pf.patronymic_id
@@ -3972,7 +3906,6 @@ def load_combobox_filter_group():
         if flag == True:
             sf = systems.select().where(System.stage == fir_e).get()
             kg = int(sf.total_group)  # количество групп
-        # if sender == my_win.choice_gr_Action or (my_win.tabWidget.currentIndex() == 2 and my_win.radioButton_gr_sort.isChecked()):
         if sender == my_win.choice_gr_Action or (my_win.tabWidget.currentIndex() == 2):
             gr_txt = [f"{i} группа" for i in range(1, kg + 1)]
             gr_txt.insert(0, "все группы")
@@ -4064,11 +3997,8 @@ def tab_etap():
             vid = "женские пары"
         elif tab_vid == 2:
             vid = "смешанные пары"
-        # if tab_double == 1:
         player_list = results.select().where((Result.system_stage == "Парный разряд") & (Result.number_group == vid))
         etap_text = "парном разряде"
-        # else:
-        #     player_list = results.select().where(Result.system_stage == "Парный разряд") & (Result.number_group == vid)
     else:
         tab_result()
         if tab_etap == 0:
