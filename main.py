@@ -1334,7 +1334,7 @@ class StartWindow(QMainWindow, Ui_Form):
         self.Button_new.clicked.connect(self.new)
         self.Button_view_pdf.clicked.connect(self.view_competition_on_arhive)
         self.Button_old.clicked.connect(self.last_competition)
-        self.Button_R.clicked.connect(self.r_load)
+        # self.Button_R.clicked.connect(self.r_load)
         self.LinkButton.clicked.connect(self.last_comp)
 
         self.Button_open.setEnabled(False)
@@ -1715,7 +1715,6 @@ def control_date_R_list():
     titles = Title.get(Title.id == title_id())
     r_date = titles.r_date
     year_current = (datetime.today().strftime("%Y"))
-    # month_current = int(datetime.today().strftime("%m"))
     month_current = (datetime.today().strftime("%m"))
     date_current = f"{year_current}_{month_current}"
     if r_date != date_current:

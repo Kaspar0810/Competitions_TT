@@ -1,0 +1,9 @@
+2026-01-29 12:17:51,318 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'r_load'
+2026-01-29 12:17:51,546 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1802, in <module>
+    fir_window = StartWindow()  # Создаём объект класса ExampleApp
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1337, in __init__
+    self.Button_R.clicked.connect(self.r_load)
+                                  ^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'r_load'
