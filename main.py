@@ -12347,11 +12347,6 @@ def add_delete_region_group(key_reg_current, current_region_group, posev_tmp, m,
                     for p in posev_tmp.keys():
                         if 0 == posev_tmp[p]:
                             temp_list.append(p)
-                    # # =====
-                    # finish = end if end > start else start
-                    # # =====
-                    # for i in range(1, finish + 1):
-                    #     temp_list.append(i)
                     if m % 2 != 0:  # в зависимости от четности посева меняет направления посева групп в списке значит m нечетное число
                         temp_list.sort()
                     else:
@@ -12359,16 +12354,6 @@ def add_delete_region_group(key_reg_current, current_region_group, posev_tmp, m,
                     current_region_group[region] = temp_list
                     f = current_region_group[region]  # список номеров групп для посева текущего региона
                     # ===== удалить посеянные группы ====
-                    # posev[f"{m}_посев"] = posev_tmp
-                    # num_gr_posev = []
-                    # for p in posev_tmp.keys():
-                    #     if 0 != posev_tmp[p]:
-                    #         num_gr_posev.append(p)
-                    # for d in num_gr_posev:  # цикл удаления посеянных групп                        
-                    #     list_group = current_region_group[region]
-                    #     if d in list_group:  # находит сеяную группу и удаляет ее из списка групп
-                    #         list_group.remove(d)
-
                 if s in f: #  присваивает переменной u - номер группы, если она идет по порядку
                     posev_tmp[s] = region
                     u = s 
@@ -12664,11 +12649,6 @@ def add_item_listwidget():
                 my_win.listWidget_second_group.addItem(item)
             coach_list.append(coach)
    
-        # duplicat = duplicat_coach_in_group(coach_list)
-        # if duplicat is not None:
-        #     color_coach_in_listwidget(duplicat, flag_combo)
-        # color_coach_in_tablewidget(duplicat, coach_list)
-
 
 def color_coach_in_listwidget(duplicat, flag_combo):
     """отмечает строки с повторяющимися тренерами"""
@@ -12940,9 +12920,7 @@ def choice_tbl_made():
             ch_d = Choice.get(Choice.id == i)
             ch_d.delete_instance()
     for i in players:
-        # family = i.player
         family_shot = i.player
-        # otc_id = i.patronymic_id
         patronymics = Patronymic.select().where(Patronymic.id == i.patronymic_id).get()
         otc = patronymics.patronymic
         family = f"{family_shot} {otc}"
@@ -13093,11 +13071,6 @@ def load_coach_to_combo():
     tmp_list.sort() 
     tmp_list.insert(0, "")
     my_win.comboBox_fltr_coach.addItems(tmp_list)            
-    # count_list = len(tmp_list)
-    # count_uniq = len(set(tmp_list)) 
-    # if count_list > count_uniq:
-    #     duplicat = [x for i, x in enumerate(tmp_list) if i != tmp_list.index(x)]
-    #     return duplicat
 
 
 def color_region_in_tableWidget(fg):
@@ -13224,12 +13197,6 @@ def total_game_table(exit_stage, kpt, fin, pv):
         if etap_text == "Полуфиналы":
             vt = "группы"
             type_table = "группы"
-            # +++ вариант с полуфиналом с выходом из 1-ого пф
-            # if exit_stage == "Предварительный":
-            #     gr_pf = total_gr // 2
-            #     # player_in_final = gr_pf * kpt * 2 # колво участников в полуфинале
-            # elif exit_stage == "1-й полуфинал":
-            #     gr_pf = total_gr // 4
             gr_pf = total_gr // 2
             player_in_final = gr_pf * kpt * 2 # колво участников в полуфинале    
             cur_index = 0
@@ -13291,15 +13258,7 @@ def total_game_table(exit_stage, kpt, fin, pv):
         stroka_kol_game = f"{total_games} игр"
         # заполняет max_player в зависиости от кол игроков
         m_pl = player_in_final
-        # if type_table == "круг": # если финал по кругу
-        #     m_pl = player_in_final
-        # elif type_table == "группы": # если ПФ
-        #     m_pl = player_in_final
-        # else: # если финал сетка
-        #     m_pl = player_in_final
-        #     # m_pl = full_net_player(player_in_final)
 
-        # ======
         system = System(title_id=title_id(), total_athletes=total_athletes, total_group=total_gr, kol_game_string=stroka_kol_game,
                         max_player=m_pl, stage=fin, type_table=type_table, page_vid=pv, label_string=str_setka,
                         choice_flag=0, score_flag=score_match, visible_game=flag_visible, stage_exit=exit_stage, mesta_exit=kpt, no_game=no_game3).save()    
@@ -13716,38 +13675,12 @@ def numbers_of_games(cur_index, player_in_final, kpt):
             if free == 0:
                 total_games = all_game_net
             elif free == 1 or free == 2 or free == 3:
-                # total_games = all_game_net - free * tours
                 total_games = all_game_net - (free * tours - (free - 1))
             elif free == 4:
                  total_games = all_game_net - (free * (tours - 1))
             else:
                 total_games = all_game_net - (free * tours - (free - 1))
-            # ========
-            # if player_in_final <= 8:
-            #     free = 8 - player_in_final
-            #     total_games = 12
-            # elif player_in_final == 16:
-            #     total_games = 32
-            # elif player_in_final > 8 and player_in_final < 16:
-            #     tours = 4
-            #     free = 16 - player_in_final
-            #     if free == 1:
-            #         total_games = 32 - free * tours
-            #     elif free == 2:
-            #         total_games = 32 - (free * tours - 1)
-            #     else:
-            #         total_games = 32 - (free * 2 + 4)
-            # elif player_in_final == 32: 
-            #      total_games = 80  
-            # elif player_in_final > 16 and player_in_final < 32:
-            #     tours = 5
-            #     free = 32 - player_in_final
-            #     if free == 1:
-            #         total_games = 80 - free * tours
-            #     elif free > 1:
-            #         total_games = 80 - (free * tours - 1)
-            # else:
-            #     total_games= 80
+
         elif cur_index == 3:  # сетка с розыгрышем призовых мест
             if player_in_final == 32:
                 total_games = 32    
@@ -13760,7 +13693,6 @@ def numbers_of_games(cur_index, player_in_final, kpt):
                 system = systems.select().where(System.stage == "Предварительный").get()
                 gr = system.total_group
                 gr = gr // 2
-            # total_games = total_games_in_final_without_group_games(player_in_final, gr, kpt)
             if kpt == 1:
                 total_games = total_games_in_final_without_group_games(player_in_final, gr, kpt)
             else:
@@ -13786,7 +13718,6 @@ def clear_db_before_choice(stage):
                                     msgBox.Ok, msgBox.Cancel)
         if result == msgBox.Ok:
              # очищает таблицы перед новой системой соревнования (system, choice)
-            # clear_db_before_edit()
             system_clear()
             choice_tbl_made()  # заполняет db жеребьевка
         else:
@@ -13813,9 +13744,7 @@ def clear_db_before_choice(stage):
             for x in sys:
                 x.total_athletes = new_total_player
                 x.save()
-    # else:  # если число спортсменов не изменилось (просто смена участников)
     gl = Game_list.select().where(Game_list.title_id == title_id())
-    # system_id = sys.select().where(System.stage == stage).get()
     gamelists = gl.select().where(Game_list.system_id == id_system)
     for i in gamelists:
         gl_d = Game_list.get(Game_list.id == i)
@@ -13848,7 +13777,6 @@ def clear_db_before_choice_final(fin):
     choice = Choice.select().where((Choice.title_id == title_id()) & (Choice.final == stage))
     for i in choice:
         Choice.update(posev_final="").where(Choice.id == i).execute()
-    # System.update(choice_flag=0).where(System.id == id_system).execute() # обновляет запись, что жеребьевка не сделана
 
 
 def clear_db_before_choice_semifinal(stage):
@@ -13977,7 +13905,6 @@ def manual_choice_setka(fin, count_exit, mesto_first_poseva):
 
 def check_choice(stage):
     """Проверяет перед жеребьевкой финалов, была ли она произведена ранее или еще нет"""
-    # stage_list = []
     id_system = system_id(stage)
     system = System.select().where((System.title_id == title_id()) & (System.id == id_system)).get()  # находит system id последнего
     check_flag = system.choice_flag
@@ -14004,7 +13931,6 @@ def checking_possibility_choice(stage):
             exit_str = "предварительном этапе"
         else:
             exit_str = "1-ом финале"
-        # gr = Result.select().where((Result.title_id == title_id()) & (Result.system_stage == exit)) # отбираем записи с выходом в финал
         gr = Result.select().where((Result.title_id == title_id()) & (Result.system_id == id_system)) # отбираем записи с выходом в финал
 
         for i in gr:
@@ -14147,12 +14073,7 @@ def max_player_and_exit_stage(etap):
         max_pl = system_last.max_player # максимальное допустимое число игроков при выборе в комбобоксе
     elif number_etap == 3:
         if etap == "Полуфиналы":
-            fin = "2-й полуфинал"
-            # ++++ вариант выбора выхода в 2-й полуфинал (из группы или 1-щ=ого пф)
-            # group_list = ["-выбор этапа", "Предварительный", "1-й полуфинал"]
-            # exit_stage, ok = QInputDialog.getItem(my_win, "Полуфиналы", "Выберите этап откуда\n"
-            #                             "выходят во 2-й полуфинал", group_list)
-            # +++++++                                
+            fin = "2-й полуфинал"          
             exit_stage = "Предварительный"
         elif etap == "Финальный":
             fin = "1-й финал" if "1-й полуфинал" in total_stage else "2-й финал"
@@ -14398,27 +14319,9 @@ def backup():
     # Execute the mysqldump command
     command = f"mysqldump -h{host} -u{user} -p{password} {database} > {backup_file}"
     subprocess.run(command, shell=True)
-    # Close the database connection
-    connection.close()
-    # ======
-    # try:
-    #     db = sqlite3.connect('comp_db.db')
-    #     db_backup = sqlite3.connect(f'comp_db_backup.db')
-    #     with db_backup:
-    #         db.backup(db_backup, pages=3, progress=None)
-    #     # показывает статус бар на 5 секунд
-    #     my_win.statusbar.showMessage(
-    #         "Резервное копирование базы данных завершено успешно", 5000)
-    # except sqlite3.Error as error:
-    #     # показывает статус бар на 5 секунд
-    #     my_win.statusbar.showMessage(
-    #         "Ошибка при копировании базы данных", 5000)
-    # finally:
-    #     if (db_backup):
-    #         db_backup.close()
-    #         db.close()
-    #         my_win.close()
 
+    connection.close()
+   
 
 def title_id():
     """возвращает title id в зависимости от соревнования"""
@@ -14479,7 +14382,6 @@ def func_zagolovok(canvas, doc):
         s1 = nz.find(word) + len(word)
         strline1 = nz[:s1]
         strline2 = nz[s1 + 1:]
-        # nz = f"{strline1}\n{strline2}"
         canvas.drawCentredString(width / 2.0, height - 1.1 * cm, strline1)
         canvas.drawCentredString(width / 2.0, height - 1.5 * cm, strline2)
         canvas.setFont("DejaVuSerif-Italic", 11)
@@ -14490,7 +14392,6 @@ def func_zagolovok(canvas, doc):
         canvas.drawCentredString(width / 2.0, height - 1.5 * cm, sr)
         canvas.setFont("DejaVuSerif-Italic", 11)
     # текста титула по основным
-    # canvas.drawCentredString(width / 2.0, height - 1.5 * cm, sr)
     canvas.drawRightString(width - 1 * cm, height - 1.9 * cm, f"г. {ms}")  # город
     canvas.drawString(0.8 * cm, height - 1.9 * cm, data_comp)  # дата начала
     # ==== текст судейская коллегия
@@ -14761,7 +14662,6 @@ def begunki_made():
     final_type = sys.type_table
     list_tours = []
     if final_type == "сетка":
-        # list_tours.append("несыгранные")
         result_setka = result.select().where(Result.number_group == number_group)
         result_all = result_setka.select().where((Result.player1 != "") & (Result.player2 != ""))
         result_fin = result_all.select().where(Result.winner.is_null())
@@ -14877,7 +14777,6 @@ def select_stage_for_schedule():
                 group_list.append(k.stage)
     my_win.comboBox_select_group_schedule.addItems(group_list)
     my_win.comboBox_select_group_schedule.setCurrentIndex(0)
-
 
 
 def select_stage_for_begunki():
@@ -15183,8 +15082,6 @@ def table_made(pv, stage):
                     [('BOX', (0, 0), (-1, -1), 2, colors.black)])  # внешние границы таблицы
 
     #  ============ создание таблиц и вставка данных =================
-    # h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
-    #         leftIndent=center_stage, spacebefore=10, textColor="green")  # стиль параграфа ()
     h1 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
             leftIndent=60, spacebefore=10, textColor="green")  # стиль параграфа ()
 
@@ -15290,13 +15187,10 @@ def table_made(pv, stage):
     catalog = 1
     change_dir(catalog)
     doc.topMargin = 1.8 * cm # высота отступа от верха листа pdf
-    # if sender == my_win.indent_edit_Action:
-    #     indent = change_indent_page()
     doc.leftMargin = 1 * cm
     elements.insert(0, (Paragraph(f"{title} {sex}.", h1)))
     doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
     os.chdir("..")
-
 
 
 def _table_made(pv, stage):
@@ -16226,8 +16120,6 @@ def setka_8_made(fin):
                            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
                            ] + ts))
 # === надпись финала
-    # h2 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
-    #         leftIndent=50, textColor=Color(1, 0, 1, 1))  # стиль параграфа (номера таблиц)
     # ==== смена заголовка титула в сетке если парные игры
     if fin == "Парный разряд":
         h2 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",

@@ -1,0 +1,10 @@
+2026-01-28 11:55:37,077 - ERROR - Необработанное исключение: KeyError: 'НАУМЕНКО Даниил'
+2026-01-28 11:55:37,078 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1125, in choice
+    player_in_setka_and_write_Game_list_and_Result(fin, posev_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5909, in player_in_setka_and_write_Game_list_and_Result
+    id_pl = all_list[2][family]
+            ~~~~~~~~~~~^^^^^^^^
+KeyError: 'НАУМЕНКО Даниил'
