@@ -15654,6 +15654,45 @@ def vid_double_game():
     return vid
 
 
+
+def find_match_numbers_in_results_db(match_num, fin):
+    """ищет cтроку в таблице -Result- по номеру встречи"""
+    schedule_dict = {}
+    schedule_list = []
+    id_system = system_id(stage=fin)
+    results = Result.select().where((Result.title_id == title_id()) & (Result.system_id == id_system))
+    
+    for res_num in results:
+        num = res_num.tours
+        if int(num) == match_num:
+            date_match = res_num.schedule_date
+            time_match = res_num.schedule_time
+            schedule_list = [date_match, time_match]
+            schedule_dict[match_num] = schedule_list
+            return schedule_dict
+
+
+def find_match_numbers_in_table(table_data, fin):
+    """Найти все номера встреч в таблице и их позиции"""
+    match_positions = {}
+    
+    for row_idx, row in enumerate(table_data):
+        for col_idx, cell in enumerate(row):
+            if cell and isinstance(cell, str):
+                # Ищем числа (положительные и отрицательные) как номера встреч
+                # Регулярное выражение для чисел с опциональным минусом
+                match = re.search(r'^(-?\d+)$', cell.strip())
+                if match:
+                    match_num = int(match.group(1))
+                    if col_idx != 0 and match_num > 0:
+                        schedule_dict = find_match_numbers_in_results_db(match_num, fin)
+                        match_positions[match_num] = (row_idx, col_idx)
+                        print(f"Найден номер встречи {match_num} на позиции ({row_idx}, {col_idx})")
+    
+    return match_positions
+
+
+
 def setka_8_superfinal(fin):
     """сетка на 8 суперфинал в pdf"""
     sender = my_win.sender()
@@ -15818,7 +15857,7 @@ def setka_8_full_made(fin):
         last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
         fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     for i in range(0, 40):
-        # column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= места ==========
@@ -15885,9 +15924,11 @@ def setka_8_full_made(fin):
     #     for k in range(2, 39, 2):
     #         fn = ('ALIGN', (i, k), (i, k), 'CENTER')
     #         style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
-    
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
+    # =========================
+    schedule = find_match_numbers_in_table(data, fin)
+    # =======================
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
@@ -16121,7 +16162,7 @@ def setka_8_2_made(fin):
     last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     for i in range(0, 40):
-        # column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= места ==========
@@ -16185,8 +16226,8 @@ def setka_8_2_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i + 1, 0), (i + 1, 39), 'CENTER')
         style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
 
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
@@ -16853,14 +16894,14 @@ def setka_32_full_made(fin):
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
     for i in range(0, strok):
-        # column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= нумерация встреч сетки ==========
     y = 0
     for i in range(1, 65, 2):
         y += 1
-        data[i + 1][0] = str(y)  # рисует начальные номера таблицы 1-32
+        data[i + 1][0] = str(y)  # рисует начальные номера таблицы 1-32 (номер столбца, номер строки)
     number_of_game = draw_num(row_n=3, row_step=2, col_n=2, number_of_columns=5, number_of_game=1, player=32, data=data) # рисует номера встреч 1-32
     data[60][8] = str((number_of_game - 3) * -1)  # номера проигравших 29
     data[62][8] = str((number_of_game - 2) * -1)  # номера проигравших 30
@@ -16923,6 +16964,9 @@ def setka_32_full_made(fin):
     draw_num_lost(row_n=182, row_step=2, col_n=8, number_of_game=65, player=2, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=194, row_step=2, col_n=8, number_of_game=73, player=2, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=201, row_step=2, col_n=8, number_of_game=77, player=2, data=data) # номера минус проигравшие встречи -1 -16
+    # ============================= ВСТАВИТЬ РАСПИСАНИЕ ====================
+
+    # ============================
     # ============= данные игроков и встреч и размещение по сетке =============
     tds = write_in_setka(data, fin, first_mesto, table)
     #===============
@@ -17025,8 +17069,8 @@ def setka_32_full_made(fin):
         for k in range(139, 177, 2):
             fn = ('ALIGN', (i, k), (i, k), 'CENTER')
             style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
