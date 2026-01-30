@@ -503,7 +503,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # выключает пункты меню пока не создана система
         self.choice_one_table_Action.setEnabled(False)
         self.choice_gr_Action.setEnabled(False)
-        self.choice_pf_Action.setEnabled(True)
+        self.choice_pf_Action.setEnabled(False)
         self.choice_fin_Action.setEnabled(False)
         self.choice_double_Action.setEnabled(False)
 
@@ -10584,6 +10584,8 @@ def choice_setka_automat(fin, flag, count_exit): # вариант жеребье
         if system.stage == "Одна таблица":
             real_all_player_in_final = len(choice.select().where(Choice.basic == fin))
             choice_posev = choice.select().order_by(Choice.rank)
+            # ===
+            count_exit = 1
         elif fin == "1-й финал":
             if stage_exit == "Предварительный":
                 # == реальное число игроков в финале
