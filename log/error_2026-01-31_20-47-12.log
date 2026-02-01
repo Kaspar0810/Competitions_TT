@@ -1,0 +1,26 @@
+2026-01-31 20:48:27,153 - ERROR - Необработанное исключение: PermissionError: [Errno 13] Permission denied: 'NR12_13012026_M_8-final.pdf'
+2026-01-31 20:48:27,153 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5654, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8059, in made_pdf_table_for_view
+    setka_8_full_made(fin)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16042, in setka_8_full_made
+    doc.build(elements, onFirstPage=func_zagolovok)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1322, in build
+    BaseDocTemplate.build(self,flowables, canvasmaker=canvasmaker)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1109, in build
+    self._endBuild()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1044, in _endBuild
+    if getattr(self,'_doSave',1): self.canv.save()
+                                  ~~~~~~~~~~~~~~^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\pdfgen\canvas.py", line 1301, in save
+    self._doc.SaveToFile(self._filename, self)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\pdfbase\pdfdoc.py", line 208, in SaveToFile
+    f = open(filename, "wb")
+PermissionError: [Errno 13] Permission denied: 'NR12_13012026_M_8-final.pdf'

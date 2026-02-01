@@ -15654,6 +15654,25 @@ def vid_double_game():
     return vid
 
 
+def schedule_str(schedule_dict, match_num):
+    """Преобразует дату и время из таблицы базы данных и получает расписание для ячейки на сетке"""
+    months_dict = {1:"янв", 2: "фев", 3: "мар", 4: "апр", 5: "мая", 6: "июн", 7:"июл",
+                   8: "авг", 9: "сен", 10: "окт", 11: "ноя", 12: "дек"}
+    date_time_txt = schedule_dict[match_num] 
+    date_txt = date_time_txt[0]
+    time_txt = date_time_txt[1]
+    if date_txt is None and time_txt is None:
+        schedule_full = ""
+    elif time_txt is None:
+        date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"
+        schedule_full = f"{date_str_rus}"
+    else:
+        date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"
+        time_str_rus = f"{date_time_txt[1].hour}:{date_time_txt[1].minute}"
+        schedule_full = f"{date_str_rus}/{time_str_rus}"
+
+    return schedule_full
+
 
 def find_match_numbers_in_results_db(match_num, fin):
     """ищет cтроку в таблице -Result- по номеру встречи"""
@@ -15674,8 +15693,10 @@ def find_match_numbers_in_results_db(match_num, fin):
 
 def find_match_numbers_in_table(table_data, fin):
     """Найти все номера встреч в таблице и их позиции"""
-    match_positions = {}
     
+    match_positions = {}
+    schedule_positions = {}
+    schedule = {}
     for row_idx, row in enumerate(table_data):
         for col_idx, cell in enumerate(row):
             if cell and isinstance(cell, str):
@@ -15686,12 +15707,14 @@ def find_match_numbers_in_table(table_data, fin):
                     match_num = int(match.group(1))
                     if col_idx != 0 and match_num > 0:
                         schedule_dict = find_match_numbers_in_results_db(match_num, fin)
+                        schedule_full_str = schedule_str(schedule_dict, match_num)
+                       
                         match_positions[match_num] = (row_idx, col_idx)
-                        print(f"Найден номер встречи {match_num} на позиции ({row_idx}, {col_idx})")
-    
-    return match_positions
-
-
+                        schedule_positions[match_num] = (row_idx, col_idx - 1)
+                        schedule[match_num] = schedule_full_str
+                        # print(f"Найден номер встречи {match_num} на позиции ({row_idx}, {col_idx})")
+    return schedule_positions, schedule
+ 
 
 def setka_8_superfinal(fin):
     """сетка на 8 суперфинал в pdf"""
@@ -15866,9 +15889,10 @@ def setka_8_full_made(fin):
         y += 1
         data[i][0] = str(y)  # рисует начальные номера таблицы 1-16
     # ========= нумерация встреч сетки ==========
-    draw_num(row_n=1, row_step=2, col_n=2, number_of_columns=3, number_of_game=1, player=8, data=data) # рисует номера встреч 1-32
-    draw_num(row_n=16, row_step=2, col_n=6, number_of_columns=2, number_of_game=8, player=2, data=data) # рисует номера встреч 1-32
+    draw_num(row_n=1, row_step=4, col_n=2, number_of_columns=3, number_of_game=1, player=8, data=data) # рисует номера встреч 1-7
+    draw_num(row_n=16, row_step=2, col_n=6, number_of_columns=1, number_of_game=8, player=2, data=data) # рисует номера встреч 1-32
     draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
+    # draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
     draw_num_lost(row_n=16, row_step=2, col_n=4, number_of_game=5, player=2, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=20, row_step=2, col_n=2, number_of_game=1, player=4, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=28, row_step=2, col_n=4, number_of_game=9, player=2, data=data) # номера минус проигравшие встречи -1 -16
@@ -15878,6 +15902,15 @@ def setka_8_full_made(fin):
     data[18][6] = str(-8)
     data[25][6] = str(-11)
     data[30][6] = str(-12)
+    #========= расписание ===========
+    schedule_list = find_match_numbers_in_table(data, fin)
+    schedule_positions = schedule_list[0]
+    schedule_text = schedule_list[1]
+    for key in schedule_positions.keys():
+        pos = schedule_positions[key]
+        text = schedule_text[key]
+        data[pos[0]][pos[1]] = text
+    # =================================
     # ============= данные игроков и встреч и размещение по сетке =============
     tds = write_in_setka(data, fin, first_mesto, table)
     #===============
@@ -15919,6 +15952,19 @@ def setka_8_full_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i + 1, 0), (i + 1, 39), 'CENTER')
         style.append(fn)
+    # ========= стиль расписание ===========
+    for key in schedule_positions.keys():
+        pos = schedule_positions[key]
+        fn = ('TEXTCOLOR', (pos[1], pos[0]), (pos[1], pos[0]), colors.red)  # цвет шрифта игроков
+        style.append(fn)
+        fn = ('ALIGIN', (pos[1], pos[0]), (pos[1], pos[0]), 'RIGHT')  # цвет шрифта игроков
+        style.append(fn)
+        fn = ('FONTNAME', (pos[1], pos[0]), (pos[1], pos[0]), 'DejaVuSerif-Italic')  # цвет шрифта игроков
+        style.append(fn)
+        fn = ('FONTSIZE', (pos[1], pos[0]), (pos[1], pos[0]), 6)  # цвет шрифта игроков
+        style.append(fn)
+
+    # ======================================
      # центрировать счет в партии
     # for i in range(3, 8, 2):
     #     for k in range(2, 39, 2):
@@ -15927,16 +15973,13 @@ def setka_8_full_made(fin):
     fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
     style.append(fn)
     # =========================
-    schedule = find_match_numbers_in_table(data, fin)
-    # =======================
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
                            ('FONTSIZE', (0, 0), (-1, -1), 6),
                            ('FONTNAME', (1, 0), (1, 16), "DejaVuSerif-Bold"),
                            ('FONTSIZE', (1, 0), (1, 16), 6),
-                           ('LEADING', (1, 0), (1, 16), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)                          
-                        #    ('ALIGN', (1, 0), (1, 16), 'CENTER'),
+                           ('LEADING', (1, 0), (1, 16), 6), # МЕЖСТРОЧНЫЙ ИНТЕРВАЛ В ЯЧЕЙКЕ (размер 7 = размеру шрифта значит без зазора)
                            # 10 столбец с 0 по 68 ряд (цвет места)
                            ('TEXTCOLOR', (8, 0), (8, 39), colors.red),
                            ('ALIGN', (8, 0), (8, 39), 'RIGHT'),
@@ -15944,7 +15987,9 @@ def setka_8_full_made(fin):
                            # цвет шрифта игроков 1 ого тура
                            ('TEXTCOLOR', (0, 0), (0, 39), colors.blue),
                            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                           ('VALIGN', (1, 0), (1, 16), 'BOTTOM')] + ts))
+                           ('VALIGN', (1, 0), (1, 16), 'BOTTOM')
+                           # ======== SCHEDULE ====                          
+                            ] + ts))
                           
 
                         #    [('ALIGN', (3, 2), (3, 2), 'CENTER')]))
@@ -19570,8 +19615,8 @@ def draw_setka_made(col, row, num, step, tur, style):
             style_set.append(fn)  
     for m in range(col + 1, col_fin + 1, 2):
         for q in range(row, row_fin, step):  # встречи 33-34
-            fn = ('SPAN', (m, q), (m, q + step - 1 ))             
-            style_set.append(fn)
+            # fn = ('SPAN', (m, q), (m, q + step - 1 ))             
+            # style_set.append(fn)
             fn = ('BACKGROUND', (m, q), (m, q + step - 1 ), colors.lightyellow)  
             style_set.append(fn) 
             fn = ('BOX', (m, q), (m, q + step - 1), 1, colors.darkblue)
@@ -19610,7 +19655,7 @@ def draw_setka(col, row, num, style):
     for m in range(col + 1, col_fin + 1, 2):
         s *= 2
         for q in range(row_b, row_fin, s * 2):  # встречи 33-34
-            fn = ('SPAN', (m, q), (m, q + s - 1 ))             
+            fn = ('SPAN', (m, q), (m, q + s - 1 )) # объединение строк           
             style_set.append(fn)
             fn = ('BACKGROUND', (m, q), (m, q + s - 1 ), colors.lightyellow)  
             style_set.append(fn) 
@@ -19713,7 +19758,7 @@ def draw_mesta(row, col, player, style):
     return style
 
 
-def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
+def _draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
     """рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
     number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
     s = 1
@@ -19722,11 +19767,51 @@ def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, 
     for k in range(col_n, col_f, 2):
         step = row_step * 2
         for i in range (row_n, row_f + 1, step):
-            data[i][k] = str(number_of_game)
+            data[i][k] = str(number_of_game) # i - номер строки K - номер столбца
             number_of_game += 1
         row_step *= 2
         s *= 2
         row_n = row_n + s // 2
+    return number_of_game
+
+
+
+def get_power_of_two(player):
+    """возвращает кол-во туров в сетке"""
+    if player <= 0 or (player & (player - 1)) != 0:
+        return None
+    tour = 0
+    while player > 1:
+        player >>= 1  # сдвиг вправо на 1 бит (деление на 2)
+        tour += 1
+    return tour
+
+def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
+    """рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
+    number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
+
+    s = 2
+    tour = get_power_of_two(player)
+    for col in range(col_n, tour * 2 + 1, 2):
+        if col == 4:
+            row_n = 3
+            row_step *=2
+        elif col == 6:
+            row_n = 7
+        elif col == 8:
+            row_n = 15
+            
+        for row in range(row_n, player * 2 - 1, row_step):
+            data[row][col] = str(number_of_game) # i - номер строки K - номер столбца
+    # col_f = col_n + tour * 2 - 1 # последний столбец
+    # row_f = row_n + (player / 2) * row_step 
+    # for k in range(col_n, col_f, 2):
+    #     for i in range (row_n, row_f + 1, row_step):
+    #         data[i][k] = str(number_of_game) # i - номер строки K - номер столбца
+            number_of_game += 1
+    #     row_step *= 2
+    #     s *= 2
+    #     row_n = row_n + s // 2
     return number_of_game
 
 

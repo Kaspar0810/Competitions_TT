@@ -1,0 +1,16 @@
+2026-01-31 21:16:17,559 - ERROR - Необработанное исключение: TypeError: 'NoneType' object is not subscriptable
+2026-01-31 21:16:17,561 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5654, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8059, in made_pdf_table_for_view
+    setka_8_full_made(fin)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15905, in setka_8_full_made
+    schedule_list = find_match_numbers_in_table(data, fin)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15710, in find_match_numbers_in_table
+    schedule_full_str = schedule_str(schedule_dict, match_num)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15661, in schedule_str
+    date_time_txt = schedule_dict[match_num]
+                    ~~~~~~~~~~~~~^^^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
