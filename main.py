@@ -15880,7 +15880,7 @@ def setka_8_full_made(fin):
         last_mesto = max_pl if fin == "1-й финал" else first_mesto + max_pl - 1
         fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     for i in range(0, 40):
-        column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        # column_count[9] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= места ==========
@@ -15888,11 +15888,13 @@ def setka_8_full_made(fin):
     for i in range(0, 16, 2):
         y += 1
         data[i][0] = str(y)  # рисует начальные номера таблицы 1-16
-    # ========= нумерация встреч сетки ==========
-    draw_num(row_n=1, row_step=4, col_n=2, number_of_columns=3, number_of_game=1, player=8, data=data) # рисует номера встреч 1-7
-    draw_num(row_n=16, row_step=2, col_n=6, number_of_columns=1, number_of_game=8, player=2, data=data) # рисует номера встреч 1-32
+    # ========= нумерация встреч сетки ========== old ===
+    draw_num(row_n=1, row_step=2, col_n=2, number_of_columns=3, number_of_game=1, player=8, data=data) # рисует номера встреч 1-32
+    draw_num(row_n=16, row_step=2, col_n=6, number_of_columns=2, number_of_game=8, player=2, data=data) # рисует номера встреч 1-32
     draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
-    # draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
+    # new ================
+
+    # ========================
     draw_num_lost(row_n=16, row_step=2, col_n=4, number_of_game=5, player=2, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=20, row_step=2, col_n=2, number_of_game=1, player=4, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=28, row_step=2, col_n=4, number_of_game=9, player=2, data=data) # номера минус проигравшие встречи -1 -16
@@ -15970,8 +15972,8 @@ def setka_8_full_made(fin):
     #     for k in range(2, 39, 2):
     #         fn = ('ALIGN', (i, k), (i, k), 'CENTER')
     #         style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
     # =========================
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
@@ -16939,7 +16941,7 @@ def setka_32_full_made(fin):
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
     for i in range(0, strok):
-        column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        # column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= нумерация встреч сетки ==========
@@ -17114,8 +17116,8 @@ def setka_32_full_made(fin):
         for k in range(139, 177, 2):
             fn = ('ALIGN', (i, k), (i, k), 'CENTER')
             style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
@@ -19615,8 +19617,8 @@ def draw_setka_made(col, row, num, step, tur, style):
             style_set.append(fn)  
     for m in range(col + 1, col_fin + 1, 2):
         for q in range(row, row_fin, step):  # встречи 33-34
-            # fn = ('SPAN', (m, q), (m, q + step - 1 ))             
-            # style_set.append(fn)
+            fn = ('SPAN', (m, q), (m, q + step - 1 ))             
+            style_set.append(fn)
             fn = ('BACKGROUND', (m, q), (m, q + step - 1 ), colors.lightyellow)  
             style_set.append(fn) 
             fn = ('BOX', (m, q), (m, q + step - 1), 1, colors.darkblue)
@@ -19758,7 +19760,7 @@ def draw_mesta(row, col, player, style):
     return style
 
 
-def _draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
+def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
     """рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
     number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
     s = 1
@@ -19786,8 +19788,8 @@ def get_power_of_two(player):
         tour += 1
     return tour
 
-def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
-    """рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
+def _draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
+    """новый вариант рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
     number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
 
     s = 2
@@ -19798,20 +19800,14 @@ def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, 
             row_step *=2
         elif col == 6:
             row_n = 7
+            row_step *=2
         elif col == 8:
             row_n = 15
             
         for row in range(row_n, player * 2 - 1, row_step):
             data[row][col] = str(number_of_game) # i - номер строки K - номер столбца
-    # col_f = col_n + tour * 2 - 1 # последний столбец
-    # row_f = row_n + (player / 2) * row_step 
-    # for k in range(col_n, col_f, 2):
-    #     for i in range (row_n, row_f + 1, row_step):
-    #         data[i][k] = str(number_of_game) # i - номер строки K - номер столбца
             number_of_game += 1
-    #     row_step *= 2
-    #     s *= 2
-    #     row_n = row_n + s // 2
+
     return number_of_game
 
 
