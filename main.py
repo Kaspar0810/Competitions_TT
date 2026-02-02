@@ -19788,27 +19788,27 @@ def get_power_of_two(player):
         tour += 1
     return tour
 
-def _draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
+def _draw_num(row_first, column_first, number_of_game, player, data):
     """новый вариант рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
     number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
 
     s = 2
     tour = get_power_of_two(player)
-    for col in range(col_n, tour * 2 + 1, 2):
+    for col in range(column_first, tour * 2 + 1, 2):
         if col == 4:
-            row_n = 3
+            row_first = 3
             row_step *=2
         elif col == 6:
-            row_n = 7
+            row_first = 7
             row_step *=2
         elif col == 8:
-            row_n = 15
+            row_first = 15
             
-        for row in range(row_n, player * 2 - 1, row_step):
+        for row in range(row_first, player * 2 - 1, row_step):
             data[row][col] = str(number_of_game) # i - номер строки K - номер столбца
             number_of_game += 1
 
-    return number_of_game
+    # return number_of_game
 
 
 def draw_num_2(row_n, row_step, col_n, number_of_columns, number_of_game, data, player):
