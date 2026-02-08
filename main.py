@@ -15893,7 +15893,9 @@ def setka_8_full_made(fin):
     draw_num(row_n=16, row_step=2, col_n=6, number_of_columns=2, number_of_game=8, player=2, data=data) # рисует номера встреч 1-32
     draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
     # new ================
-
+    # draw_num(row_first=1, column_first=2, number_of_game=1, player=4, data=data) # рисует номера встреч 1-32
+    # draw_num(row_first=16, column_first=6, number_of_game=5, player=2, data=data) # рисует номера встреч 1-32
+    # draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
     # ========================
     draw_num_lost(row_n=16, row_step=2, col_n=4, number_of_game=5, player=2, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=20, row_step=2, col_n=2, number_of_game=1, player=4, data=data) # номера минус проигравшие встречи -1 -16
@@ -19777,7 +19779,6 @@ def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, 
     return number_of_game
 
 
-
 def get_power_of_two(player):
     """возвращает кол-во туров в сетке"""
     if player <= 0 or (player & (player - 1)) != 0:
@@ -19792,19 +19793,26 @@ def _draw_num(row_first, column_first, number_of_game, player, data):
     """новый вариант рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
     number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
 
-    s = 2
+    # s = 2
+    row_step = 2
+    line = player * 2
     tour = get_power_of_two(player)
-    for col in range(column_first, tour * 2 + 1, 2):
+    # row_step = 2 * (line - 1)
+    column_end = column_first + (tour * 2)+ 1
+    for col in range(column_first, column_end, 2):
         if col == 4:
             row_first = 3
-            row_step *=2
+            row_step = row_step * (line - 1)
+            # player //=2
         elif col == 6:
             row_first = 7
             row_step *=2
+            player //=2
         elif col == 8:
             row_first = 15
-            
-        for row in range(row_first, player * 2 - 1, row_step):
+        row_end = row_first + 2 * (line - 1)
+
+        for row in range(row_first, row_end, row_step):
             data[row][col] = str(number_of_game) # i - номер строки K - номер столбца
             number_of_game += 1
 
