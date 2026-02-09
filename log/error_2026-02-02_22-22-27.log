@@ -1,0 +1,15 @@
+2026-02-02 22:22:49,106 - ERROR - Необработанное исключение: TypeError: 'float' object cannot be interpreted as an integer
+2026-02-02 22:22:49,108 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5654, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8059, in made_pdf_table_for_view
+    setka_8_full_made(fin)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15896, in setka_8_full_made
+    draw_num(row_first=1, column_first=2, number_of_game=1, player=8, data=data) # рисует номера встреч 1-32
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19810, in draw_num
+    for row in range(row_first, row_end, row_step):
+               ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'float' object cannot be interpreted as an integer
