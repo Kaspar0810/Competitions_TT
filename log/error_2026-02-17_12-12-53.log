@@ -1,0 +1,14 @@
+2026-02-17 12:17:15,875 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'id_choice' where it is not associated with a value
+2026-02-17 12:17:15,876 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 3536, in add_player
+    Choice.update(family=fn).where(Choice.id == id_choice).execute()
+                                               ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'id_choice' where it is not associated with a value
+2026-02-17 12:17:22,561 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'id_choice' where it is not associated with a value
+2026-02-17 12:17:22,562 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 3536, in add_player
+    Choice.update(family=fn).where(Choice.id == id_choice).execute()
+                                               ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'id_choice' where it is not associated with a value

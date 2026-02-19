@@ -3508,29 +3508,32 @@ def add_player():
                             fio_city=fn_city, fio=fn, pay_rejting=pay_R, comment=comment, coach_id = idc, patronymic_id=idp).where(Player.id == pl_id).execute()
             results = Result.select().where(Result.title_id == title_id())
             #  =========== вариант с изменением отчества в -result- и -choice-
-            new_fio_full = f"{fn}/{ct}" # фамилия и город игрока для редактирования в -Results-
-            choices = Choice.select().where(Choice.player_choice_id == pl_id).get()
-            id_choice = choices.id
-            old_family = choices.family
-            old_fio_full = f"{old_family}/{ct}" # вариант фамилия до изменения для поиска в Резульататах
-            player_1 = results.select().where(Result.player1 == old_fio_full)
-            if len(player_1)> 0:
-                for p in player_1:
-                    Result.update(player1=new_fio_full).where(Result.id == p).execute()
-            player_2 = results.select().where(Result.player2 == old_fio_full)
-            if len(player_2)> 0:
-                for p in player_2:
-                    Result.update(player2=new_fio_full).where(Result.id == p).execute()
-            player_win = results.select().where(Result.winner == old_fio_full)
-            if len(player_win)> 0:
-                for p in player_win:
-                    Result.update(winner=new_fio_full).where(Result.id == p).execute() 
-            player_los = results.select().where(Result.loser == old_fio_full)
-            if len(player_los)> 0:
-                for p in player_los:
-                    Result.update(loser=new_fio_full).where(Result.id == p).execute() 
-            # обновляет таблицу -Choice- новые ФИО
-            Choice.update(family=fn).where(Choice.id == id_choice).execute() 
+            flag = ready_system()
+           # Если система создана, то редактирует игрока в других таблицах
+            if flag is True: 
+                new_fio_full = f"{fn}/{ct}" # фамилия и город игрока для редактирования в -Results-
+                choices = Choice.select().where(Choice.player_choice_id == pl_id).get()
+                id_choice = choices.id
+                old_family = choices.family
+                old_fio_full = f"{old_family}/{ct}" # вариант фамилия до изменения для поиска в Резульататах
+                player_1 = results.select().where(Result.player1 == old_fio_full)
+                if len(player_1)> 0:
+                    for p in player_1:
+                        Result.update(player1=new_fio_full).where(Result.id == p).execute()
+                player_2 = results.select().where(Result.player2 == old_fio_full)
+                if len(player_2)> 0:
+                    for p in player_2:
+                        Result.update(player2=new_fio_full).where(Result.id == p).execute()
+                player_win = results.select().where(Result.winner == old_fio_full)
+                if len(player_win)> 0:
+                    for p in player_win:
+                        Result.update(winner=new_fio_full).where(Result.id == p).execute() 
+                player_los = results.select().where(Result.loser == old_fio_full)
+                if len(player_los)> 0:
+                    for p in player_los:
+                        Result.update(loser=new_fio_full).where(Result.id == p).execute() 
+                # обновляет таблицу -Choice- новые ФИО
+                Choice.update(family=fn).where(Choice.id == id_choice).execute() 
         elif txt == "Добавить":
             debt = "долг" if txt_edit == "Спортсмену необходимо оплатить рейтинг!" else ""
             # ==  перевод даты рождения в вид для db
@@ -15525,8 +15528,18 @@ def protokol_pdf():
         n += 1
         round = l.round
         randevy = l.tours
-        player_1 = l.player1
-        player_2 = l.player2
+        player_1_str = l.player1
+        player_2_str = l.player2
+        znak = player_1_str.find(" ")
+        fam_1 = f"{player_1_str[:znak + 2]}" # фамилия и первая буква имени с точкой
+        znak_1 = player_1_str.find("/")
+        city_pl1 = player_1_str[znak_1:] # город
+        znak = player_2_str.find(" ")
+        fam_2 = f"{player_2_str[:znak + 2]}" # фамилия и первая буква имени с точкой
+        znak_1 = player_2_str.find("/")
+        city_pl2 = player_2_str[znak_1:] # город
+        player_1 = f"{fam_1}.{city_pl1}" # игрок и город
+        player_2 = f"{fam_2}.{city_pl2}" # игрок и город
         win_pl = l.winner
   
         data = [n, round, randevy, player_1, player_2, win_pl]
