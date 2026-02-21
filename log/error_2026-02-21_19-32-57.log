@@ -1,0 +1,7 @@
+2026-02-21 19:34:43,752 - ERROR - Необработанное исключение: AttributeError: 'QGroupBox' object has no attribute 'currentWidget'
+2026-02-21 19:34:43,755 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 4724, in clear_score_fields
+    current_tab = my_win.groupBox_match.currentWidget()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QGroupBox' object has no attribute 'currentWidget'. Did you mean: 'parentWidget'?

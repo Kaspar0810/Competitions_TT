@@ -4525,22 +4525,7 @@ def page():
             pass
         my_win.Button_clear_field_result.clicked.connect(clear_score_fields)
 
-        # ========================
-        # === кнопка для очищения полей ввода счета и чекбокс для защиты кнопки
-        
-        # checkBox_clear_field = QCheckBox("", my_win.tabWidget)
-        # checkBox_clear_field.resize(100, 30)
-        # checkBox_clear_field.move(850, 50)
-        # checkBox_clear_field.show()
-        # Button_clear_field = QPushButton("Очистить\nполя", my_win.tabWidget)
-        # Button_clear_field.resize(70, 30)
-        # Button_clear_field.move(870, 50)
-        # Button_clear_field.show()
-        # Button_clear_field.setEnabled(False)
-
-        # ============================       
-
-        # == определяет разигрывается 3-е место или нет и в зависимости от этого включает кнопку и checkBox
+            # == определяет разигрывается 3-е место или нет и в зависимости от этого включает кнопку и checkBox
         if "1-й финал" in choice_etap:
             system = sf.select().where(System.stage == "1-й финал").get()
             flag_3 = system.no_game
@@ -4687,13 +4672,9 @@ def toggle_clear_button(state):
     if state == Qt.Checked:
         my_win.Button_clear_field_result.setEnabled(True)
         my_win.Button_clear_field_result.setToolTip("Нажмите для очистки всех полей ввода счета")
-        # Можно добавить звуковой сигнал или всплывающее сообщение
-        QApplication.beep()  # Звуковой сигнал
-        my_win.statusbar.showMessage("Кнопка очистки разблокирована!", 3000)
     else:
         my_win.Button_clear_field_result.setEnabled(False)
         my_win.Button_clear_field_result.setToolTip("Установите флажок защиты для разблокировки")
-        my_win.statusbar.showMessage("Кнопка очистки заблокирована", 2000)
 
 def clear_score_fields():
     """Очистка полей ввода счета"""
@@ -4706,43 +4687,7 @@ def clear_score_fields():
         line.clear()
      # Сбрасываем чекбокс защиты
     my_win.checkBox_clear_field_result.setChecked(False)
-    # # Дополнительное подтверждение
-    # reply = QMessageBox.question(
-    #     my_win,
-    #     "Подтверждение очистки",
-    #     "Вы действительно хотите очистить все поля ввода счета?\n\n"
-    #     "Это действие нельзя отменить!",
-    #     QMessageBox.Yes | QMessageBox.No,
-    #     QMessageBox.No
-    # )
-    
-    # if reply == QMessageBox.Yes:
-    #     # Очищаем поля ввода счета в текущей вкладке
-    #     cleared_count = 0      
-    #     # Ищем все SpinBox и LineEdit на текущей вкладке
-    #     # current_tab = my_win.tabWidget_2.currentWidget()
-    #     current_tab = my_win.groupBox_match.currentWidget()
-    #     if current_tab:            
-    #         for widget in current_tab.findChildren(QtWidgets.QLineEdit):
-    #             if "score" in widget.objectName().lower() or "счет" in widget.objectName().lower():
-    #                 widget.clear()
-    #                 cleared_count += 1   
-    #     # Сбрасываем чекбокс защиты
-    #     my_win.checkBox_clear_field_result.setChecked(False)
-        
-    #     # Показываем сообщение
-    #     my_win.statusbar.showMessage(f"Очищено {cleared_count} полей", 3000)
-        
-    #     # Можно также обновить таблицу результатов
-    #     # update_results_table()
-        
-    #     QMessageBox.information(
-    #         my_win,
-    #         "Очистка выполнена",
-    #         f"Успешно очищено {cleared_count} полей ввода счета!"
-    #     )
-# =================================
-
+  
 
 def otchestvo_input():
     """если требуется отчество то включает поле и выводит в listView сохраненые данные"""
