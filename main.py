@@ -4477,9 +4477,9 @@ def page():
         # ===== вариант AI =====
             # Создаем чекбокс защиты
         if not hasattr(my_win, 'checkBox_clear_field_result'):
-            my_win.checkBox_clear_field_result = QCheckBox("Защита", my_win.tabWidget)
+            my_win.checkBox_clear_field_result = QCheckBox("", my_win.tabWidget)
             my_win.checkBox_clear_field_result.resize(100, 30)
-            my_win.checkBox_clear_field_result.move(850, 50)
+            my_win.checkBox_clear_field_result.move(850, 40)
             my_win.checkBox_clear_field_result.setToolTip("Установите флажок для разблокировки кнопки очистки")
             my_win.checkBox_clear_field_result.show()
         else:
@@ -4488,8 +4488,8 @@ def page():
         # Создаем кнопку очистки полей
         if not hasattr(my_win, 'Button_clear_field_result'):
             my_win.Button_clear_field_result = QPushButton("Очистить\nполя", my_win.tabWidget)
-            my_win.Button_clear_field_result.resize(70, 30)
-            my_win.Button_clear_field_result.move(910, 50)  # Смещаем ниже чекбокса
+            my_win.Button_clear_field_result.resize(70, 36)
+            my_win.Button_clear_field_result.move(870, 37)  # Смещаем ниже чекбокса
             my_win.Button_clear_field_result.setEnabled(False)
             my_win.Button_clear_field_result.setStyleSheet("""
                 QPushButton {
@@ -4499,8 +4499,8 @@ def page():
                     border-radius: 3px;
                 }
                 QPushButton:enabled {
-                    background-color: #F4A460;
-                    color: white;
+                    background-#F5F5F5;
+                    color: black;
                     font-weight: bold;
                     border: 2px solid #cc0000;
                 }
@@ -4697,40 +4697,50 @@ def toggle_clear_button(state):
 
 def clear_score_fields():
     """Очистка полей ввода счета"""
-    # Дополнительное подтверждение
-    reply = QMessageBox.question(
-        my_win,
-        "Подтверждение очистки",
-        "Вы действительно хотите очистить все поля ввода счета?\n\n"
-        "Это действие нельзя отменить!",
-        QMessageBox.Yes | QMessageBox.No,
-        QMessageBox.No
-    )
+    line_edit_list = [my_win.lineEdit_pl1_s1, my_win.lineEdit_pl2_s1, my_win.lineEdit_pl1_s2, my_win.lineEdit_pl2_s2,
+                            my_win.lineEdit_pl1_s3, my_win.lineEdit_pl2_s3, my_win.lineEdit_pl1_s4, my_win.lineEdit_pl2_s4,
+                            my_win.lineEdit_pl1_s5, my_win.lineEdit_pl2_s5, my_win.lineEdit_pl1_s6, my_win.lineEdit_pl2_s6,
+                            my_win.lineEdit_pl1_s7, my_win.lineEdit_pl2_s7, my_win.lineEdit_player1,  my_win.lineEdit_player2,
+                            my_win.lineEdit_pl1_score_total, my_win.lineEdit_pl2_score_total]
+    for line in line_edit_list:
+        line.clear()
+     # Сбрасываем чекбокс защиты
+    my_win.checkBox_clear_field_result.setChecked(False)
+    # # Дополнительное подтверждение
+    # reply = QMessageBox.question(
+    #     my_win,
+    #     "Подтверждение очистки",
+    #     "Вы действительно хотите очистить все поля ввода счета?\n\n"
+    #     "Это действие нельзя отменить!",
+    #     QMessageBox.Yes | QMessageBox.No,
+    #     QMessageBox.No
+    # )
     
-    if reply == QMessageBox.Yes:
-        # Очищаем поля ввода счета в текущей вкладке
-        cleared_count = 0      
-        # Ищем все SpinBox и LineEdit на текущей вкладке
-        current_tab = my_win.tabWidget_2.currentWidget()
-        if current_tab:            
-            for widget in current_tab.findChildren(QtWidgets.QLineEdit):
-                if "score" in widget.objectName().lower() or "счет" in widget.objectName().lower():
-                    widget.clear()
-                    cleared_count += 1   
-        # Сбрасываем чекбокс защиты
-        my_win.checkBox_clear_field_result.setChecked(False)
+    # if reply == QMessageBox.Yes:
+    #     # Очищаем поля ввода счета в текущей вкладке
+    #     cleared_count = 0      
+    #     # Ищем все SpinBox и LineEdit на текущей вкладке
+    #     # current_tab = my_win.tabWidget_2.currentWidget()
+    #     current_tab = my_win.groupBox_match.currentWidget()
+    #     if current_tab:            
+    #         for widget in current_tab.findChildren(QtWidgets.QLineEdit):
+    #             if "score" in widget.objectName().lower() or "счет" in widget.objectName().lower():
+    #                 widget.clear()
+    #                 cleared_count += 1   
+    #     # Сбрасываем чекбокс защиты
+    #     my_win.checkBox_clear_field_result.setChecked(False)
         
-        # Показываем сообщение
-        my_win.statusbar.showMessage(f"Очищено {cleared_count} полей", 3000)
+    #     # Показываем сообщение
+    #     my_win.statusbar.showMessage(f"Очищено {cleared_count} полей", 3000)
         
-        # Можно также обновить таблицу результатов
-        # update_results_table()
+    #     # Можно также обновить таблицу результатов
+    #     # update_results_table()
         
-        QMessageBox.information(
-            my_win,
-            "Очистка выполнена",
-            f"Успешно очищено {cleared_count} полей ввода счета!"
-        )
+    #     QMessageBox.information(
+    #         my_win,
+    #         "Очистка выполнена",
+    #         f"Успешно очищено {cleared_count} полей ввода счета!"
+    #     )
 # =================================
 
 
