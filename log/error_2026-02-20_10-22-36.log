@@ -1,0 +1,14 @@
+2026-02-20 10:22:43,591 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'Button_clear_field'
+2026-02-20 10:22:43,592 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4639, in clear_field
+    my_win.Button_clear_field.setEnabled(True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'Button_clear_field'
+2026-02-20 10:22:45,952 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'Button_clear_field'
+2026-02-20 10:22:45,954 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4639, in clear_field
+    my_win.Button_clear_field.setEnabled(True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'Button_clear_field'

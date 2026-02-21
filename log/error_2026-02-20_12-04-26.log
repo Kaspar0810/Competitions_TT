@@ -1,0 +1,14 @@
+2026-02-20 12:04:33,770 - ERROR - Необработанное исключение: AttributeError: 'QToolBox' object has no attribute 'Button_clear_field'
+2026-02-20 12:04:33,770 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4647, in clear_field
+    my_win.toolBox.Button_clear_field.setEnabled(True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QToolBox' object has no attribute 'Button_clear_field'
+2026-02-20 12:04:56,904 - ERROR - Необработанное исключение: AttributeError: 'QToolBox' object has no attribute 'Button_clear_field'
+2026-02-20 12:04:56,918 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4647, in clear_field
+    my_win.toolBox.Button_clear_field.setEnabled(True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QToolBox' object has no attribute 'Button_clear_field'

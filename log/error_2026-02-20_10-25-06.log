@@ -1,0 +1,14 @@
+2026-02-20 10:25:12,471 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'tabwidget'
+2026-02-20 10:25:12,471 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4639, in clear_field
+    my_win.tabwidget.Button_clear_field.setEnabled(True)
+    ^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'tabwidget'
+2026-02-20 10:25:17,127 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'tabwidget'
+2026-02-20 10:25:17,129 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4639, in clear_field
+    my_win.tabwidget.Button_clear_field.setEnabled(True)
+    ^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'tabwidget'

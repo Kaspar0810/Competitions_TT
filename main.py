@@ -77,7 +77,7 @@ from start_form import Ui_Form
 from datetime import *
 
 from PyQt5 import *
-from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, QVariant
+from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
 from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout
@@ -4474,12 +4474,71 @@ def page():
         Button_view.setFlat(True)
         Button_view.show()
         Button_view.clicked.connect(view)
+        # ===== вариант AI =====
+            # Создаем чекбокс защиты
+        if not hasattr(my_win, 'checkBox_clear_field_result'):
+            my_win.checkBox_clear_field_result = QCheckBox("Защита", my_win.tabWidget)
+            my_win.checkBox_clear_field_result.resize(100, 30)
+            my_win.checkBox_clear_field_result.move(850, 50)
+            my_win.checkBox_clear_field_result.setToolTip("Установите флажок для разблокировки кнопки очистки")
+            my_win.checkBox_clear_field_result.show()
+        else:
+            my_win.checkBox_clear_field_result.show()
+        
+        # Создаем кнопку очистки полей
+        if not hasattr(my_win, 'Button_clear_field_result'):
+            my_win.Button_clear_field_result = QPushButton("Очистить\nполя", my_win.tabWidget)
+            my_win.Button_clear_field_result.resize(70, 30)
+            my_win.Button_clear_field_result.move(910, 50)  # Смещаем ниже чекбокса
+            my_win.Button_clear_field_result.setEnabled(False)
+            my_win.Button_clear_field_result.setStyleSheet("""
+                QPushButton {
+                    background-color: #cccccc;
+                    color: #666666;
+                    border: 1px solid #999999;
+                    border-radius: 3px;
+                }
+                QPushButton:enabled {
+                    background-color: #F4A460;
+                    color: white;
+                    font-weight: bold;
+                    border: 2px solid #cc0000;
+                }
+                QPushButton:enabled:hover {
+                    background-color: #ff6666;
+                }
+            """)
+            my_win.Button_clear_field_result.show()
+        else:
+            my_win.Button_clear_field_result.show()
+        
+        # Подключаем сигналы (отключаем старые соединения, чтобы не было дублирования)
+        try:
+            my_win.checkBox_clear_field_result.stateChanged.disconnect()
+        except:
+            pass
+        my_win.checkBox_clear_field_result.stateChanged.connect(toggle_clear_button)
+        
+        try:
+            my_win.Button_clear_field_result.clicked.disconnect()
+        except:
+            pass
+        my_win.Button_clear_field_result.clicked.connect(clear_score_fields)
 
-        checkBox_clear_filed = QCheckBox("Очистить поля", my_win.tabWidget)
-        checkBox_clear_filed.resize(100, 30)
-        checkBox_clear_filed.move(850, 50)
-        checkBox_clear_filed.stateChanged.connect(clear_field)
-        checkBox_clear_filed.show()
+        # ========================
+        # === кнопка для очищения полей ввода счета и чекбокс для защиты кнопки
+        
+        # checkBox_clear_field = QCheckBox("", my_win.tabWidget)
+        # checkBox_clear_field.resize(100, 30)
+        # checkBox_clear_field.move(850, 50)
+        # checkBox_clear_field.show()
+        # Button_clear_field = QPushButton("Очистить\nполя", my_win.tabWidget)
+        # Button_clear_field.resize(70, 30)
+        # Button_clear_field.move(870, 50)
+        # Button_clear_field.show()
+        # Button_clear_field.setEnabled(False)
+
+        # ============================       
 
         # == определяет разигрывается 3-е место или нет и в зависимости от этого включает кнопку и checkBox
         if "1-й финал" in choice_etap:
@@ -4492,11 +4551,6 @@ def page():
                 my_win.checkBox_no_play_3.setChecked(False)
                 my_win.Button_3_mesta.setEnabled(False)
         # =============
-        # Label_view = QLabel(my_win.tabWidget)
-        # Label_view.resize(150, 80) # размеры кнопки (длина 120, ширина 50)
-        # Label_view.move(880, 130) # разммещение кнопки (от левого края 850, от верхнего 60) от виджета в котором размещен
-        # Label_view.setText("Просмотр")
-        # Label_view.show()
         my_win.widget.hide()
         my_win.tableWidget.hide()
 
@@ -4525,7 +4579,6 @@ def page():
                 i.setChecked(True)
                 break
 
-        # my_win.label_result.setText(f"{stage_current} этап")
         game_visible = sys_etap.visible_game # если False, то счет в партиях не писать
         my_win.checkBox_4.setChecked(game_visible)
         my_win.checkBox_7.setEnabled(False)
@@ -4628,15 +4681,61 @@ def page():
         load_combo_schedule_date()
         # ======
 
+# ===== функция AI ============
+def toggle_clear_button(state):
+    """Включение/выключение кнопки очистки в зависимости от состояния чекбокса"""
+    if state == Qt.Checked:
+        my_win.Button_clear_field_result.setEnabled(True)
+        my_win.Button_clear_field_result.setToolTip("Нажмите для очистки всех полей ввода счета")
+        # Можно добавить звуковой сигнал или всплывающее сообщение
+        QApplication.beep()  # Звуковой сигнал
+        my_win.statusbar.showMessage("Кнопка очистки разблокирована!", 3000)
+    else:
+        my_win.Button_clear_field_result.setEnabled(False)
+        my_win.Button_clear_field_result.setToolTip("Установите флажок защиты для разблокировки")
+        my_win.statusbar.showMessage("Кнопка очистки заблокирована", 2000)
 
-def clear_field():
-    """Очистка полей при правке счета в партиях"""
-    if my_win.checkBox_clear_field.isChecked:
-        pass
+def clear_score_fields():
+    """Очистка полей ввода счета"""
+    # Дополнительное подтверждение
+    reply = QMessageBox.question(
+        my_win,
+        "Подтверждение очистки",
+        "Вы действительно хотите очистить все поля ввода счета?\n\n"
+        "Это действие нельзя отменить!",
+        QMessageBox.Yes | QMessageBox.No,
+        QMessageBox.No
+    )
+    
+    if reply == QMessageBox.Yes:
+        # Очищаем поля ввода счета в текущей вкладке
+        cleared_count = 0      
+        # Ищем все SpinBox и LineEdit на текущей вкладке
+        current_tab = my_win.tabWidget_2.currentWidget()
+        if current_tab:            
+            for widget in current_tab.findChildren(QtWidgets.QLineEdit):
+                if "score" in widget.objectName().lower() or "счет" in widget.objectName().lower():
+                    widget.clear()
+                    cleared_count += 1   
+        # Сбрасываем чекбокс защиты
+        my_win.checkBox_clear_field_result.setChecked(False)
+        
+        # Показываем сообщение
+        my_win.statusbar.showMessage(f"Очищено {cleared_count} полей", 3000)
+        
+        # Можно также обновить таблицу результатов
+        # update_results_table()
+        
+        QMessageBox.information(
+            my_win,
+            "Очистка выполнена",
+            f"Успешно очищено {cleared_count} полей ввода счета!"
+        )
+# =================================
 
 
 def otchestvo_input():
-    """елси требуется отчество то включает поле и выводит в listView сохраненые данные"""
+    """если требуется отчество то включает поле и выводит в listView сохраненые данные"""
     pass
 
 
@@ -17108,7 +17207,7 @@ def setka_32_full_made(fin):
     for i in range(0, 11, 2):
         fn = ('TEXTCOLOR', (i + 1, 0), (i + 1, 206), colors.black)  # цвет шрифта игроков
         style.append(fn)
-        fn = ('TEXTCOLOR', (i, 0), (i, 206), colors.green)  # цвет шрифта номеров встреч
+        fn = ('TEXTCOLOR', (i, 0), (i, 206), colors.brown)  # цвет шрифта номеров встреч
         style.append(fn)
         # выравнивание фамилий игроков по левому краю
         fn = ('ALIGN', (i + 1, 0), (i + 1, 206), 'LEFT')

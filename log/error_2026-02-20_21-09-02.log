@@ -1,0 +1,9 @@
+2026-02-20 21:09:09,838 - ERROR - Необработанное исключение: NameError: name 'self' is not defined
+2026-02-20 21:09:09,843 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4152, in tool_page
+    page()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4482, in page
+    checkBox_clear_field.stateChanged.connect(self.on_confirm_changed)
+                                              ^^^^
+NameError: name 'self' is not defined

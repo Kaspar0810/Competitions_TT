@@ -1,0 +1,7 @@
+2026-02-20 13:31:28,825 - ERROR - Необработанное исключение: AttributeError: 'QTabWidget' object has no attribute 'checkBox_clear_field'
+2026-02-20 13:31:28,827 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4648, in clear_field_game
+    my_win.tabWidget.checkBox_clear_field.clear()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QTabWidget' object has no attribute 'checkBox_clear_field'

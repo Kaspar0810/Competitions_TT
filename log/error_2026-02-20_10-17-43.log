@@ -1,0 +1,14 @@
+2026-02-20 10:17:49,584 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'checkBox_clear_field'
+2026-02-20 10:17:49,585 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4639, in clear_field
+    if my_win.checkBox_clear_field.isChecked:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'checkBox_clear_field'
+2026-02-20 10:17:52,287 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'checkBox_clear_field'
+2026-02-20 10:17:52,290 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4639, in clear_field
+    if my_win.checkBox_clear_field.isChecked:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'checkBox_clear_field'

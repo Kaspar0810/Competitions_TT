@@ -1,0 +1,232 @@
+2026-02-20 13:47:59,633 - ERROR - Необработанное исключение: TypeError: isChecked(self): too many arguments
+2026-02-20 13:47:59,633 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4651, in clear_field_game
+    checkBox_in_tab.isChecked(False)
+TypeError: isChecked(self): too many arguments
+2026-02-20 13:51:23,956 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:23,959 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:28,186 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:28,186 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:32,152 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:32,152 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:33,244 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:33,244 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:34,421 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:34,423 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:34,727 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:34,728 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:41,692 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:41,692 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:47,176 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:47,177 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7386, in focus
+    sum_total_game = score_in_game()  # подсчет очков в партии
+                     ^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7458, in score_in_game
+    sys = system.select().where(System.stage == stage).get()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex_SSHOR13\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [69, 'все финалы', 1, 0]
+2026-02-20 13:51:50,078 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: ''
+2026-02-20 13:51:50,079 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 7870, in enter_score
+    sc_total = circle_type(none_player, stage)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8195, in circle_type
+    st1 = int(my_win.lineEdit_pl1_score_total.text())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: ''
