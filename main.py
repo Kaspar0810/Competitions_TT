@@ -684,6 +684,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         db_r(gamer=gm)
         db_select_title()
 
+
     def fast_change_comp(self):
         """Быстрый переход между соревнованиями"""
         sender = my_win.sender()
@@ -723,6 +724,48 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     button_list[j].setFont(font_no_und)
                     button_list[j].setFlat(False)
         button_comp_enabled()
+
+
+
+    # def fast_change_comp(self):
+    #     """Быстрый переход между соревнованиями"""
+    #     sender = my_win.sender()
+    #     button_list = [Button_turnir_1, Button_turnir_2, Button_turnir_3, Button_turnir_4]
+    #     font_und = QFont("DejaVuSans-Bold", 10)
+    #     font_und.setUnderline(True)
+    #     font_no_und = QFont("DejaVuSans-Bold", 10)
+    #     font_no_und.setUnderline(False)
+
+    #     for j in range(0, 4):
+    #         if sender == Button_turnir_1:
+    #             if j == 0:
+    #                 button_list[j].setFont(font_und)
+    #                 button_list[j].setFlat(True)
+    #             else:
+    #                 button_list[j].setFont(font_no_und)
+    #                 button_list[j].setFlat(False)
+    #         elif sender == Button_turnir_2:
+    #             if j == 1:
+    #                 button_list[j].setFont(font_und)
+    #                 button_list[j].setFlat(True)
+    #             else:
+    #                 button_list[j].setFont(font_no_und)
+    #                 button_list[j].setFlat(False)   
+    #         elif sender == Button_turnir_3:             
+    #             if j == 2:
+    #                 button_list[j].setFont(font_und)
+    #                 button_list[j].setFlat(True)
+    #             else:
+    #                 button_list[j].setFont(font_no_und)
+    #                 button_list[j].setFlat(False) 
+    #         elif sender == Button_turnir_4:
+    #             if j == 3:
+    #                 button_list[j].setFont(font_und)
+    #                 button_list[j].setFlat(True)
+    #             else:
+    #                 button_list[j].setFont(font_no_und)
+    #                 button_list[j].setFlat(False)
+    #     button_comp_enabled()
 
     def check_debitor_R(self):
         check_player_whitout_R()
@@ -1239,6 +1282,70 @@ my_win.resize(1390, 780) ## ===== размер формы ==================
 my_win.center()
 
 # ===========
+# # ============== вариант новых кнопок ================
+# class CompetitionFrame(QFrame):
+#     """Фрейм с кнопками соревнований"""
+    
+#     # def __init__(self, parent=None):
+#     #     super().__init__(parent)
+#     #     self.init_ui()
+#     #     self.load_competitions()
+    
+    # def init_ui(self):
+    #     """Инициализация интерфейса"""
+    #     # Основной layout для фрейма
+    #     self.layout = QVBoxLayout(self)
+    #     self.layout.setContentsMargins(0, 0, 0, 0)
+    #     self.layout.setSpacing(2)
+        
+    #     # Настройка фрейма
+    #     self.setFrameStyle(QFrame.Box)
+    #     self.setLineWidth(2)
+# def button_comp():
+#     frame = QFrame(my_win)
+#     frame.setFrameStyle(QFrame.Box | QFrame.Sunken)
+#     frame.setGeometry(10, 25, 242, 30)
+
+#     buttons_layout = QHBoxLayout(frame) # располагает кнопки внутри горизонтально layout
+#     buttons_layout.setContentsMargins(2, 2, 2, 2)  # Отступы от краев фрайма кнопок 
+
+#     font = QFont('Times New Roman', 10)
+#     Button_turnir_1 = QPushButton("-#-") # (в каком виджете размещена)
+#     Button_turnir_1.setFont(font)
+#     Button_turnir_1.setFlat(False)
+#     Button_turnir_1.show()
+#     Button_turnir_2 = QPushButton("-#-") # (в каком виджете размещена)
+#     Button_turnir_2.setFont(font)
+#     Button_turnir_2.setFlat(False)
+#     Button_turnir_2.show()
+#         # вариант с двумя кнопками
+#     Button_turnir_3 = QPushButton("-#-") # (в каком виджете размещена)
+#     Button_turnir_3.setFont(font)
+#     Button_turnir_3.setFlat(False)
+#     Button_turnir_3.show()
+#     Button_turnir_4 = QPushButton("-#-") # (в каком виджете размещена)
+#     Button_turnir_4.setFont(font)
+#     Button_turnir_4.setFlat(False)
+#     Button_turnir_4.show()
+
+#     buttons_layout.addWidget(Button_turnir_1)
+#     buttons_layout.addWidget(Button_turnir_2)
+
+#     buttons_layout.addWidget(Button_turnir_3)
+#     buttons_layout.addWidget(Button_turnir_4)
+
+
+#     Button_turnir_1.setEnabled(False)
+#     Button_turnir_2.setEnabled(False)
+
+#     Button_turnir_3.setEnabled(False)
+#     Button_turnir_4.setEnabled(False)
+#     Button_turnir_1.clicked.connect(my_win.fast_change_comp)
+#     Button_turnir_2.clicked.connect(my_win.fast_change_comp)
+#     Button_turnir_3.clicked.connect(my_win.fast_change_comp)
+#     Button_turnir_4.clicked.connect(my_win.fast_change_comp)
+
+# ==========================
 frame = QFrame(my_win)
 frame.setFrameStyle(QFrame.Box | QFrame.Sunken)
 frame.setGeometry(10, 25, 242, 30)
@@ -1323,6 +1430,107 @@ def update_player_list():
                 r_new = gamer.r_list
                 Player.update(rank=r_new).where(Player.id == id_pl).execute()
 
+# ============== вариант новых кнопок ================
+# class CompetitionFrame(QFrame):
+#     """Фрейм с кнопками соревнований"""
+    
+#     def __init__(self, parent=None):
+#         super().__init__(parent)
+#         self.init_ui()
+#         self.load_competitions()
+    
+#     def init_ui(self):
+#         """Инициализация интерфейса"""
+#         # Основной layout для фрейма
+#         self.layout = QVBoxLayout(self)
+#         self.layout.setContentsMargins(0, 0, 0, 0)
+#         self.layout.setSpacing(2)
+        
+#         # Настройка фрейма
+#         self.setFrameStyle(QFrame.Box)
+#         self.setLineWidth(2)
+        
+#     def load_competitions(self):
+#         """Загрузка соревнований из БД"""
+#         competitions = Title.select()
+
+            
+#             # Создание кнопок для каждого соревнования
+#         for comp in competitions:
+#             self.add_competition_button(comp)
+            
+#         #     cursor.close()
+#         #     connection.close()
+            
+#         # except mysql.connector.Error as err:
+#         #     QMessageBox.critical(
+#         #         self, 
+#         #         "Ошибка БД", 
+#         #         f"Ошибка подключения к базе данных:\n{err}"
+#         #     )
+#         # except Exception as e:
+#         #     QMessageBox.critical(
+#         #         self, 
+#         #         "Ошибка", 
+#         #         f"Неизвестная ошибка:\n{e}"
+#         #     )
+    
+#     def add_competition_button(self, competition):
+#         """Добавление кнопки соревнования"""
+#         # Формирование текста кнопки
+#         name = competition['Название соревнования']
+#         start_date = competition['Дата начала']
+#         end_date = competition['Дата окончания']
+        
+#         button_text = f"{name}\nс {start_date} по {end_date}"
+        
+#         # Создание кнопки
+#         button = QPushButton(button_text)
+#         button.setMinimumHeight(80)
+#         button.setFont(QFont('Arial', 10))
+        
+#         # Сохраняем данные соревнования в свойстве кнопки
+#         button.competition_data = competition
+        
+#         # Подключаем сигнал нажатия
+#         button.clicked.connect(self.on_competition_clicked)
+        
+#         # Добавляем кнопку в layout
+#         self.layout.addWidget(button)
+    
+#     def on_competition_clicked(self):
+#         """Обработчик нажатия на кнопку соревнования"""
+#         button = self.sender()  # Получаем кнопку, которая была нажата
+        
+#         if button and hasattr(button, 'competition_data'):
+#             comp_data = button.competition_data
+            
+#             # Здесь запускается соответствующее соревнование
+#             self.start_competition(comp_data)
+    
+#     def start_competition(self, competition_data):
+#         """Запуск соревнования"""
+#         name = competition_data['Название соревнования']
+#         start_date = competition_data['Дата начала']
+#         end_date = competition_data['Дата окончания']
+        
+#         # Формируем сообщение о запуске
+#         msg = f"Запуск соревнования:\n\n"
+#         msg += f"Название: {name}\n"
+#         msg += f"Дата начала: {start_date}\n"
+#         msg += f"Дата окончания: {end_date}\n"
+#         msg += f"Количество записей: {competition_data.get('count', 1)}"
+        
+#         # Показываем информационное сообщение
+#         # В реальном приложении здесь будет код запуска соревнования
+#         QMessageBox.information(self, "Запуск соревнования", msg)
+        
+#         # Здесь можно добавить реальную логику запуска
+#         # Например, открытие нового окна с соревнованием
+#         # или выполнение определенных действий
+
+
+# =======================================
 
 
 class StartWindow(QMainWindow, Ui_Form):
@@ -1399,7 +1607,8 @@ class StartWindow(QMainWindow, Ui_Form):
         flag = check_delete_db()
         if isinstance(flag, list): # узнает принадлежит переменная к типу
            delete_db_copy(del_files_list=flag) 
-        go_to() 
+        go_to()
+        # button_comp() 
         my_win.show()
 
     def new(self):
@@ -20957,8 +21166,8 @@ def made_list_regions():
     my_win.Button_made_page_pdf.setEnabled(True)
     my_win.tableWidget.clear()
     region_list = []
-    regions = Player.select().where(Player.title_id == title_id()) 
-    # regions = Player.select().where((Player.title_id == 66) | (Player.title_id == 67))
+    # regions = Player.select().where(Player.title_id == title_id()) 
+    regions = Player.select().where((Player.title_id == 68) | (Player.title_id == 69))
     for k in regions:
         reg = k.region
         if reg != "":
