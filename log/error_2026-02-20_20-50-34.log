@@ -1,7 +1,0 @@
-2026-02-20 20:51:32,162 - ERROR - Необработанное исключение: NameError: name 'Button_clear_field' is not defined
-2026-02-20 20:51:32,163 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4667, in on_confirm_changed
-    Button_clear_field.setEnabled(state == QtCore.Qt.Checked)
-    ^^^^^^^^^^^^^^^^^^
-NameError: name 'Button_clear_field' is not defined

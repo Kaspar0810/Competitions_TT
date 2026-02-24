@@ -1,9 +1,0 @@
-2026-02-20 10:08:45,028 - ERROR - Необработанное исключение: NameError: name 'checkBox_clear_field' is not defined
-2026-02-20 10:08:45,028 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4152, in tool_page
-    page()
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4479, in page
-    checkBox_clear_field.resize(100, 30)
-    ^^^^^^^^^^^^^^^^^^^^
-NameError: name 'checkBox_clear_field' is not defined
