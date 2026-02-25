@@ -1,0 +1,13 @@
+2026-02-25 15:19:27,769 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'select_range' where it is not associated with a value
+2026-02-25 15:19:27,774 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22136, in schedule_net
+    fill_table_schedule(player_list)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22434, in fill_table_schedule
+    schedule_table_select(my_win.tableView_schedule, model)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22562, in schedule_table_select
+    my_win.btn_select_range.clicked.connect(select_range)
+                                            ^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'select_range' where it is not associated with a value
