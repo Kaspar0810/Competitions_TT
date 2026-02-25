@@ -77,7 +77,7 @@ from start_form import Ui_Form
 from datetime import *
 
 from PyQt5 import *
-from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt
+from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
 from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout
@@ -22118,17 +22118,10 @@ def format_mysql_date(date_str):
 
 def schedule_net():
     """Создает расписание встречи в финалах по сетке по дате времени и номеру стола"""
-    # player_list = Result.select().where(Result.title_id == title_id())
-    # fin = []
-    # data = []
     fin = []
 
-    # model = MyTableModel(data)
-   
     system = System.select().where(System.title_id == title_id())
-    # my_win.tabWidget_2.setCurrentIndex(4)
-    # my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
-    # my_win.tableView_schedule.show()
+
     for sys in system:  # отбирает финалы с сеткой
         if sys.stage != "Предварительный" and sys.stage != "Полуфиналы":
             txt = sys.label_string
@@ -22141,42 +22134,7 @@ def schedule_net():
     player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
 
     fill_table_schedule(player_list)
-    # player_selected = player_list.dicts().execute()    
-    # row_count = len(player_selected)  # кол-во строк в таблице
-    # num_columns = [0, 3, 4, 5, 17, 18] # номера столбцов в таблице базы данных, откуда брать данные
-    # my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection) # выделение несколких строк по клику мышью
-
-    # # model.setHorizontalHeaderLabels(['№ встречи','Игрок-1', 'Игрок-2', 'дата', 'Город', 'Регион', 'Разряд'])
-    # model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время'])
-    # if row_count != 0:  # список удаленных игроков пуст если R = 0
-       
-    #     for row in range(row_count):  # добавляет данные из базы в TableWidget
-    #         item_1 = str(list(player_selected[row].values())[num_columns[0]])
-    #         item_2 = str(list(player_selected[row].values())[num_columns[1]])
-    #         item_3 = str(list(player_selected[row].values())[num_columns[2]])
-    #         item_4 = str(list(player_selected[row].values())[num_columns[3]])
-    #         item_5 = str(list(player_selected[row].values())[num_columns[4]])
-    #         if item_5 != "None":
-    #             item_5 = format_mysql_date(date_str=item_5)
-    #         item_6 = str(list(player_selected[row].values())[num_columns[5]])
-    #         # item_7 = str(list(player_selected[row].values())[num_columns[6]])
-    #         # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
-    #         data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
-    #         data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
-
-    #     my_win.tableView_schedule.setModel(model)
-    #     font = my_win.tableView_schedule.font()
-    #     font.setPointSize(11)
-    #     my_win.tableView_schedule.setFont(font)
-    #         # my_win.tableView.setSortingEnabled(True)
-    #     my_win.tableView_schedule.horizontalHeader().setFont(QFont("Times", 12, QFont.Bold)) # делает заголовки жирный и размер 13
-    #     my_win.tableView_schedule.horizontalHeader().setStyleSheet("background-color:yellow;") # делает фон заголовков светлоголубой
-
-    #     my_win.tableView_schedule.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
-    #         # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
-    #     my_win.tableView_schedule.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
-    #     my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
-    # my_win.tableView_schedule.show()
+  
     my_win.lineEdit_schedule_time.setInputMask('00.00')
     load_combo_schedule_date()
 
@@ -22433,19 +22391,18 @@ def sort_double_player():
 def fill_table_schedule(player_list):
     """загружает таблицу TableView расписания"""
     data = []
-    # data_table_tmp = []
     data_table_list = []
     model = MyTableModel(data)
-    # system = System.select().where(System.title_id == title_id())
     my_win.tabWidget_2.setCurrentIndex(4)
     my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
-    # my_win.tableView_schedule.show()
-    # player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
+   
     player_selected = player_list.dicts().execute()    
     row_count = len(player_selected)  # кол-во строк в таблице
-    num_columns = [0, 3, 4, 5, 17, 18] # номера столбцов в таблице базы данных, откуда брать данные
-    my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection) # выделение несколких строк по клику мышью
-    model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время'])
+    num_columns = [0, 3, 4, 5, 17, 18, 19] # номера столбцов в таблице базы данных, откуда брать данные
+    # выделение несколких строк по клику мышью
+    my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
+    my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
+    model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])
     if row_count != 0:  # список удаленных игроков пуст если R = 0     
         for row in range(row_count):  # добавляет данные из базы в TableWidget
             item_1 = str(list(player_selected[row].values())[num_columns[0]])
@@ -22457,9 +22414,9 @@ def fill_table_schedule(player_list):
                 item_5 = format_mysql_date(date_str=item_5)
             item_6_txt = str(list(player_selected[row].values())[num_columns[5]])
             item_6 = item_6_txt[:5] 
-            # item_7 = str(list(player_selected[row].values())[num_columns[6]])
-            # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
-            data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
+            item_7 = str(list(player_selected[row].values())[num_columns[6]])
+            data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
+            # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
             data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
     my_win.tableView_schedule.setModel(model)
     font = my_win.tableView_schedule.font()
@@ -22470,11 +22427,11 @@ def fill_table_schedule(player_list):
     my_win.tableView_schedule.horizontalHeader().setStyleSheet("background-color:yellow;") # делает фон заголовков светлоголубой
 
     my_win.tableView_schedule.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
-            # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
-    # my_win.tableView_schedule.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
     my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
     my_win.tableView_schedule.hideColumn(0)
     my_win.tableView_schedule.show()
+    # ======= вызов функции для выделения строк
+    # schedule_table_select(my_win.tableView_schedule, model)
 
 def load_combo_schedule_date():
     """загружает в комбо даты встреч для расписания"""
@@ -22584,8 +22541,69 @@ def schedule_filter():
     # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
-# def shedule_whrite_on_net(fin):
-#     """"записывает расписание на сетку по встречам"""
+def schedule_table_select(tableView_schedule, model):
+    """"выделяет в QTableView строки для составления расписания"""
+    # Создаем таблицу
+    # table_view = QTableView()
+    my_win.tableView_schedule.setModel(model)
+        
+    # Настраиваем выделение
+    my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
+    my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
+        
+    # layout.addWidget(my_win.tableView_schedule)
+        
+    # Кнопки для демонстрации
+    # btn_select_odd = QPushButton("Выделить нечетные строки")
+    # btn_select_odd.clicked.connect(self.select_odd_rows)
+    # layout.addWidget(btn_select_odd)
+        
+    # btn_select_range = QPushButton("Выделить строки 5-10")
+    my_win.btn_select_range.clicked.connect(select_range)
+    # layout.addWidget(btn_select_range)
+        
+    # btn_clear = QPushButton("Очистить выделение")
+    my_win.btn_clear.clicked.connect(clear_selection)
+    # layout.addWidget(btn_clear)
+        
+    # Информация о выделении
+    # btn_info = QPushButton("Показать выделенные строки")
+    my_win.btn_info.clicked.connect(show_selected_rows)
+    # layout.addWidget(btn_info)
+    
+    # def select_odd_rows(self):
+    #     """Выделить нечетные строки"""
+    #     selection_model = self.table_view.selectionModel()
+    #     selection_model.clear()
+        
+    #     for row in range(0, self.model.rowCount(QModelIndex()), 2):
+    #         index = self.model.index(row, 0)
+    #         selection_model.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
+        
+    def select_range():
+        """Выделить диапазон строк"""
+        from PyQt5.QtCore import QItemSelection
+            
+        selection_model = my_win.tableView_schedule.selectionModel()
+            
+        top_left = model.index(4, 0)  # строка 5 (индекс 4)
+        bottom_right = model.index(9, model.columnCount(QModelIndex()) - 1)  # строка 10
+            
+        selection = QItemSelection(top_left, bottom_right)
+        selection_model.clear()
+        selection_model.select(selection, QItemSelectionModel.Select)
+        
+def clear_selection():
+    """Очистить выделение"""
+    my_win.tableView_schedule.selectionModel().clear()
+    
+def show_selected_rows():
+    """Показать индексы выделенных строк"""
+    selection_model = my_win.tableView_schedule.selectionModel()
+    selected_rows = selection_model.selectedRows()
+        
+    rows = [index.row() for index in selected_rows]
+    print(f"Выделены строки: {sorted(rows)}")
 #     pass
 # def filter_schedule():
 #     """Загружает комбобокс для фильтра расписания"""
