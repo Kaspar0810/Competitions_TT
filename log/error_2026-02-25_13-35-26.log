@@ -1,0 +1,25 @@
+2026-02-25 13:35:49,053 - ERROR - Необработанное исключение: ValueError: not enough values to unpack (expected 3, got 1)
+2026-02-25 13:35:49,054 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5713, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8130, in made_pdf_table_for_view
+    setka_32_full_made(fin)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 17203, in setka_32_full_made
+    t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                           ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+                           ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                           ('VALIGN', (1, 0), (1, 64), 'BOTTOM')] + ts))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 1151, in setStyle
+    self._addCommand(cmd)
+    ~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 1217, in _addCommand
+    (op, (sc, sr), (ec, er)), values = cmd[:3] , cmd[3:]
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
