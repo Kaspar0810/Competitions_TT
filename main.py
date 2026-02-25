@@ -107,7 +107,9 @@ from sys import platform
 import time
 
 from typing import List, Tuple, Dict, Optional, Set
-from collections import defaultdict    
+from collections import defaultdict 
+from playhouse.migrate import * # для удаления, редактирования таблиц DB  
+
 os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
 # WindowsArguments = dpiawareness = 1
 
@@ -115,7 +117,7 @@ os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
 # screen_rect = app.desktop().screenGeometry()
 # width, height = screen_rect.width(), screen_rect.height()
 # import collections
-from playhouse.migrate import * # для удаления, редактирования таблиц DB
+
 
 if not os.path.isdir("table_pdf"):  # создает папку 
     os.mkdir("table_pdf")
@@ -7952,6 +7954,9 @@ def enter_score(none_player=0):
         result.loser = loser
         result.points_loser = l
         result.score_loser = ts_loser
+        # ==== убирает расписание встречи после сыгранной игры
+        result.schedule_date = ""
+        result.shedule_time = ""
         result.save()
     #  == попытка удалить встречи с игроками задействованных в редактировани счета по сетке
     if flag_edit_match is not None and type == "сетка":
@@ -17804,7 +17809,6 @@ def mesto_in_final(fin):
 
     return first_mesto
 
-
 def write_in_setka(data, stage, first_mesto, table):
     """функция заполнения сетки результатами встреч data поступает чистая только номера в сетке, дальше идет заполнение игроками и счетом"""
     "row_num_win - словарь, ключ - номер игры, значение - список(номер строки 1-ого игрока, номер строки 2-ого игрока) и записвает итоговые места в db"
@@ -18479,7 +18483,6 @@ def setka_data_clear(fin, table):
     all_list.append(tds)
     return all_list
     
-
 def kol_player(stage):
     """выводит максимальное количество человек в группе t если все группы равны, а g2 если разное количество"""
     id_system = system_id(stage)
@@ -18497,8 +18500,6 @@ def kol_player(stage):
     else:
         max_gamer = system.max_player // system.total_group
     return max_gamer
-
-
 
 def  table_data(stage, kg):
     """циклом создаем список участников каждой группы или финалов по кругу"""
@@ -22583,9 +22584,9 @@ def schedule_filter():
     # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
-def shedule_whrite_on_net(fin):
-    """"записывает расписание на сетку по встречам"""
-    pass
+# def shedule_whrite_on_net(fin):
+#     """"записывает расписание на сетку по встречам"""
+#     pass
 # def filter_schedule():
 #     """Загружает комбобокс для фильтра расписания"""
 #     player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_txt))
@@ -22621,7 +22622,7 @@ def shedule_whrite_on_net(fin):
 # =======        
 # def proba(): 
 #     # ======================
-#     myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
+    # myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
     # ========== создать таблицу    
     # class Choice_double_player(BaseModel):
     #     double_player = CharField(70)    
@@ -22672,13 +22673,14 @@ def shedule_whrite_on_net(fin):
     # cursor.close()
 # ===== создание, удаление, переименование столбцов
     # with db.atomic():
-    #     migrate(migrator.drop_column('results', 'schedule_time')) # удаление столбца
+    #     migrator = MySQLMigrator(db)
+        # migrate(migrator.drop_column('results', 'schedule_time')) # удаление столбца
         # migrate(migrator.alter_column_type('system', 'mesta_exit', IntegerField()))
         # migrate(migrator.alter_column_type('system', 'mesta_exit', IntegerField()))
         # migrate(migrator.rename_column('results', 'schedule_time', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
-        # migrate(migrator.add_column('results', 'schedule_time', DateField(null=True))) # null=True допускает пустое значение
+        # migrate(migrator.add_column('results', 'schedule_table', DateField(null=True))) # null=True допускает пустое значение
    
 #     db.close()
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции

@@ -269,7 +269,8 @@ class Result(BaseModel):
     sex = CharField(10)
     schedule_date = DateField()
     schedule_time = TimeField()
-
+    schedule_table = CharField()
+    
     class Meta:
         db_table = "results"
         opder_by = "id"
