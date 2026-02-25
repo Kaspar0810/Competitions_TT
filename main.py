@@ -15736,8 +15736,11 @@ def schedule_str(schedule_dict, match_num):
         date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"
         schedule_full = f"{date_str_rus}"
     else:
-        date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"
-        time_str_rus = f"{date_time_txt[1].hour}:{date_time_txt[1].minute}"
+        date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"        
+        if date_time_txt[1].minute == 0:
+            time_str_rus = f"{date_time_txt[1].hour}:{date_time_txt[1].minute}0"
+        else:
+            time_str_rus = f"{date_time_txt[1].hour}:{date_time_txt[1].minute}"
         schedule_full = f"{date_str_rus}/{time_str_rus}"
 
     return schedule_full
@@ -15781,7 +15784,7 @@ def find_match_numbers_in_table(table_data, fin):
                         match_positions[match_num] = (row_idx, col_idx)
                         schedule_positions[match_num] = (row_idx, col_idx - 1)
                         schedule[match_num] = schedule_full_str
-                        # print(f"Найден номер встречи {match_num} на позиции ({row_idx}, {col_idx})")
+
     return schedule_positions, schedule
  
 
@@ -15961,11 +15964,7 @@ def setka_8_full_made(fin):
     draw_num(row_n=1, row_step=2, col_n=2, number_of_columns=3, number_of_game=1, player=8, data=data) # рисует номера встреч 1-32
     draw_num(row_n=16, row_step=2, col_n=6, number_of_columns=2, number_of_game=8, player=2, data=data) # рисует номера встреч 1-32
     draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
-    # new ================
-    # draw_num(row_first=1, column_first=2, number_of_game=1, player=4, data=data) # рисует номера встреч 1-32
-    # draw_num(row_first=16, column_first=6, number_of_game=5, player=2, data=data) # рисует номера встреч 1-32
-    # draw_num(row_n=20, row_step=2, col_n=4, number_of_columns=2, number_of_game=9, player=4, data=data) # рисует номера встреч 1-32
-    # ========================
+  
     draw_num_lost(row_n=16, row_step=2, col_n=4, number_of_game=5, player=2, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=20, row_step=2, col_n=2, number_of_game=1, player=4, data=data) # номера минус проигравшие встречи -1 -16
     draw_num_lost(row_n=28, row_step=2, col_n=4, number_of_game=9, player=2, data=data) # номера минус проигравшие встречи -1 -16
@@ -17767,6 +17766,8 @@ def schedule_data(data, fin):
         fn = ('TEXTCOLOR', (pos[1], pos[0]), (pos[1], pos[0]), colors.red)
         style_color_schedule.append(fn)
         fn =  ('ALIGN', (pos[1], pos[0]), (pos[1], pos[0]), 'RIGHT')
+        style_color_schedule.append(fn)
+        fn = ('FONTNAME', (pos[1], pos[0]), (pos[1], pos[0]), "DejaVuSerif-Bold")
         style_color_schedule.append(fn)
   
     return style_color_schedule   
