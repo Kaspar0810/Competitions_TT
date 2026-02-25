@@ -15976,13 +15976,7 @@ def setka_8_full_made(fin):
     data[25][6] = str(-11)
     data[30][6] = str(-12)
     #========= расписание ===========
-    schedule_list = find_match_numbers_in_table(data, fin)
-    schedule_positions = schedule_list[0]
-    schedule_text = schedule_list[1]
-    for key in schedule_positions.keys():
-        pos = schedule_positions[key]
-        text = schedule_text[key]
-        data[pos[0]][pos[1]] = text
+    style_color_schedule = schedule_data(data, fin)
     # =================================
     # ============= данные игроков и встреч и размещение по сетке =============
     tds = write_in_setka(data, fin, first_mesto, table)
@@ -16017,7 +16011,7 @@ def setka_8_full_made(fin):
     for i in range(1, 6, 2):
         fn = ('TEXTCOLOR', (i, 0), (i, 39), colors.black)  # цвет шрифта игроков
         style.append(fn)
-        fn = ('TEXTCOLOR', (i + 1, 0), (i + 1, 39), colors.green)  # цвет шрифта номеров встреч
+        fn = ('TEXTCOLOR', (i + 1, 0), (i + 1, 39), colors.brown)  # цвет шрифта номеров встреч
         style.append(fn)
         # выравнивание фамилий игроков по левому краю
         fn = ('ALIGN', (i, 0), (i, 39), 'LEFT') 
@@ -16025,28 +16019,26 @@ def setka_8_full_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i + 1, 0), (i + 1, 39), 'CENTER')
         style.append(fn)
-    # ========= стиль расписание ===========
-    for key in schedule_positions.keys():
-        pos = schedule_positions[key]
-        fn = ('TEXTCOLOR', (pos[1], pos[0]), (pos[1], pos[0]), colors.red)  # цвет шрифта игроков
+    # =========== центрировать счет в партии =========
+    game = find_match_numbers_in_table(data, fin)  # находит номер строки и столбца матча на сетке
+    # центрировать счет в партии 
+    num_game = game[0]
+    for i in num_game.keys():
+        row_column = num_game[i]
+        row = row_column[0]
+        column = row_column[1]
+        fn = ('ALIGN', (column + 2, row + 1), (column + 2, row + 1), 'CENTER')
         style.append(fn)
-        fn = ('ALIGIN', (pos[1], pos[0]), (pos[1], pos[0]), 'RIGHT')  # цвет шрифта игроков
-        style.append(fn)
-        fn = ('FONTNAME', (pos[1], pos[0]), (pos[1], pos[0]), 'DejaVuSerif-Italic')  # цвет шрифта игроков
-        style.append(fn)
-        fn = ('FONTSIZE', (pos[1], pos[0]), (pos[1], pos[0]), 6)  # цвет шрифта игроков
-        style.append(fn)
-
-    # ======================================
-     # центрировать счет в партии
-    # for i in range(3, 8, 2):
-    #     for k in range(2, 39, 2):
-    #         fn = ('ALIGN', (i, k), (i, k), 'CENTER')
-    #         style.append(fn)
+    for i in range(0, 12, 2):
+            fn = ('VALIGN', (i, 0), (i, -1), 'TOP')
+            style.append(fn)
+    # =============================================    
     # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
     # style.append(fn)
-    # =========================
+    # =========================   
     ts = style   # стиль таблицы (список оформления строк и шрифта)
+    for b in style_color_schedule:
+        ts.append(b)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
                            ('FONTSIZE', (0, 0), (-1, -1), 6),
@@ -16064,8 +16056,6 @@ def setka_8_full_made(fin):
                            # ======== SCHEDULE ====                          
                             ] + ts))
                           
-
-                        #    [('ALIGN', (3, 2), (3, 2), 'CENTER')]))
 # === надпись финала
     # h2 = PS("normal", fontSize=12, fontName="DejaVuSerif-Italic",
     #         leftIndent=50, textColor=Color(1, 0, 1, 1))  # стиль параграфа (номера таблиц)
@@ -16571,7 +16561,9 @@ def setka_16_full_made(fin):
     data[63][8] = str(-31)
     data[65][8] = str(32)  # создание номеров встреч 32
     data[67][8] = str(-32)
-
+    #========= расписание ===========
+    style_color_schedule = schedule_data(data, fin)
+    # ============================
     # ============= данные игроков и встреч и размещение по сетке =============
     tds = write_in_setka(data, fin, first_mesto, table)
     #===============
@@ -16631,9 +16623,24 @@ def setka_16_full_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i + 1, 0), (i + 1, 68), 'CENTER')
         style.append(fn)
+     # =========== центрировать счет в партии =========
+    game = find_match_numbers_in_table(data, fin)  # находит номер строки и столбца матча на сетке
+    # центрировать счет в партии 
+    num_game = game[0]
+    for i in num_game.keys():
+        row_column = num_game[i]
+        row = row_column[0]
+        column = row_column[1]
+        fn = ('ALIGN', (column + 2, row + 1), (column + 2, row + 1), 'CENTER')
+        style.append(fn)
+   
+    for i in range(0, 12, 2):
+            fn = ('VALIGN', (i, 0), (i, -1), 'TOP')
+            style.append(fn)
     # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
     # style.append(fn)
-
+    for b in style_color_schedule:
+        ts.append(b)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
@@ -17590,13 +17597,8 @@ def setka_32_2_made(fin):
                 dict_num_game[key] = r
 
     #========= расписание ===========
-    schedule_list = find_match_numbers_in_table(data, fin)
-    schedule_positions = schedule_list[0]
-    schedule_text = schedule_list[1]
-    for key in schedule_positions.keys():
-        pos = schedule_positions[key]
-        text = schedule_text[key]
-        data[pos[0]][pos[1]] = text
+    style_color_schedule = schedule_data(data, fin)
+    # ============================
     # =================================
     # ===== добавить данные игроков и счета в data ==================
     tds = write_in_setka(data, fin, first_mesto, table)
@@ -17693,12 +17695,27 @@ def setka_32_2_made(fin):
         # центрирование номеров встреч
         fn = ('ALIGN', (i, 0), (i, 206), 'CENTER')
         style.append(fn)
+    # =========== центрировать счет в партии =========
+    game = find_match_numbers_in_table(data, fin)  # находит номер строки и столбца матча на сетке
+    # центрировать счет в партии 
+    num_game = game[0]
+    for i in num_game.keys():
+        row_column = num_game[i]
+        row = row_column[0]
+        column = row_column[1]
+        fn = ('ALIGN', (column + 2, row + 1), (column + 2, row + 1), 'CENTER')
+        style.append(fn)
+   
+    for i in range(0, 12, 2):
+            fn = ('VALIGN', (i, 0), (i, -1), 'TOP')
+            style.append(fn)
     # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
     # style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
-
+    for b in style_color_schedule:
+        ts.append(b)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
                            ('FONTSIZE', (0, 0), (-1, -1), 5),
