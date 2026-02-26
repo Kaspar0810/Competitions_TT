@@ -22392,6 +22392,10 @@ def fill_table_schedule(player_list):
     """загружает таблицу TableView расписания"""
     data = []
     data_table_list = []
+    for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
+            if i.isChecked():
+                schedule_current = i.text()
+                break
     model = MyTableModel(data)
     my_win.tabWidget_2.setCurrentIndex(4)
     my_win.tableView_schedule.setGeometry(QtCore.QRect(0, 0, 1000, 550)) # (точка слева, точка сверху, ширина, высота)
@@ -22402,21 +22406,37 @@ def fill_table_schedule(player_list):
     # выделение несколких строк по клику мышью
     my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
     my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
-    model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])
+    # model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])
     if row_count != 0:  # список удаленных игроков пуст если R = 0     
         for row in range(row_count):  # добавляет данные из базы в TableWidget
             item_1 = str(list(player_selected[row].values())[num_columns[0]])
             item_2 = str(list(player_selected[row].values())[num_columns[1]])
             item_3 = str(list(player_selected[row].values())[num_columns[2]])
             item_4 = str(list(player_selected[row].values())[num_columns[3]])
-            item_5 = str(list(player_selected[row].values())[num_columns[4]])
-            if item_5 != "None":
-                item_5 = format_mysql_date(date_str=item_5)
-            item_6_txt = str(list(player_selected[row].values())[num_columns[5]])
-            item_6 = item_6_txt[:5] 
-            item_7 = str(list(player_selected[row].values())[num_columns[6]])
-            data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
-            # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
+            if schedule_current == "Только дата":
+                model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата'])
+                item_5 = str(list(player_selected[row].values())[num_columns[4]])
+                if item_5 != "None":
+                    item_5 = format_mysql_date(date_str=item_5)
+                data_table_list = [item_1, item_2, item_3, item_4, item_5] 
+            elif schedule_current == "Дата и время":
+                model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время'])
+                item_5 = str(list(player_selected[row].values())[num_columns[4]])
+                if item_5 != "None":
+                    item_5 = format_mysql_date(date_str=item_5)
+                item_6_txt = str(list(player_selected[row].values())[num_columns[5]])
+                item_6 = item_6_txt[:5] 
+                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
+            else:
+                model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])
+                item_5 = str(list(player_selected[row].values())[num_columns[4]])
+                if item_5 != "None":
+                    item_5 = format_mysql_date(date_str=item_5)
+                item_6_txt = str(list(player_selected[row].values())[num_columns[5]])
+                item_6 = item_6_txt[:5] 
+                item_7 = str(list(player_selected[row].values())[num_columns[6]])
+                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
+
             data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
     my_win.tableView_schedule.setModel(model)
     font = my_win.tableView_schedule.font()
@@ -22491,6 +22511,10 @@ def check_schedule():
     """Записывает в таблицу расписание встреч"""
     month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
                   "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
+    for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
+            if i.isChecked():
+                schedule_current = i.text()
+                break
     titles = Title.select().where(Title.id == title_id()).get()
     d_start = titles.data_start
     date_txt = my_win.comboBox_schedule_date.currentText()
@@ -22512,8 +22536,14 @@ def check_schedule():
         rows = index.row()
         id_vst = my_win.tableView_schedule.model().index(rows, 0).data() # данные ячейки tableView
         vst = my_win.tableView_schedule.model().index(rows, 1).data() # данные ячейки tableView
-        app = Result.update(schedule_date=date_str, schedule_time=time_str).where((Result.id == id_vst) & (Result.tours == vst))
+        if schedule_current == "Только дата":
+            app = Result.update(schedule_date=date_str).where((Result.id == id_vst) & (Result.tours == vst))
+        elif schedule_current == "Дата и время":
+            app = Result.update(schedule_date=date_str, schedule_time=time_str).where((Result.id == id_vst) & (Result.tours == vst))
+        else:
+            app = Result.update(schedule_date=date_str, schedule_time=time_str).where((Result.id == id_vst) & (Result.tours == vst))
         app.execute()
+    my_win.tableView_schedule.selectionModel().clear()
 
 def schedule_filter():
     """фильтрация расписания по дате и времени"""
