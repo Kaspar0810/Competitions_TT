@@ -1,0 +1,14 @@
+2026-02-26 20:41:47,259 - ERROR - Необработанное исключение: NameError: name 'model' is not defined
+2026-02-26 20:41:47,264 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22787, in schedule_filter
+    my_win.tableView_schedule.setModel(model)
+                                       ^^^^^
+NameError: name 'model' is not defined
+2026-02-26 20:43:25,659 - ERROR - Необработанное исключение: NameError: name 'model' is not defined
+2026-02-26 20:43:25,680 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22787, in schedule_filter
+    my_win.tableView_schedule.setModel(model)
+                                       ^^^^^
+NameError: name 'model' is not defined

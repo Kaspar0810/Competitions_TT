@@ -1,0 +1,10 @@
+2026-02-26 21:55:27,190 - ERROR - Необработанное исключение: TypeError: argument 1 has unexpected type 'NoneType'
+2026-02-26 21:55:27,193 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22345, in schedule_net
+    fill_table_schedule(player_list)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22661, in fill_table_schedule
+    my_win.btn_select_range.clicked.connect(select_range(model))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+TypeError: argument 1 has unexpected type 'NoneType'

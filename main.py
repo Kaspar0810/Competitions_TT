@@ -22615,7 +22615,6 @@ def fill_table_schedule(player_list):
     # выделение несколких строк по клику мышью
     my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
     my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
-    # model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])
     if row_count != 0:  # список удаленных игроков пуст если R = 0     
         for row in range(row_count):  # добавляет данные из базы в TableWidget
             item_1 = str(list(player_selected[row].values())[num_columns[0]])
@@ -22659,6 +22658,7 @@ def fill_table_schedule(player_list):
     my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
     my_win.tableView_schedule.hideColumn(0)
     my_win.tableView_schedule.show()
+    my_win.btn_select_range.clicked.connect(select_range(model))
     # ======= вызов функции для выделения строк
     # schedule_table_select(my_win.tableView_schedule, model)
 
@@ -22717,9 +22717,11 @@ def load_combo_schedule_stage():
     my_win.comboBox_select_stage_schedule.addItems(stage_system)
 
 def check_schedule():
+    msgBox = QMessageBox()
     """Записывает в таблицу расписание встреч"""
     month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
                   "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
+    
     for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
             if i.isChecked():
                 schedule_current = i.text()
@@ -22741,6 +22743,9 @@ def check_schedule():
     minuta = time_txt[3:]
     time_str = f"{hour}:{minuta}"
     indices = my_win.tableView_schedule.selectionModel().selectedRows()
+    if len(indices) == 0:
+        reply = msgBox.information(my_win, 'Уведомление', "Вы не отметили номера встреч\n для записи расписания", msgBox.Ok) 
+        return
     for index in sorted(indices):
         rows = index.row()
         id_vst = my_win.tableView_schedule.model().index(rows, 0).data() # данные ячейки tableView
@@ -22753,6 +22758,7 @@ def check_schedule():
             app = Result.update(schedule_date=date_str, schedule_time=time_str).where((Result.id == id_vst) & (Result.tours == vst))
         app.execute()
     my_win.tableView_schedule.selectionModel().clear()
+    # fill_table_schedule
 
 def schedule_filter():
     """фильтрация расписания по дате и времени"""
@@ -22780,15 +22786,15 @@ def schedule_filter():
     # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
-def schedule_table_select(tableView_schedule, model):
-    """"выделяет в QTableView строки для составления расписания"""
+# def schedule_table_select(tableView_schedule, model):
+    # """"выделяет в QTableView строки для составления расписания"""
     # Создаем таблицу
     # table_view = QTableView()
-    my_win.tableView_schedule.setModel(model)
+    # my_win.tableView_schedule.setModel(model)
         
-    # Настраиваем выделение
-    my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
-    my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
+    # # Настраиваем выделение
+    # my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
+    # my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
         
     # layout.addWidget(my_win.tableView_schedule)
         
@@ -22797,17 +22803,17 @@ def schedule_table_select(tableView_schedule, model):
     # btn_select_odd.clicked.connect(self.select_odd_rows)
     # layout.addWidget(btn_select_odd)
         
-    # btn_select_range = QPushButton("Выделить строки 5-10")
-    my_win.btn_select_range.clicked.connect(select_range)
-    # layout.addWidget(btn_select_range)
+    # my_win.btn_select_range = QPushButton("Выделить строки 5-10")
+
+    # # layout.addWidget(btn_select_range)
         
-    # btn_clear = QPushButton("Очистить выделение")
-    my_win.btn_clear.clicked.connect(clear_selection)
-    # layout.addWidget(btn_clear)
+    # # btn_clear = QPushButton("Очистить выделение")
+    # my_win.btn_clear.clicked.connect(clear_selection)
+    # # layout.addWidget(btn_clear)
         
-    # Информация о выделении
-    # btn_info = QPushButton("Показать выделенные строки")
-    my_win.btn_info.clicked.connect(show_selected_rows)
+    # # Информация о выделении
+    # # btn_info = QPushButton("Показать выделенные строки")
+    # my_win.btn_info.clicked.connect(show_selected_rows)
     # layout.addWidget(btn_info)
     
     # def select_odd_rows(self):
@@ -22819,18 +22825,20 @@ def schedule_table_select(tableView_schedule, model):
     #         index = self.model.index(row, 0)
     #         selection_model.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
         
-    def select_range():
-        """Выделить диапазон строк"""
-        from PyQt5.QtCore import QItemSelection
+def select_range(model):
+    """Выделить диапазон строк"""
+    from PyQt5.QtCore import QItemSelection, QItemSelectionModel
+    # fill_table_schedule(player_list)
+    # model = MyTableModel(data)
             
-        selection_model = my_win.tableView_schedule.selectionModel()
+    selection_model = my_win.tableView_schedule.selectionModel()
             
-        top_left = model.index(4, 0)  # строка 5 (индекс 4)
-        bottom_right = model.index(9, model.columnCount(QModelIndex()) - 1)  # строка 10
+    top_left = model.index(4, 0)  # строка 5 (индекс 4)
+    bottom_right = model.index(9, model.columnCount(QModelIndex()) - 1)  # строка 10
             
-        selection = QItemSelection(top_left, bottom_right)
-        selection_model.clear()
-        selection_model.select(selection, QItemSelectionModel.Select)
+    selection = QItemSelection(top_left, bottom_right)
+    selection_model.clear()
+    selection_model.select(selection, QItemSelectionModel.Select)
         
 def clear_selection():
     """Очистить выделение"""
@@ -22843,6 +22851,8 @@ def show_selected_rows():
         
     rows = [index.row() for index in selected_rows]
     print(f"Выделены строки: {sorted(rows)}")
+
+# my_win.btn_select_range.clicked.connect(select_range)
 #     pass
 # def filter_schedule():
 #     """Загружает комбобокс для фильтра расписания"""
@@ -22937,7 +22947,7 @@ def show_selected_rows():
         # migrate(migrator.rename_column('results', 'schedule_time', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
-        # migrate(migrator.add_column('results', 'schedule_table', DateField(null=True))) # null=True допускает пустое значение
+#         migrate(migrator.add_column('results', 'schedule_table', CharField(null=True))) # null=True допускает пустое значение
    
 #     db.close()
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
