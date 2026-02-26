@@ -1,7 +1,0 @@
-2026-02-20 11:26:29,583 - ERROR - Необработанное исключение: AttributeError: 'QTabWidget' object has no attribute 'tab_3'
-2026-02-20 11:26:29,587 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 4641, in clear_field
-    button_in_tab = my_win.tabWidget.tab_3.findChild(QPushButton, "Очистить\nполя")
-                    ^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'QTabWidget' object has no attribute 'tab_3'

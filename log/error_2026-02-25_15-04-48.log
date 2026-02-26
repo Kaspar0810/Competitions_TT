@@ -1,0 +1,10 @@
+2026-02-25 15:05:02,252 - ERROR - Необработанное исключение: NameError: name 'tableView_schedule' is not defined
+2026-02-25 15:05:02,253 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22136, in schedule_net
+    fill_table_schedule(player_list)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22434, in fill_table_schedule
+    schedule_table_select(tableView_schedule, model)
+                          ^^^^^^^^^^^^^^^^^^
+NameError: name 'tableView_schedule' is not defined

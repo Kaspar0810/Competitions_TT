@@ -1,0 +1,7 @@
+2026-02-25 13:54:35,605 - ERROR - Необработанное исключение: NameError: name 'migrator' is not defined
+2026-02-25 13:54:35,628 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22681, in proba
+    migrate(migrator.add_column('results', 'schedule_table', DateField(null=True))) # null=True допускает пустое значение
+            ^^^^^^^^
+NameError: name 'migrator' is not defined

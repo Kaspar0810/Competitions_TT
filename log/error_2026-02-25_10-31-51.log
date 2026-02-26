@@ -1,0 +1,35 @@
+2026-02-25 10:32:13,245 - ERROR - Необработанное исключение: ValueError: Bad valign: 'CENTER'
+2026-02-25 10:32:13,246 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5713, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8130, in made_pdf_table_for_view
+    setka_32_full_made(fin)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 17239, in setka_32_full_made
+    doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1322, in build
+    BaseDocTemplate.build(self,flowables, canvasmaker=canvasmaker)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 1083, in build
+    self.handle_flowable(flowables)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\doctemplate.py", line 946, in handle_flowable
+    if not frame.add(S[0], canv, trySplit=0):
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\frames.py", line 201, in _add
+    flowable.drawOn(canv, self._x + self._leftExtraIndent, y, _sW=aW-w)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 112, in drawOn
+    self._drawOn(canvas)
+    ~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\flowables.py", line 93, in _drawOn
+    self.draw()#this is the bit you overload
+    ~~~~~~~~~^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 2357, in draw
+    self._drawCell(cellval, cellstyle, (colpos, rowpos), (colwidth, rowheight))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 2599, in _drawCell
+    raise ValueError(f'Bad valign: {valign!a}')
+ValueError: Bad valign: 'CENTER'

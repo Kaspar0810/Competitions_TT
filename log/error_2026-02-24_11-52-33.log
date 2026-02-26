@@ -1,0 +1,14 @@
+2026-02-24 11:54:48,407 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-02-24 11:54:48,410 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5713, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8130, in made_pdf_table_for_view
+    setka_32_full_made(fin)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 17060, in setka_32_full_made
+    number_of_game = draw_num(row_n=89, row_step=2, col_n=4, number_of_columns=3, number_of_game=37, player=8, data=data) # рисует номера встреч 1-32
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20095, in draw_num
+    data[i][k] = str(number_of_game) # i - номер строки K - номер столбца
+    ~~~~^^^
+IndexError: list index out of range

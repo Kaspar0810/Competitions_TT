@@ -31,9 +31,9 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>257</x>
       <y>0</y>
-      <width>841</width>
+      <width>840</width>
       <height>311</height>
      </rect>
     </property>
@@ -3950,7 +3950,7 @@
      <widget class="Line" name="line_6">
       <property name="geometry">
        <rect>
-        <x>227</x>
+        <x>208</x>
         <y>20</y>
         <width>16</width>
         <height>181</height>
@@ -3963,9 +3963,9 @@
      <widget class="QLabel" name="label_48">
       <property name="geometry">
        <rect>
-        <x>27</x>
+        <x>12</x>
         <y>10</y>
-        <width>211</width>
+        <width>191</width>
         <height>20</height>
        </rect>
       </property>
@@ -3987,7 +3987,7 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>211</width>
+        <width>191</width>
         <height>16</height>
        </rect>
       </property>
@@ -4000,7 +4000,7 @@
        <rect>
         <x>10</x>
         <y>161</y>
-        <width>211</width>
+        <width>191</width>
         <height>16</height>
        </rect>
       </property>
@@ -4013,7 +4013,7 @@
        <rect>
         <x>10</x>
         <y>176</y>
-        <width>211</width>
+        <width>191</width>
         <height>30</height>
        </rect>
       </property>
@@ -4032,7 +4032,7 @@
      <widget class="QPushButton" name="Button_up">
       <property name="geometry">
        <rect>
-        <x>244</x>
+        <x>228</x>
         <y>92</y>
         <width>121</width>
         <height>26</height>
@@ -4054,7 +4054,7 @@
      <widget class="QPushButton" name="Button_down">
       <property name="geometry">
        <rect>
-        <x>244</x>
+        <x>228</x>
         <y>121</y>
         <width>121</width>
         <height>24</height>
@@ -4076,7 +4076,7 @@
      <widget class="QLabel" name="label_54">
       <property name="geometry">
        <rect>
-        <x>255</x>
+        <x>232</x>
         <y>70</y>
         <width>91</width>
         <height>20</height>
@@ -4098,7 +4098,7 @@
      <widget class="Line" name="line_9">
       <property name="geometry">
        <rect>
-        <x>245</x>
+        <x>228</x>
         <y>140</y>
         <width>121</width>
         <height>16</height>
@@ -4111,7 +4111,7 @@
      <widget class="Line" name="line_10">
       <property name="geometry">
        <rect>
-        <x>245</x>
+        <x>228</x>
         <y>82</y>
         <width>121</width>
         <height>16</height>
@@ -4124,7 +4124,7 @@
      <widget class="QPushButton" name="Button_made_one_file_pdf">
       <property name="geometry">
        <rect>
-        <x>244</x>
+        <x>228</x>
         <y>176</y>
         <width>121</width>
         <height>30</height>
@@ -4145,7 +4145,7 @@
      <widget class="QLabel" name="label_55">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>239</x>
         <y>153</y>
         <width>91</width>
         <height>20</height>
@@ -4167,7 +4167,7 @@
      <widget class="Line" name="line_11">
       <property name="geometry">
        <rect>
-        <x>370</x>
+        <x>352</x>
         <y>20</y>
         <width>16</width>
         <height>181</height>
@@ -4182,7 +4182,7 @@
        <rect>
         <x>11</x>
         <y>41</y>
-        <width>211</width>
+        <width>191</width>
         <height>133</height>
        </rect>
       </property>
@@ -4360,7 +4360,7 @@
      <widget class="QLabel" name="label_56">
       <property name="geometry">
        <rect>
-        <x>246</x>
+        <x>227</x>
         <y>10</y>
         <width>101</width>
         <height>20</height>
@@ -4382,8 +4382,8 @@
      <widget class="QPushButton" name="Button_view_page_pdf">
       <property name="geometry">
        <rect>
-        <x>244</x>
-        <y>41</y>
+        <x>227</x>
+        <y>43</y>
         <width>121</width>
         <height>24</height>
        </rect>
@@ -4404,8 +4404,8 @@
      <widget class="Line" name="line_12">
       <property name="geometry">
        <rect>
-        <x>245</x>
-        <y>30</y>
+        <x>227</x>
+        <y>32</y>
         <width>121</width>
         <height>21</height>
        </rect>
@@ -4568,9 +4568,9 @@
      <widget class="QGroupBox" name="groupBox_9">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>20</y>
-        <width>161</width>
+        <x>552</x>
+        <y>10</y>
+        <width>136</width>
         <height>91</height>
        </rect>
       </property>
@@ -4580,7 +4580,7 @@
        </font>
       </property>
       <property name="title">
-       <string>Статистика игрока</string>
+       <string>Статистика</string>
       </property>
       <property name="flat">
        <bool>false</bool>
@@ -4638,7 +4638,7 @@
      <widget class="Line" name="line_20">
       <property name="geometry">
        <rect>
-        <x>579</x>
+        <x>540</x>
         <y>16</y>
         <width>16</width>
         <height>181</height>
@@ -4648,41 +4648,13 @@
        <enum>Qt::Vertical</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="label_80">
-      <property name="geometry">
-       <rect>
-        <x>614</x>
-        <y>51</y>
-        <width>39</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>10</pointsize>
-        <weight>75</weight>
-        <italic>true</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="text">
-       <string>Финал</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
      <widget class="QPushButton" name="Button_made_schedule">
       <property name="geometry">
        <rect>
-        <x>592</x>
-        <y>11</y>
-        <width>91</width>
-        <height>39</height>
+        <x>370</x>
+        <y>40</y>
+        <width>171</width>
+        <height>24</height>
        </rect>
       </property>
       <property name="font">
@@ -4693,8 +4665,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Расписание 
-на сетке</string>
+       <string>Расписание на сетке</string>
       </property>
       <property name="shortcut">
        <string/>
@@ -4709,21 +4680,11 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_schedule_date_2">
-      <property name="geometry">
-       <rect>
-        <x>592</x>
-        <y>68</y>
-        <width>91</width>
-        <height>23</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_74">
       <property name="geometry">
        <rect>
-        <x>595</x>
-        <y>92</y>
+        <x>370</x>
+        <y>130</y>
         <width>85</width>
         <height>16</height>
        </rect>
@@ -4747,8 +4708,8 @@
      <widget class="QComboBox" name="comboBox_schedule_date">
       <property name="geometry">
        <rect>
-        <x>592</x>
-        <y>109</y>
+        <x>370</x>
+        <y>150</y>
         <width>91</width>
         <height>23</height>
        </rect>
@@ -4757,8 +4718,8 @@
      <widget class="QLineEdit" name="lineEdit_schedule_time">
       <property name="geometry">
        <rect>
-        <x>592</x>
-        <y>150</y>
+        <x>570</x>
+        <y>120</y>
         <width>91</width>
         <height>25</height>
        </rect>
@@ -4773,9 +4734,9 @@
      <widget class="QPushButton" name="Button_schedule_ok">
       <property name="geometry">
        <rect>
-        <x>592</x>
-        <y>176</y>
-        <width>91</width>
+        <x>470</x>
+        <y>148</y>
+        <width>71</width>
         <height>26</height>
        </rect>
       </property>
@@ -4795,8 +4756,8 @@
      <widget class="QLabel" name="label_79">
       <property name="geometry">
        <rect>
-        <x>595</x>
-        <y>133</y>
+        <x>573</x>
+        <y>103</y>
         <width>90</width>
         <height>16</height>
        </rect>
@@ -4816,6 +4777,166 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
+     </widget>
+     <widget class="QLabel" name="label_91">
+      <property name="geometry">
+       <rect>
+        <x>571</x>
+        <y>143</y>
+        <width>90</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Номер стола</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_schedule_table">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>160</y>
+        <width>91</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+       </font>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_select_range">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>180</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>диапазон</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_clear">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>180</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>очистить</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_info">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>190</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>инфо</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_80">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>10</y>
+        <width>121</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Расписание встреч&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="frame_4">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>70</y>
+        <width>151</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QRadioButton" name="radioButton_date">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>121</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Только дата</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButton_date_time">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>121</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Дата и время</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButton_full">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>82</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Полное</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -4864,8 +4985,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -4877,8 +4998,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -5490,8 +5611,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6002,8 +6123,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6731,8 +6852,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6851,8 +6972,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
