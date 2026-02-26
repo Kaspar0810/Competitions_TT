@@ -1,0 +1,9 @@
+2026-02-26 14:29:45,480 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: 'Только дата'
+2026-02-26 14:29:45,485 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22136, in schedule_net
+    fill_table_schedule(player_list)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22397, in fill_table_schedule
+    match_current = int(i.text())
+ValueError: invalid literal for int() with base 10: 'Только дата'
