@@ -1,0 +1,9 @@
+2026-02-27 14:09:20,670 - ERROR - Необработанное исключение: AttributeError: 'QTimeEdit' object has no attribute 'set'
+2026-02-27 14:09:20,671 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 4368, in tool_page
+    page()
+    ~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 4878, in page
+    my_win.timeEdit_schedule.set
+AttributeError: 'QTimeEdit' object has no attribute 'set'

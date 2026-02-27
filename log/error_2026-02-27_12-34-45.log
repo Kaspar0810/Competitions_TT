@@ -1,0 +1,21 @@
+2026-02-27 12:34:52,914 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'month' where it is not associated with a value
+2026-02-27 12:34:52,915 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22702, in load_combo_schedule_time
+    month = month_str if month < 10 else f"0{month_str}"
+                         ^^^^^
+UnboundLocalError: cannot access local variable 'month' where it is not associated with a value
+2026-02-27 12:35:02,267 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'month' where it is not associated with a value
+2026-02-27 12:35:02,268 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22702, in load_combo_schedule_time
+    month = month_str if month < 10 else f"0{month_str}"
+                         ^^^^^
+UnboundLocalError: cannot access local variable 'month' where it is not associated with a value
+2026-02-27 12:35:02,278 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'month' where it is not associated with a value
+2026-02-27 12:35:02,279 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22702, in load_combo_schedule_time
+    month = month_str if month < 10 else f"0{month_str}"
+                         ^^^^^
+UnboundLocalError: cannot access local variable 'month' where it is not associated with a value

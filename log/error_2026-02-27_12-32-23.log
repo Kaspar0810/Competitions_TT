@@ -1,0 +1,6 @@
+2026-02-27 12:32:32,687 - ERROR - Необработанное исключение: TypeError: object of type 'int' has no len()
+2026-02-27 12:32:32,687 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22702, in load_combo_schedule_time
+    count = len(month_str)
+TypeError: object of type 'int' has no len()

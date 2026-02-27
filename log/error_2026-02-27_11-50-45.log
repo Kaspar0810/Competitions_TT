@@ -1,0 +1,7 @@
+2026-02-27 11:58:01,253 - ERROR - Необработанное исключение: NameError: name 'd_start' is not defined
+2026-02-27 11:58:01,256 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22695, in load_combo_schedule_time
+    year_txt = str(d_start)
+                   ^^^^^^^
+NameError: name 'd_start' is not defined

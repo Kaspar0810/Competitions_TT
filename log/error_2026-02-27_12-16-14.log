@@ -1,0 +1,6 @@
+2026-02-27 12:16:39,265 - ERROR - Необработанное исключение: ValueError: ' февраля' is not in list
+2026-02-27 12:16:39,269 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22701, in load_combo_schedule_time
+    month_txt = month_list.index(date_txt[2:])
+ValueError: ' февраля' is not in list

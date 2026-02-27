@@ -77,12 +77,17 @@ from start_form import Ui_Form
 from datetime import *
 
 from PyQt5 import *
-from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex, QItemSelectionModel
+from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex, QItemSelectionModel, QTime, Qt, QTimer
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
-from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame
+from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame, QTimeEdit
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout
 from PyQt5.QtWidgets import QAbstractItemView, QFileDialog, QProgressDialog, QAction, QDesktopWidget, QTableView, QColorDialog, QMessageBox, QCheckBox
 from PyQt5 import QtGui, QtWidgets, QtCore
+
+
+# from PyQt5.QtWidgets import QTimeEdit, QWidget, QVBoxLayout, QLabel
+# from PyQt5.QtCore import QTime, Qt
+
 import itertools
 from models import *
 from collections import Counter
@@ -4867,15 +4872,108 @@ def page():
         my_win.Button_made_one_file_pdf.setEnabled(False)
         my_win.Button_print_begunki.setEnabled(False)
         my_win.Button_change_player.setEnabled(False)
-        # my_win.Button_list_winner.setEnabled(False)
         my_win.lineEdit_range_tours.hide()
         my_win.comboBox_first_group.setEnabled(False)
         my_win.comboBox_second_group.setEnabled(False)
-        my_win.lineEdit_schedule_time.setInputMask('00.00')
+        my_win.timeEdit_schedule.hide()
+        my_win.label_79.hide()
         load_combo_schedule_stage()
         load_combo_etap_begunki()
         load_combo_schedule_date()
         # ======
+
+
+
+# class CustomTimeEdit(QTimeEdit):
+#     def __init__(self, parent=None):
+#         super().__init__(parent)
+#         self.step_minutes = 5  # Шаг в минутах
+#         self.init_ui()
+        
+#     def init_ui(self):
+#         """Начальная настройка"""
+#         # Устанавливаем начальное время (9:00)
+#         self.setTime(QTime(9, 0))
+        
+#         # Формат отображения
+#         self.setDisplayFormat("HH:mm")
+        
+#         # Устанавливаем диапазон
+#         self.setTimeRange(QTime(0, 0), QTime(23, 55))
+        
+#         # Включаем отслеживание изменений
+#         self.setWrapping(False)  # Не переходить через границы
+        
+#         # Устанавливаем шаг для колесика мыши
+#         self.setWheelStep(5)  # 5 минут при прокрутке колесиком
+        
+#     def setWheelStep(self, minutes):
+#         """Устанавливает шаг для колесика мыши"""
+#         self._wheel_step = minutes
+        
+#     def wheelEvent(self, event):
+#         """Обработка колесика мыши с шагом 5 минут"""
+#         if hasattr(self, '_wheel_step'):
+#             steps = event.angleDelta().y() // 120
+#             self.stepBy(steps * self._wheel_step)
+#         else:
+#             super().wheelEvent(event)
+    
+#     def stepBy(self, steps):
+#         """Переопределяем шаг для стрелок"""
+#         # steps - количество шагов (обычно 1 или -1)
+#         current = self.time()
+        
+#         # Добавляем steps * step_minutes минут
+#         new_time = current.addSecs(steps * self.step_minutes * 60)
+        
+#         # Проверяем границы
+#         if new_time >= self.minimumTime() and new_time <= self.maximumTime():
+#             self.setTime(new_time)
+#         elif steps > 0:
+#             self.setTime(self.maximumTime())
+#         else:
+#             self.setTime(self.minimumTime())
+def setup_simple_time_edit():
+    """Простая настройка timeEdit"""
+    
+    time_edit = my_win.timeEdit_schedule
+    
+    # 1. Устанавливаем начальное время 9:00
+    time_edit.setTime(QTime(9, 0))
+    
+    # 2. Устанавливаем формат с ведущими нулями
+    time_edit.setDisplayFormat("HH:mm")
+    
+    # 3. Создаем функцию для округления до 5 минут
+    def round_to_5_minutes():
+        time = time_edit.time()
+        minutes = time.minute()
+        
+        # Округляем до ближайших 5 минут
+        remainder = minutes % 5
+        if remainder != 0:
+            # if remainder < 3:  # Округляем вниз
+            #     new_minutes = minutes - remainder
+            # else:  # Округляем вверх
+            new_minutes = minutes + (5 - remainder)
+            
+            if new_minutes >= 60:
+                new_minutes = 0
+                new_hour = (time.hour() + 1) % 24
+            else:
+                new_hour = time.hour()
+            
+            new_time = QTime(new_hour, new_minutes)
+            time_edit.blockSignals(True)
+            time_edit.setTime(new_time)
+            time_edit.blockSignals(False)
+    
+    # 4. Подключаем сигнал изменения
+    time_edit.timeChanged.connect(lambda: QTimer.singleShot(100, round_to_5_minutes))
+
+# Вызываем настройку
+setup_simple_time_edit()
 
 # ===== функция AI ============
 def toggle_clear_button(state):
@@ -22687,9 +22785,21 @@ def load_combo_schedule_date():
 def load_combo_schedule_time():
     """Заполнение комбобокса для фильтра расписания"""
     time_list = []
+    month_list = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+    titles = Title.select().where(Title.id == title_id()).get()
+    d_start = titles.data_start
     my_win.comboBox_filter_schedule_time.clear()
-    gr_fin = my_win.comboBox_select_group_schedule.currentText()
-    results = Result.select().where((Result.title_id == title_id()) & (Result.number_group == gr_fin)).order_by(Result.schedule_time)
+    date_txt = my_win.comboBox_filter_schedule_date.currentText()
+    if date_txt == "":
+        return
+    else:
+        year = str(d_start)[:4]
+        day = date_txt[:2]
+        idx = month_list.index(date_txt[3:])
+        number = idx + 1
+        month = format_with_leading_zero(number)
+        date_str = f"{year}-{month}-{day}"
+    results = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_str)).order_by(Result.schedule_time)
     # result_sort = results.select()where(Result.schedule_time is Not Null).order()
     for i in results:
         s_time = i.schedule_time
@@ -22699,7 +22809,15 @@ def load_combo_schedule_time():
             if time_str not in time_list:
                 time_list.append(time_str)
     time_list.sort()
-    my_win.comboBox_filter_schedule_time .addItems(time_list)
+    my_win.comboBox_filter_schedule_time.addItems(time_list)
+
+def format_with_leading_zero(number):
+    """Форматирует число, добавляя ведущий ноль если нужно"""
+    try:
+        num = int(number)
+        return f"{num:02d}"
+    except (ValueError, TypeError):
+        return str(number)
 
 def load_combo_schedule_stage():
     """Заполняет комбо для фильтра этапами соревнования"""
@@ -22779,7 +22897,6 @@ def schedule_filter():
     time_str = f"{hours_txt}:{min_txt}:{sec_txt}"
     results = Result.select().where(Result.title_id == title_id())
     player_list = results.select().where((Result.schedule_date == date_str) & (Result.schedule_time == time_str))
-    # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
 def select_rows_with_options():
@@ -22912,7 +23029,18 @@ def select_rows_with_options():
                 "Некорректный формат ввода.\nИспользуйте числа, запятые и дефисы."
             )
 
-        
+def schedule_field():
+    """показывает в зависимости от радиокнопок время и столы в расписании"""
+    for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
+            if i.isChecked():
+                schedule_current = i.text()
+                break  
+    if schedule_current == "Полное":
+        my_win.timeEdit_schedule.show()
+        my_win.label_79.show()
+    else:
+        my_win.timeEdit_schedule.hide() 
+        my_win.label_79.hide()       
 # def clear_selection():
 #     """Очистить выделение"""
 #     my_win.tableView_schedule.selectionModel().clear()
@@ -23121,12 +23249,16 @@ my_win.comboBox_kategor_sec.currentTextChanged.connect(add_referee_to_db)
 
 my_win.comboBox_select_stage_schedule.currentTextChanged.connect(select_stage_for_schedule)
 my_win.comboBox_select_group_schedule.currentTextChanged.connect(load_combo_schedule_time)
+my_win.comboBox_filter_schedule_date.currentTextChanged.connect(load_combo_schedule_time)
 
 
 # =======  отслеживание переключение чекбоксов =========
 my_win.radioButton_match_3.toggled.connect(change_status_visible_and_score_game)
 my_win.radioButton_match_5.toggled.connect(change_status_visible_and_score_game)
 my_win.radioButton_match_7.toggled.connect(change_status_visible_and_score_game)
+
+my_win.radioButton_date.toggled.connect(schedule_field)
+my_win.radioButton_full.toggled.connect(schedule_field)
 
 my_win.checkBox_repeat_regions.stateChanged.connect(change_choice_group) 
 
