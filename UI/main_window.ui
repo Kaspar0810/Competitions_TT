@@ -4651,16 +4651,16 @@
      <widget class="QPushButton" name="Button_made_schedule">
       <property name="geometry">
        <rect>
-        <x>359</x>
+        <x>356</x>
         <y>40</y>
-        <width>131</width>
+        <width>198</width>
         <height>24</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
         <italic>true</italic>
        </font>
       </property>
@@ -4684,7 +4684,7 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>110</y>
+        <y>92</y>
         <width>85</width>
         <height>16</height>
        </rect>
@@ -4708,9 +4708,9 @@
      <widget class="QPushButton" name="Button_schedule_ok">
       <property name="geometry">
        <rect>
-        <x>490</x>
+        <x>360</x>
         <y>180</y>
-        <width>71</width>
+        <width>201</width>
         <height>26</height>
        </rect>
       </property>
@@ -4731,8 +4731,8 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>160</y>
-        <width>90</width>
+        <y>136</y>
+        <width>191</width>
         <height>16</height>
        </rect>
       </property>
@@ -4746,71 +4746,35 @@
        </font>
       </property>
       <property name="text">
-       <string>Время встречи</string>
+       <string>Время встречи и номера столов</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_91">
-      <property name="geometry">
-       <rect>
-        <x>591</x>
-        <y>113</y>
-        <width>90</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>10</pointsize>
-        <weight>75</weight>
-        <italic>true</italic>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Номер стола</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_schedule_table">
-      <property name="geometry">
-       <rect>
-        <x>590</x>
-        <y>130</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-        <italic>false</italic>
-       </font>
       </property>
      </widget>
      <widget class="QPushButton" name="btn_select_range">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>120</y>
-        <width>75</width>
+        <x>460</x>
+        <y>111</y>
+        <width>100</width>
         <height>23</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>диапазон</string>
+       <string>номера встреч</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btn_clear">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>90</y>
+        <x>570</x>
+        <y>180</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -4819,17 +4783,22 @@
        <string>очистить</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_info">
+     <widget class="QPushButton" name="btn_number_table">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>150</y>
-        <width>75</width>
-        <height>23</height>
+        <x>460</x>
+        <y>154</y>
+        <width>100</width>
+        <height>22</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>инфо</string>
+       <string>номера столов</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_80">
@@ -4858,9 +4827,9 @@
       <property name="geometry">
        <rect>
         <x>356</x>
-        <y>70</y>
-        <width>131</width>
-        <height>39</height>
+        <y>67</y>
+        <width>201</width>
+        <height>23</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -4873,7 +4842,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>2</y>
+         <y>3</y>
          <width>121</width>
          <height>17</height>
         </rect>
@@ -4888,8 +4857,8 @@
       <widget class="QRadioButton" name="radioButton_full">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>18</y>
+         <x>120</x>
+         <y>3</y>
          <width>82</width>
          <height>17</height>
         </rect>
@@ -4903,7 +4872,7 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>130</y>
+        <y>111</y>
         <width>91</width>
         <height>23</height>
        </rect>
@@ -4913,7 +4882,7 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>180</y>
+        <y>154</y>
         <width>91</width>
         <height>22</height>
        </rect>

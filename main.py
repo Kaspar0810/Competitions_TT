@@ -22904,14 +22904,14 @@ def select_rows_with_options():
     
     # Создаем кастомный диалог
     dialog = QtWidgets.QDialog(my_win)
-    dialog.setWindowTitle("Выбор строк")
+    dialog.setWindowTitle("Выбор встреч")
     dialog.setModal(True)
     dialog.setMinimumWidth(400)
     
     layout = QtWidgets.QVBoxLayout(dialog)
     
     # Поле ввода
-    label = QtWidgets.QLabel("Введите номера строк для выделения:")
+    label = QtWidgets.QLabel("Введите номера встреч для выделения:")
     layout.addWidget(label)
     
     line_edit = QtWidgets.QLineEdit()
