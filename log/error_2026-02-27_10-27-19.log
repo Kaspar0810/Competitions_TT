@@ -1,0 +1,7 @@
+2026-02-27 10:28:04,955 - ERROR - Необработанное исключение: TypeError: MyTableModel.rowCount() missing 1 required positional argument: 'parent'
+2026-02-27 10:28:04,958 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22825, in select_rows_with_options
+    info_label = QtWidgets.QLabel(f"Всего строк в таблице: {model.rowCount()}")
+                                                            ~~~~~~~~~~~~~~^^
+TypeError: MyTableModel.rowCount() missing 1 required positional argument: 'parent'

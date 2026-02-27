@@ -1,0 +1,7 @@
+2026-02-27 10:45:17,856 - ERROR - Необработанное исключение: NameError: name 'QtQCore' is not defined
+2026-02-27 10:45:17,858 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22903, in select_rows_with_options
+    QtQCore.QItemSelectionModel.Select | QtCore.QItemSelectionModel.Rows
+    ^^^^^^^
+NameError: name 'QtQCore' is not defined

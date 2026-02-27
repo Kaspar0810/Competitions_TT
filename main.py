@@ -77,7 +77,7 @@ from start_form import Ui_Form
 from datetime import *
 
 from PyQt5 import *
-from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex
+from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex, QItemSelectionModel
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
 from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout
@@ -22658,9 +22658,6 @@ def fill_table_schedule(player_list):
     my_win.tableView_schedule.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
     my_win.tableView_schedule.hideColumn(0)
     my_win.tableView_schedule.show()
-    my_win.btn_select_range.clicked.connect(select_range(model))
-    # ======= вызов функции для выделения строк
-    # schedule_table_select(my_win.tableView_schedule, model)
 
 def load_combo_schedule_date():
     """загружает в комбо даты встреч для расписания"""
@@ -22758,7 +22755,6 @@ def check_schedule():
             app = Result.update(schedule_date=date_str, schedule_time=time_str).where((Result.id == id_vst) & (Result.tours == vst))
         app.execute()
     my_win.tableView_schedule.selectionModel().clear()
-    # fill_table_schedule
 
 def schedule_filter():
     """фильтрация расписания по дате и времени"""
@@ -22786,82 +22782,151 @@ def schedule_filter():
     # player_selected = player_list.dicts().execute()
     fill_table_schedule(player_list)
 
-# def schedule_table_select(tableView_schedule, model):
-    # """"выделяет в QTableView строки для составления расписания"""
-    # Создаем таблицу
-    # table_view = QTableView()
-    # my_win.tableView_schedule.setModel(model)
-        
-    # # Настраиваем выделение
-    # my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
-    # my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
-        
-    # layout.addWidget(my_win.tableView_schedule)
-        
-    # Кнопки для демонстрации
-    # btn_select_odd = QPushButton("Выделить нечетные строки")
-    # btn_select_odd.clicked.connect(self.select_odd_rows)
-    # layout.addWidget(btn_select_odd)
-        
-    # my_win.btn_select_range = QPushButton("Выделить строки 5-10")
-
-    # # layout.addWidget(btn_select_range)
-        
-    # # btn_clear = QPushButton("Очистить выделение")
-    # my_win.btn_clear.clicked.connect(clear_selection)
-    # # layout.addWidget(btn_clear)
-        
-    # # Информация о выделении
-    # # btn_info = QPushButton("Показать выделенные строки")
-    # my_win.btn_info.clicked.connect(show_selected_rows)
-    # layout.addWidget(btn_info)
+def select_rows_with_options():
+    """Расширенный диалог выбора строк с дополнительными опциями"""
     
-    # def select_odd_rows(self):
-    #     """Выделить нечетные строки"""
-    #     selection_model = self.table_view.selectionModel()
-    #     selection_model.clear()
-        
-    #     for row in range(0, self.model.rowCount(QModelIndex()), 2):
-    #         index = self.model.index(row, 0)
-    #         selection_model.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
-        
-def select_range(model):
-    """Выделить диапазон строк"""
-    from PyQt5.QtCore import QItemSelection, QItemSelectionModel
-    # fill_table_schedule(player_list)
-    # model = MyTableModel(data)
-            
-    selection_model = my_win.tableView_schedule.selectionModel()
-            
-    top_left = model.index(4, 0)  # строка 5 (индекс 4)
-    bottom_right = model.index(9, model.columnCount(QModelIndex()) - 1)  # строка 10
-            
-    selection = QItemSelection(top_left, bottom_right)
-    selection_model.clear()
-    selection_model.select(selection, QItemSelectionModel.Select)
-        
-def clear_selection():
-    """Очистить выделение"""
-    my_win.tableView_schedule.selectionModel().clear()
+    # Создаем кастомный диалог
+    dialog = QtWidgets.QDialog(my_win)
+    dialog.setWindowTitle("Выбор строк")
+    dialog.setModal(True)
+    dialog.setMinimumWidth(400)
     
-def show_selected_rows():
-    """Показать индексы выделенных строк"""
-    selection_model = my_win.tableView_schedule.selectionModel()
-    selected_rows = selection_model.selectedRows()
+    layout = QtWidgets.QVBoxLayout(dialog)
+    
+    # Поле ввода
+    label = QtWidgets.QLabel("Введите номера строк для выделения:")
+    layout.addWidget(label)
+    
+    line_edit = QtWidgets.QLineEdit()
+    line_edit.setPlaceholderText("Пример: 1,3,5 или 1-5 или 1,3,5-7")
+    layout.addWidget(line_edit)
+    
+    # Информация о количестве строк
+    from PyQt5.QtCore import QModelIndex
+    model = my_win.tableView_schedule.model()
+    if model:
+        row_count = model.rowCount(QModelIndex())  # Важно: передаем пустой индекс
+        info_label = QtWidgets.QLabel(f"Всего строк в таблице: {row_count}")
+        info_label.setStyleSheet("color: gray;")
+        layout.addWidget(info_label)
+    
+    # Опции выбора
+    options_group = QtWidgets.QGroupBox("Опции")
+    options_layout = QtWidgets.QVBoxLayout()
+    
+    clear_current = QtWidgets.QCheckBox("Очистить текущее выделение")
+    clear_current.setChecked(True)
+    options_layout.addWidget(clear_current)
+    
+    scroll_to_selection = QtWidgets.QCheckBox("Прокрутить к выделению")
+    scroll_to_selection.setChecked(True)
+    options_layout.addWidget(scroll_to_selection)
+    
+    options_group.setLayout(options_layout)
+    layout.addWidget(options_group)
+    
+    # Кнопки
+    buttons = QtWidgets.QDialogButtonBox(
+        QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+    )
+    buttons.accepted.connect(dialog.accept)
+    buttons.rejected.connect(dialog.reject)
+    layout.addWidget(buttons)
+    
+    # Показываем диалог
+    if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        text = line_edit.text()
+        if not text:
+            return
+            
+        try:
+            rows_to_select = set()
+            
+            # Парсинг ввода
+            parts = text.replace(' ', '').split(',')
+            for part in parts:
+                if '-' in part:
+                    start, end = map(int, part.split('-'))
+                    rows_to_select.update(range(start, end + 1))
+                else:
+                    rows_to_select.add(int(part))
+            
+            # Выделение строк
+            selection_model = my_win.tableView_schedule.selectionModel()
+            
+            if clear_current.isChecked():
+                selection_model.clearSelection()
+            
+            if model is None:
+                QtWidgets.QMessageBox.warning(
+                    my_win, "Предупреждение", "Модель данных не найдена"
+                )
+                return
+            
+            from PyQt5.QtCore import QModelIndex, QItemSelectionModel
+            row_count = model.rowCount(QModelIndex())
+            
+            if row_count == 0:
+                QtWidgets.QMessageBox.warning(
+                    my_win, "Предупреждение", "Таблица пуста"
+                )
+                return
+            
+            selected_count = 0
+            first_selected = None
+            
+            for row in sorted(rows_to_select):
+                # Проверяем границы (индексация с 1 для пользователя)
+                if 1 <= row <= row_count:
+                    index = model.index(row - 1, 0, QModelIndex())
+                    selection_model.select(
+                        index, 
+                        QtCore.QItemSelectionModel.Select | QtCore.QItemSelectionModel.Rows
+                    )
+                    selected_count += 1
+                    if first_selected is None:
+                        first_selected = row - 1
+                else:
+                    QtWidgets.QMessageBox.warning(
+                        my_win, 
+                        "Предупреждение", 
+                        f"Строка {row} не существует (всего строк: {row_count})"
+                    )
+            
+            # Прокрутка к первому выбранному
+            if scroll_to_selection.isChecked() and first_selected is not None:
+                my_win.tableView_schedule.scrollTo(
+                    model.index(first_selected, 0, QModelIndex())
+                )
+            
+            # Результат
+            if selected_count > 0:
+                QtWidgets.QMessageBox.information(
+                    my_win, "Успешно", f"Выделено строк: {selected_count}"
+                )
+            
+        except ValueError:
+            QtWidgets.QMessageBox.critical(
+                my_win, 
+                "Ошибка", 
+                "Некорректный формат ввода.\nИспользуйте числа, запятые и дефисы."
+            )
+
         
-    rows = [index.row() for index in selected_rows]
-    print(f"Выделены строки: {sorted(rows)}")
+# def clear_selection():
+#     """Очистить выделение"""
+#     my_win.tableView_schedule.selectionModel().clear()
+    
+# def show_selected_rows():
+#     """Показать индексы выделенных строк"""
+#     selection_model = my_win.tableView_schedule.selectionModel()
+#     selected_rows = selection_model.selectedRows()
+        
+#     rows = [index.row() for index in selected_rows]
+#     print(f"Выделены строки: {sorted(rows)}")
 
-# my_win.btn_select_range.clicked.connect(select_range)
-#     pass
-# def filter_schedule():
-#     """Загружает комбобокс для фильтра расписания"""
-#     player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_txt))
-# def load_combo_schedule():
-#     """загружает комбобокс фильтра для расписания"""
 
-    # player_list = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_txt))
-    # fill_table(player_list)
+
 
 # def proba():
 #     choices = Choice.select()
@@ -22952,6 +23017,8 @@ def show_selected_rows():
 #     db.close()
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
 
+my_win.btn_select_range.clicked.connect(select_rows_with_options)
+# my_win.btn_select_range.clicked.connect(select_range)
 # ===== переводит фокус на поле ввода счета в партии вкладки -группа-
 my_win.lineEdit_pl1_s1.returnPressed.connect(focus)
 my_win.lineEdit_pl2_s1.returnPressed.connect(focus)
