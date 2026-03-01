@@ -1,0 +1,7 @@
+2026-02-28 18:37:35,231 - ERROR - Необработанное исключение: TypeError: '>' not supported between instances of 'int' and 'str'
+2026-02-28 18:37:35,231 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 23148, in select_numbers_tables
+    if selected_count > count_table:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'int' and 'str'

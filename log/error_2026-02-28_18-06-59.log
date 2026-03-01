@@ -1,0 +1,7 @@
+2026-02-28 18:15:56,385 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'K' where it is not associated with a value
+2026-02-28 18:15:56,386 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 23101, in select_numbers_tables
+    K += 1
+    ^
+UnboundLocalError: cannot access local variable 'K' where it is not associated with a value

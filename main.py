@@ -4877,6 +4877,9 @@ def page():
         my_win.comboBox_second_group.setEnabled(False)
         my_win.timeEdit_schedule.hide()
         my_win.label_79.hide()
+        my_win.btn_number_table.hide()
+        my_win.btn_select_range.hide()
+        my_win.lineEdit_all_table.hide()
         load_combo_schedule_stage()
         load_combo_etap_begunki()
         load_combo_schedule_date()
@@ -22404,7 +22407,6 @@ def double_family():
     double_id = find_duplicate_values(double_pl_dict) # список id игроков двойных фамилий
     list_duplicate_family(double_id)
 
-
 def format_mysql_date(date_str):
     """Преобразует дату из MySQL формата (YYYY-MM-DD) в 'число месяц' Пример: 2024-01-11 → '11 января'"""
     MONTHS_RU = {
@@ -22422,13 +22424,15 @@ def format_mysql_date(date_str):
 
     return f"{day} {month}"
 
-
 def schedule_net():
     """Создает расписание встречи в финалах по сетке по дате времени и номеру стола"""
     fin = []
 
     system = System.select().where(System.title_id == title_id())
-
+    table, ok = QInputDialog.getInt(
+                    my_win, "Cтолы", "Укажите количество столов.",0)
+    my_win.lineEdit_all_table.setText(str(table))
+    
     for sys in system:  # отбирает финалы с сеткой
         if sys.stage != "Предварительный" and sys.stage != "Полуфиналы":
             txt = sys.label_string
@@ -22441,10 +22445,7 @@ def schedule_net():
     player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
 
     fill_table_schedule(player_list)
-  
-    my_win.lineEdit_schedule_time.setInputMask('00.00')
     load_combo_schedule_date()
-
 
 def find_duplicate_values(double_pl_dict):
     double_id = []
@@ -22460,7 +22461,6 @@ def find_duplicate_values(double_pl_dict):
         for k in id_player:
             double_id.append(k)
     return double_id
-
 
 def check_choice_net(fin):
     """Проверка после жеребьевки сетки на 1-ю встречи одних регионов или одинаковых тренеров"""
@@ -22497,7 +22497,6 @@ def check_choice_net(fin):
             c = 0
         g += 1
 
-
 def mesto_3_no_play():
     """записывает в DB  изменения по разигрыванию 3 места"""
     if my_win.checkBox_no_play_3.isChecked():
@@ -22508,7 +22507,6 @@ def mesto_3_no_play():
         my_win.Button_3_mesta.setEnabled(False)
     System.update(no_game=n_g).where((System.title_id == title_id()) & (System.stage == '1-й финал')).execute()
         
-
 def two_3_place():
     """Когда не разигрывается 3-е место"""
     msgBox = QMessageBox()
@@ -22542,7 +22540,6 @@ def two_3_place():
         Result.update(winner=game.player1, loser=game.player2).where(Result.tours == number_game).execute()
     player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == '1-й финал'))
     fill_table(player_list)
-
 
 def add_delete_double_player_to_list():
     """добавляет или удаляет пару в списки""" 
@@ -22605,7 +22602,6 @@ def add_delete_double_player_to_list():
     my_win.label_32.setText(text)
     fill_table(player_list)
 
-
 def load_double_players():
     """изменяет списки участников парных игр в зависмости от вкладки"""
     msgBox = QMessageBox()
@@ -22646,9 +22642,8 @@ def load_double_players():
         my_win.label_32.setText(txt)
     else: # результаты парных игр
         player_list = Players_double.select().where((Players_double.title_id == title_id()) & (Players_double.double_vid == vid))
-    # my_win.tabWidget.setCurrentIndex(4)
-    fill_table(player_list)
 
+    fill_table(player_list)
 
 def check_repeat_player_double(fam_name, city, r):
     """фукция проверки повтора ввода одно и того же игрока"""
@@ -22668,14 +22663,13 @@ def check_repeat_player_double(fam_name, city, r):
                 r_player = l.r_2
                 second_pl = l.player_1
         if city == city_pl and int(r) == r_player:
-            reply = msgBox.information(my_win, 'Уведомление', f"{fam_name} уже есть в списках пар.\nОн записан вмете с {second_pl}", msgBox.Ok)                                                                           ,
+            reply = msgBox.information(my_win, 'Уведомление', f"{fam_name} уже есть в списках пар.\nОн записан вместе с {second_pl}", msgBox.Ok)                                                                           ,
             flag = True
         else:
             flag = False
     else:
         flag = False
     return flag
-
 
 def sort_double_player():
     """сортировка списка пар по рейтингу"""
@@ -22693,7 +22687,6 @@ def sort_double_player():
     else:
         player_list = double_player.select().order_by(Players_double.region_main)
     fill_table(player_list)
-
 
 def fill_table_schedule(player_list):
     """загружает таблицу TableView расписания"""
@@ -22725,14 +22718,6 @@ def fill_table_schedule(player_list):
                 if item_5 != "None":
                     item_5 = format_mysql_date(date_str=item_5)
                 data_table_list = [item_1, item_2, item_3, item_4, item_5] 
-            elif schedule_current == "Дата и время":
-                model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время'])
-                item_5 = str(list(player_selected[row].values())[num_columns[4]])
-                if item_5 != "None":
-                    item_5 = format_mysql_date(date_str=item_5)
-                item_6_txt = str(list(player_selected[row].values())[num_columns[5]])
-                item_6 = item_6_txt[:5] 
-                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6]
             else:
                 model.setHorizontalHeaderLabels(['id', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])
                 item_5 = str(list(player_selected[row].values())[num_columns[4]])
@@ -22771,7 +22756,6 @@ def load_combo_schedule_date():
     while d_end > deadline:
         deadline += timedelta(days=1)    
         txt = str(deadline)
-        # year = txt[:4]
         month = int(txt[5:7])
         day = txt[8:]
         day_txt = day[0]
@@ -22834,29 +22818,28 @@ def load_combo_schedule_stage():
 def check_schedule():
     msgBox = QMessageBox()
     """Записывает в таблицу расписание встреч"""
-    month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
-                  "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
+    # month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
+    #               "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
     
     for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
             if i.isChecked():
                 schedule_current = i.text()
                 break
-    titles = Title.select().where(Title.id == title_id()).get()
-    d_start = titles.data_start
-    date_txt = my_win.comboBox_schedule_date.currentText()
-    znak = date_txt.find(" ")
-    year_txt = str(d_start)
-    day_txt = date_txt[:znak]
-    month_txt = date_txt[znak + 1:]
-    count = len(day_txt)
-    day = day_txt if count == 2 else f"0{day_txt}"
-    month = month_dict[month_txt]
-    year = year_txt[:4]
-    date_str = f"{year}-{month}-{day}"
-    time_txt = my_win.lineEdit_schedule_time.text()
-    hour = time_txt[:2]
-    minuta = time_txt[3:]
-    time_str = f"{hour}:{minuta}"
+    # titles = Title.select().where(Title.id == title_id()).get()
+    # d_start = titles.data_start
+    # date_txt = my_win.comboBox_schedule_date.currentText()
+    # znak = date_txt.find(" ")
+    # year_txt = str(d_start)
+    # day_txt = date_txt[:znak]
+    # month_txt = date_txt[znak + 1:]
+    # count = len(day_txt)
+    # day = day_txt if count == 2 else f"0{day_txt}"
+    # month = month_dict[month_txt]
+    # year = year_txt[:4]
+    # date_str = f"{year}-{month}-{day}"
+    date_str = format_date_schedule()
+    time_str = my_win.timeEdit_schedule.text()
+
     indices = my_win.tableView_schedule.selectionModel().selectedRows()
     if len(indices) == 0:
         reply = msgBox.information(my_win, 'Уведомление', "Вы не отметили номера встреч\n для записи расписания", msgBox.Ok) 
@@ -23029,6 +23012,151 @@ def select_rows_with_options():
                 "Некорректный формат ввода.\nИспользуйте числа, запятые и дефисы."
             )
 
+def select_numbers_tables():
+    """Расширенный диалог выбора номера столов"""
+    time_str = my_win.timeEdit_schedule.text()
+    date_str = format_date_schedule()
+    count_table = int(my_win.lineEdit_all_table.text())
+    # Создаем кастомный диалог
+    dialog = QtWidgets.QDialog(my_win)
+    dialog.setWindowTitle("Номера столов")
+    dialog.setModal(True)
+    dialog.setMinimumWidth(400)
+    
+    layout = QtWidgets.QVBoxLayout(dialog)
+    
+    # Поле ввода
+    label = QtWidgets.QLabel("Введите номера столов для встреч:")
+    layout.addWidget(label)
+    
+    line_edit = QtWidgets.QLineEdit()
+    line_edit.setPlaceholderText("Пример: 1,3,5 или 1-5 или 1,3,5-7")
+    layout.addWidget(line_edit)
+    
+    # Информация о количестве строк
+    from PyQt5.QtCore import QModelIndex
+    model = my_win.tableView_schedule.model()
+    if model:
+        row_count = model.rowCount(QModelIndex())  # Важно: передаем пустой индекс
+        info_label = QtWidgets.QLabel(f"Всего строк в таблице: {row_count}")
+        info_label.setStyleSheet("color: gray;")
+        layout.addWidget(info_label)
+    
+    # Опции выбора
+    options_group = QtWidgets.QGroupBox("Опции")
+    options_layout = QtWidgets.QVBoxLayout()
+    
+    clear_current = QtWidgets.QCheckBox("Очистить текущее выделение")
+    clear_current.setChecked(True)
+    options_layout.addWidget(clear_current)
+    
+    scroll_to_selection = QtWidgets.QCheckBox("Прокрутить к выделению")
+    scroll_to_selection.setChecked(True)
+    options_layout.addWidget(scroll_to_selection)
+    
+    options_group.setLayout(options_layout)
+    layout.addWidget(options_group)
+    
+    # Кнопки
+    buttons = QtWidgets.QDialogButtonBox(
+        QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+    )
+    buttons.accepted.connect(dialog.accept)
+    buttons.rejected.connect(dialog.reject)
+    layout.addWidget(buttons)
+    
+    # Показываем диалог
+    if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        text = line_edit.text()
+        if not text:
+            return
+            
+        try:
+            # rows_to_select = set()
+            k = 0
+            rows_to_select = []
+            # Парсинг ввода
+            parts = text.replace(' ', '').split(',')
+            for part in parts:
+                if '-' in part:
+                    start, end = map(int, part.split('-'))
+                    for n in range(start, end + 1):
+                       rows_to_select.append(n) 
+                    # rows_to_select.append(range(start, end + 1))
+                else:
+                    # rows_to_select.add(int(part))
+                    rows_to_select.append(int(part))
+
+            indices = my_win.tableView_schedule.selectionModel().selectedRows()            
+            for index in sorted(indices):
+                rows = index.row()
+                id_vst = my_win.tableView_schedule.model().index(rows, 0).data() # данные ячейки tableView
+                table_num = rows_to_select[k]
+                app = Result.update(schedule_date=date_str, schedule_time=time_str, schedule_table=table_num).where(Result.id == id_vst)                
+                app.execute()
+                k += 1
+
+            # Выделение строк
+            selection_model = my_win.tableView_schedule.selectionModel()
+            
+            if clear_current.isChecked():
+                selection_model.clearSelection()
+            
+            if model is None:
+                QtWidgets.QMessageBox.warning(
+                    my_win, "Предупреждение", "Модель данных не найдена"
+                )
+                return
+            
+            from PyQt5.QtCore import QModelIndex, QItemSelectionModel
+            row_count = model.rowCount(QModelIndex())
+            
+            if row_count == 0:
+                QtWidgets.QMessageBox.warning(
+                    my_win, "Предупреждение", "Таблица пуста"
+                )
+                return
+            
+            selected_count = 0
+            first_selected = None
+            
+            for row in sorted(rows_to_select):
+                # Проверяем границы (индексация с 1 для пользователя)
+                if 1 <= row <= row_count:
+                    index = model.index(row - 1, 0, QModelIndex())
+                    selection_model.select(
+                        index, 
+                        QtCore.QItemSelectionModel.Select | QtCore.QItemSelectionModel.Rows
+                    )
+                    selected_count += 1
+                    if first_selected is None:
+                        first_selected = row - 1
+                else:
+                    QtWidgets.QMessageBox.warning(
+                        my_win, 
+                        "Предупреждение", 
+                        f"Строка {row} не существует (всего строк: {row_count})"
+                    )
+            
+            # Прокрутка к первому выбранному
+            if scroll_to_selection.isChecked() and first_selected is not None:
+                my_win.tableView_schedule.scrollTo(
+                    model.index(first_selected, 0, QModelIndex())
+                )
+            
+            # Результат
+            if selected_count > count_table:
+                QtWidgets.QMessageBox.information(
+                    my_win, "Ошибка", f"Число столов меньше,выделеных строк: {selected_count}"
+                )
+            
+        except ValueError:
+            QtWidgets.QMessageBox.critical(
+                my_win, 
+                "Ошибка", 
+                "Некорректный формат ввода.\nИспользуйте числа, запятые и дефисы."
+            )
+
 def schedule_field():
     """показывает в зависимости от радиокнопок время и столы в расписании"""
     for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
@@ -23037,10 +23165,34 @@ def schedule_field():
                 break  
     if schedule_current == "Полное":
         my_win.timeEdit_schedule.show()
+        my_win.btn_select_range.show()
+        my_win.btn_number_table.show()
+        my_win.lineEdit_all_table.show()
         my_win.label_79.show()
     else:
         my_win.timeEdit_schedule.hide() 
-        my_win.label_79.hide()       
+        my_win.btn_select_range.hide()
+        my_win.btn_number_table.hide()
+        my_win.lineEdit_all_table.hide()
+        my_win.label_79.hide()  
+
+def format_date_schedule():
+    """форматирутет дату расписания для DB"""
+    month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
+                  "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
+    titles = Title.select().where(Title.id == title_id()).get()
+    d_start = titles.data_start
+    date_txt = my_win.comboBox_schedule_date.currentText()
+    znak = date_txt.find(" ")
+    year_txt = str(d_start)
+    day_txt = date_txt[:znak]
+    month_txt = date_txt[znak + 1:]
+    count = len(day_txt)
+    day = day_txt if count == 2 else f"0{day_txt}"
+    month = month_dict[month_txt]
+    year = year_txt[:4]
+    date_str = f"{year}-{month}-{day}"
+    return  date_str
 # def clear_selection():
 #     """Очистить выделение"""
 #     my_win.tableView_schedule.selectionModel().clear()
@@ -23146,6 +23298,7 @@ def schedule_field():
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
 
 my_win.btn_select_range.clicked.connect(select_rows_with_options)
+my_win.btn_number_table.clicked.connect(select_numbers_tables)
 # my_win.btn_select_range.clicked.connect(select_range)
 # ===== переводит фокус на поле ввода счета в партии вкладки -группа-
 my_win.lineEdit_pl1_s1.returnPressed.connect(focus)

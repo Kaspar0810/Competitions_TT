@@ -1,0 +1,7 @@
+2026-02-27 19:57:58,175 - ERROR - Необработанное исключение: AttributeError: 'QLCDNumber' object has no attribute 'setValue'
+2026-02-27 19:57:58,176 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22436, in schedule_net
+    my_win.lcdNumber.setValue(table)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QLCDNumber' object has no attribute 'setValue'. Did you mean: 'intValue'?

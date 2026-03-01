@@ -1,0 +1,7 @@
+2026-02-28 18:30:23,022 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-02-28 18:30:23,022 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 23095, in select_numbers_tables
+    table_num = parts[k]
+                ~~~~~^^^
+IndexError: list index out of range

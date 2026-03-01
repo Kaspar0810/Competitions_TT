@@ -1,0 +1,7 @@
+2026-02-27 19:25:15,456 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'lineEdit_schedule_time'
+2026-02-27 19:25:15,457 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22856, in check_schedule
+    time_txt = my_win.lineEdit_schedule_time.text()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'lineEdit_schedule_time'

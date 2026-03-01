@@ -1,0 +1,7 @@
+2026-02-28 18:35:30,051 - ERROR - Необработанное исключение: NameError: name 'row_select' is not defined
+2026-02-28 18:35:30,052 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 23094, in select_numbers_tables
+    table_num = row_select[k]
+                ^^^^^^^^^^
+NameError: name 'row_select' is not defined

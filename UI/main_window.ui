@@ -3950,7 +3950,7 @@
      <widget class="Line" name="line_6">
       <property name="geometry">
        <rect>
-        <x>204</x>
+        <x>201</x>
         <y>20</y>
         <width>16</width>
         <height>181</height>
@@ -4032,7 +4032,7 @@
      <widget class="QPushButton" name="Button_up">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>214</x>
         <y>92</y>
         <width>121</width>
         <height>26</height>
@@ -4054,7 +4054,7 @@
      <widget class="QPushButton" name="Button_down">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>214</x>
         <y>121</y>
         <width>121</width>
         <height>24</height>
@@ -4076,7 +4076,7 @@
      <widget class="QLabel" name="label_54">
       <property name="geometry">
        <rect>
-        <x>232</x>
+        <x>223</x>
         <y>70</y>
         <width>91</width>
         <height>20</height>
@@ -4098,7 +4098,7 @@
      <widget class="Line" name="line_9">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>214</x>
         <y>140</y>
         <width>121</width>
         <height>16</height>
@@ -4111,7 +4111,7 @@
      <widget class="Line" name="line_10">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>215</x>
         <y>82</y>
         <width>121</width>
         <height>16</height>
@@ -4124,7 +4124,7 @@
      <widget class="QPushButton" name="Button_made_one_file_pdf">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>214</x>
         <y>176</y>
         <width>121</width>
         <height>30</height>
@@ -4145,7 +4145,7 @@
      <widget class="QLabel" name="label_55">
       <property name="geometry">
        <rect>
-        <x>239</x>
+        <x>232</x>
         <y>153</y>
         <width>91</width>
         <height>20</height>
@@ -4167,7 +4167,7 @@
      <widget class="Line" name="line_11">
       <property name="geometry">
        <rect>
-        <x>344</x>
+        <x>335</x>
         <y>20</y>
         <width>16</width>
         <height>181</height>
@@ -4382,7 +4382,7 @@
      <widget class="QPushButton" name="Button_view_page_pdf">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>214</x>
         <y>43</y>
         <width>121</width>
         <height>24</height>
@@ -4404,7 +4404,7 @@
      <widget class="Line" name="line_12">
       <property name="geometry">
        <rect>
-        <x>221</x>
+        <x>215</x>
         <y>30</y>
         <width>121</width>
         <height>21</height>
@@ -4651,9 +4651,9 @@
      <widget class="QPushButton" name="Button_made_schedule">
       <property name="geometry">
        <rect>
-        <x>356</x>
-        <y>40</y>
-        <width>198</width>
+        <x>360</x>
+        <y>67</y>
+        <width>91</width>
         <height>24</height>
        </rect>
       </property>
@@ -4665,7 +4665,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Расписание на сетке</string>
+       <string>Создать</string>
       </property>
       <property name="shortcut">
        <string/>
@@ -4724,7 +4724,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Ок</string>
+       <string>Записать</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_79">
@@ -4755,9 +4755,9 @@
      <widget class="QPushButton" name="btn_select_range">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>469</x>
         <y>111</y>
-        <width>100</width>
+        <width>91</width>
         <height>23</height>
        </rect>
       </property>
@@ -4786,9 +4786,9 @@
      <widget class="QPushButton" name="btn_number_table">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>469</x>
         <y>154</y>
-        <width>100</width>
+        <width>91</width>
         <height>22</height>
        </rect>
       </property>
@@ -4827,7 +4827,7 @@
       <property name="geometry">
        <rect>
         <x>356</x>
-        <y>67</y>
+        <y>41</y>
         <width>201</width>
         <height>23</height>
        </rect>
@@ -4873,7 +4873,7 @@
        <rect>
         <x>360</x>
         <y>111</y>
-        <width>91</width>
+        <width>90</width>
         <height>23</height>
        </rect>
       </property>
@@ -4883,9 +4883,154 @@
        <rect>
         <x>360</x>
         <y>154</y>
-        <width>91</width>
+        <width>90</width>
         <height>22</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_91">
+      <property name="geometry">
+       <rect>
+        <x>469</x>
+        <y>70</y>
+        <width>85</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Всего столов</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_all_table">
+      <property name="geometry">
+       <rect>
+        <x>474</x>
+        <y>88</y>
+        <width>81</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_93">
+      <property name="geometry">
+       <rect>
+        <x>343</x>
+        <y>115</y>
+        <width>16</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_94">
+      <property name="geometry">
+       <rect>
+        <x>343</x>
+        <y>155</y>
+        <width>16</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>2</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_95">
+      <property name="geometry">
+       <rect>
+        <x>451</x>
+        <y>115</y>
+        <width>16</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>3</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_96">
+      <property name="geometry">
+       <rect>
+        <x>452</x>
+        <y>155</y>
+        <width>16</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>4</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </widget>

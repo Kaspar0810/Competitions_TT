@@ -1,0 +1,7 @@
+2026-02-27 20:15:08,931 - ERROR - Необработанное исключение: TypeError: setText(self, a0: Optional[str]): argument 1 has unexpected type 'int'
+2026-02-27 20:15:08,932 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22436, in schedule_net
+    my_win.lineEdit_all_table.setText(table)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: setText(self, a0: Optional[str]): argument 1 has unexpected type 'int'
