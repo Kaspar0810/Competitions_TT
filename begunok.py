@@ -1,4 +1,5 @@
 import os
+import time
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
@@ -255,11 +256,17 @@ def create_begunok():
         ('SPAN', (11, 11), (15, 11)), # поле субъекты столбцы от 0 до 7, строки 9-10
         ('SPAN', (11, 12), (15, 12)), # поле субъекты столбцы от 0 до 7, строки 9-10
         # ('SPAN', (28, 7), (31, 7)),  # Матч №
-        ('BOX', (0, 9), (7, 10), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10
+        ('BOX', (0, 9), (7, 10), 1, colors.darkblue), # объединение ФИО столбцы от 0 до 7, строки 9-10
         ('BOX', (0, 11), (7, 11), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10
         ('BOX', (0, 12), (7, 12), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10
+        # объединение рейтинг
         ('BOX', (8, 9), (10, 10), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10 рейтинг
-        ('BOX', (11, 9), (15, 10), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10 субъекты
+        ('BOX', (8, 10), (10, 11), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10 рейтинг
+        ('BOX', (8, 11), (10, 12), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10 рейтинг
+         # объдинение субъекта РФ
+        ('BOX', (11, 9), (15, 10), 1, colors.darkblue), # объдинение субъекта РФ столбцы от 0 до 7, строки 9-10 субъекты
+        ('BOX', (11, 10), (15, 11), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10 субъекты
+        ('BOX', (11, 11), (15, 12), 1, colors.darkblue), # столбцы от 0 до 7, строки 9-10 субъекты
         # Победитель
         ('SPAN', (0, 14), (10, 14)),  # Победил(а)
         ('SPAN', (13, 14), (17, 14)),  # Со счетом
@@ -307,46 +314,76 @@ def create_begunok():
     
     return table
 
-# Создание PDF
-c = canvas.Canvas("Begunki_2.pdf", pagesize=page_size)
+# Проверка и создание PDF
+max_attempts = 3
+attempt = 0
+filename = "begunki_full.pdf"
 
-# Создаем таблицу-бегунок
-begunok = create_begunok()
+while attempt < max_attempts:
+    try:
+        # Создание PDF
+        c = canvas.Canvas("begunki_full.pdf", pagesize=page_size)
 
-# Рассчитываем размеры таблицы
-table_width = cols * col_width
-table_height = rows * row_height
+        # Создаем таблицу-бегунок
+        begunok = create_begunok()
 
-# Позиции для двух бегунков
-margin = 5 * mm
-vertical_spacing = 10 * mm
+        # Рассчитываем размеры таблицы
+        table_width = cols * col_width
+        table_height = rows * row_height
 
-# Верхний бегунок
-x1 = margin
-y1 = height - margin - table_height
-begunok.wrapOn(c, table_width, table_height)
-begunok.drawOn(c, x1, y1)
+        # Позиции для двух бегунков
+        margin = 5 * mm
+        vertical_spacing = 10 * mm
 
-# Нижний бегунок
-x2 = margin
-y2 = y1 - table_height - vertical_spacing
-begunok.wrapOn(c, table_width, table_height)
-begunok.drawOn(c, x2, y2)
+        # Верхний бегунок
+        x1 = margin
+        y1 = height - margin - table_height
+        begunok.wrapOn(c, table_width, table_height)
+        begunok.drawOn(c, x1, y1)
 
-# Добавляем разделительную линию между бегунками
-c.setStrokeColorRGB(0.7, 0.7, 0.7)
-c.setLineWidth(0.2)
-c.line(margin, y2 + table_height + vertical_spacing/2, 
-       margin + table_width, y2 + table_height + vertical_spacing/2)
+        # Нижний бегунок
+        x2 = margin
+        y2 = y1 - table_height - vertical_spacing
+        begunok.wrapOn(c, table_width, table_height)
+        begunok.drawOn(c, x2, y2)
 
-# Добавляем подписи
-c.setFont('DejaVu', 7)
-c.drawString(margin, y1 + table_height + 2*mm, "Бегунок 1")
-c.drawString(margin, y2 + table_height + 2*mm, "Бегунок 2")
+        # Добавляем разделительную линию между бегунками
+        c.setStrokeColorRGB(0.7, 0.7, 0.7)
+        c.setLineWidth(0.2)
+        c.line(margin, y2 + table_height + vertical_spacing/2, 
+            margin + table_width, y2 + table_height + vertical_spacing/2)
+         # Сохраняем
+        c.save()
+        print(f"PDF успешно создан: {filename}")
+        break  # Выходим из цикла при успехе
+        
+    except PermissionError:
+        attempt += 1
+        if attempt < max_attempts:
+            print(f"Файл '{filename}' открыт в другой программе.")
+            print(f"Закройте файл и нажмите Enter для повторной попытки (попытка {attempt+1}/{max_attempts})...")
+            input()
+            time.sleep(1)
+        else:
+            # Создаем файл с другим именем
+            new_filename = f"begunki_full_new_{int(time.time())}.pdf"
+            print(f"Не удалось сохранить '{filename}'. Сохраняю как '{new_filename}'")
+            
+            # Пробуем сохранить с новым именем
+            c = canvas.Canvas(new_filename, pagesize=page_size)
+            # ... повторяем код сохранения ...
+            c.save()
+            print(f"PDF сохранен как: {new_filename}")
 
-c.save()
+# # Добавляем подписи
+# c.setFont('DejaVu', 7)
+# c.drawString(margin, y1 + table_height + 2*mm, "Бегунок 1")
+# c.drawString(margin, y2 + table_height + 2*mm, "Бегунок 2")
 
-print("PDF 'Begunki_2.pdf' успешно создан!")
+
+# c.save()
+
+print("PDF 'begunki_full.pdf' успешно создан!")
 print(f"Размер страницы: {width/10:.0f} x {height/10:.0f} мм")
 print(f"Размер одного бегунка: {table_width/10:.1f} x {table_height/10:.1f} мм")
 print(f"Сетка: {cols} колонок x {rows} строк")
