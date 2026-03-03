@@ -1,0 +1,9 @@
+2026-03-03 12:11:38,016 - ERROR - Необработанное исключение: TypeError: begunok_full.<locals>.create_begunok() takes 0 positional arguments but 1 was given
+2026-03-03 12:11:38,016 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15075, in begunki_made
+    begunok_full()
+    ~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15454, in begunok_full
+    begunok1 = create_begunok(begunok1_data)
+TypeError: begunok_full.<locals>.create_begunok() takes 0 positional arguments but 1 was given

@@ -1,0 +1,11 @@
+2026-03-03 11:24:17,498 - ERROR - Необработанное исключение: TypeError: Table.__init__() got an unexpected keyword argument 'colWidths'
+2026-03-03 11:24:17,499 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15075, in begunki_made
+    begunok_full()
+    ~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15462, in begunok_full
+    begunok = create_begunok()
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15271, in create_begunok
+    table = Table(data, colWidths=col_widths, rowHeights=[row_height] * rows)
+TypeError: Table.__init__() got an unexpected keyword argument 'colWidths'

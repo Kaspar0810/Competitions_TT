@@ -1,0 +1,13 @@
+2026-03-03 12:16:00,365 - ERROR - Необработанное исключение: ValueError: <Table@0x1A93EB7A3C0 unknown rows x unknown cols>... invalid data type
+2026-03-03 12:16:00,366 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15075, in begunki_made
+    begunok_full()
+    ~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15459, in begunok_full
+    begunok1 = create_begunok(begunok1_data)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15254, in create_begunok
+    table = Table(data, colWidths=col_widths, rowHeights=[row_height] * rows)
+  File "C:\Users\Alex\Competitions_TT\venv\Lib\site-packages\reportlab\platypus\tables.py", line 277, in __init__
+    raise ValueError("%s invalid data type" % self.identity())
+ValueError: <Table@0x1A93EB7A3C0 unknown rows x unknown cols>... invalid data type
