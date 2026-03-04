@@ -23,14 +23,6 @@ pdfmetrics.registerFont(TTFont('DejaVuSerif-Bold', os.path.join(outpath, 'DejaVu
 pdfmetrics.registerFont(TTFont('DejaVuSerif-Italic', os.path.join(outpath, 'DejaVuSerif-Italic.ttf')))
 # Стили для текста
 styles = getSampleStyleSheet()
-# style_normal = ParagraphStyle(
-#     'Normal',
-#     parent=styles['Normal'],
-#     fontName='DejaVuSerif',
-#     fontSize=7,
-#     leading=8,
-#     alignment=TA_LEFT
-# )
 
 # Размеры страницы A4 (книжная)
 page_size = A4
@@ -70,17 +62,6 @@ class BegunokPDF:
             - table: номер стола
             - stage: стадия
             - match_num: номер матча
-            - player1: ФИО первого участника
-            - player2: ФИО второго участника
-            - rating1: рейтинг первого
-            - rating2: рейтинг второго
-            - region1: регион первого
-            - region2: регион второго
-            - scores: список счетов по партиям (например, ["11", "9", "11", "8", "11"])
-            - total_score1: общий счет первого
-            - total_score2: общий счет второго
-            - winner: победитель
-            - final_score: итоговый счет
         """
         
         table_data = []
@@ -243,14 +224,25 @@ class BegunokPDF:
         table_data.append(row31)
 
         # Создание таблицы с точными размерами колонок
-        col_widths = [col_width] * cols
+        # col_widths = [col_width] * cols
 
-        table = Table(table_data, colWidths=col_widths, rowHeights=[row_height] * rows)
+    #   Создание таблицы - ИСПРАВЛЕНО: используем правильные имена параметров
+        col_widths_list = [col_width] * cols
+        row_heights_list = [row_height] * rows
+        # Увеличиваем высоту для некоторых строк
+        row_heights_list[0] = 6 * mm
+        row_heights_list[1] = 6 * mm
+        row_heights_list[2] = 6 * mm
+        row_heights_list[9] = 7 * mm
+        row_heights_list[10] = 4 * mm
+
+        # table = Table(table_data, colWidths=col_widths, rowHeights=[row_height] * rows)
+        table = Table(table_data, colWidths=col_widths_list, rowHeights=row_heights_list)
 
         # Стиль таблицы - точная копия всех линий
         style = [
             # Все линии сетки - черные, тонкие
-            # ('GRID', (0, 0), (-1, -1), 0.2, colors.lightgrey),
+            ('GRID', (0, 0), (-1, -1), 0.2, colors.lightgrey),
             
             # Основной шрифт
             ('FONTNAME', (0, 0), (-1, -1), 'DejaVuSerif'),
@@ -422,12 +414,7 @@ class BegunokPDF:
                 fn = ('BOX', (33, 11 + i), (36, 11 + i), 0.5, colors.darkblue)
                 style.append(fn)  # предупреждения
         table.setStyle(TableStyle(style))
-       
-        # Добавляем подпись с номером бегунка
-        # header = Paragraph(f"<b>Бегунок {index} - Матч №{data.get('match_num', '')} ({data.get('stage', '')})</b>", 
-        #                   ParagraphStyle('Header', parent=style_normal, fontSize=6, alignment=TA_LEFT))
-        
-        # return [header, Spacer(1, 2*mm), table, Spacer(1, 2*mm)]
+
         return [table]
     
     def add_begunki(self, begunki_data):
@@ -450,115 +437,86 @@ class BegunokPDF:
         print(f"PDF '{self.filename}' успешно создан!")
 
 # # Функция для генерации тестовых данных
-def generate_test_data(count):
-    """Генерирует тестовые данные для указанного количества бегунков"""
-    test_data = []
+# def generate_test_data(count):
+#     """Генерирует тестовые данные для указанного количества бегунков"""
+#     test_data = []
     
-    players = [
-        ("Иванов Иван Иванович", "Москва", "2650"),
-        ("Петров Петр Петрович", "Санкт-Петербург", "2580"),
-        ("Сидоров Сидор Сидорович", "Казань", "2710"),
-        ("Смирнов Андрей Андреевич", "Екатеринбург", "2630"),
-        ("Кузнецов Дмитрий Дмитриевич", "Новосибирск", "2590"),
-        ("Попов Алексей Алексеевич", "Красноярск", "2550"),
-        ("Васильев Сергей Сергеевич", "Сочи", "2610"),
-        ("Михайлов Михаил Михайлович", "Ростов-на-Дону", "2570"),
-        ("Федоров Федор Федорович", "Самара", "2620"),
-        ("Алексеев Алексей Алексеевич", "Омск", "2560"),
-    ]
+#     players = [
+#         ("Иванов Иван Иванович", "Москва", "2650"),
+#         ("Петров Петр Петрович", "Санкт-Петербург", "2580"),
+#         ("Сидоров Сидор Сидорович", "Казань", "2710"),
+#         ("Смирнов Андрей Андреевич", "Екатеринбург", "2630"),
+#         ("Кузнецов Дмитрий Дмитриевич", "Новосибирск", "2590"),
+#         ("Попов Алексей Алексеевич", "Красноярск", "2550"),
+#         ("Васильев Сергей Сергеевич", "Сочи", "2610"),
+#         ("Михайлов Михаил Михайлович", "Ростов-на-Дону", "2570"),
+#         ("Федоров Федор Федорович", "Самара", "2620"),
+#         ("Алексеев Алексей Алексеевич", "Омск", "2560"),
+#     ]
     
-    stages = ["1/32 финала", "1/16 финала", "1/8 финала", "1/4 финала", "1/2 финала", "Финал"]
+#     stages = ["1/32 финала", "1/16 финала", "1/8 финала", "1/4 финала", "1/2 финала", "Финал"]
     
-    for i in range(count):
-        p1, p2 = players[i % len(players)], players[(i + 1) % len(players)]
-        stage = stages[i % len(stages)]
+#     for i in range(count):
+#         p1, p2 = players[i % len(players)], players[(i + 1) % len(players)]
+#         stage = stages[i % len(stages)]
         
-        # Генерируем случайный счет
-        score1, score2 = 3, (i % 3)  # 3:0, 3:1 или 3:2
-        if score2 == 0:
-            scores = ["11", "11", "11", "0", "0"]
-        elif score2 == 1:
-            scores = ["11", "9", "11", "0", "0"]
-        else:
-            scores = ["11", "9", "11", "8", "11"]
+#         # Генерируем случайный счет
+#         score1, score2 = 3, (i % 3)  # 3:0, 3:1 или 3:2
+#         if score2 == 0:
+#             scores = ["11", "11", "11", "0", "0"]
+#         elif score2 == 1:
+#             scores = ["11", "9", "11", "0", "0"]
+#         else:
+#             scores = ["11", "9", "11", "8", "11"]
         
-        data = {
-            'date': f'{15 + (i % 10)}.03.2026',
-            'time': f'{10 + (i % 8)}:{30 * (i % 2):02d}',
-            'table': str((i % 10) + 1),
-            'stage': stage,
-            'match_num': str(100 + i),
-            'player1': p1[0],
-            'player2': p2[0],
-            'rating1': p1[2],
-            'rating2': p2[2],
-            'region1': p1[1],
-            'region2': p2[1],
-            'scores': scores,
-            'total_score1': str(score1),
-            'total_score2': str(score2),
-            'winner': p1[0] if score1 > score2 else p2[0],
-            'final_score': f'{score1}:{score2}'
-        }
-        test_data.append(data)
+#         data = {
+#             'date': f'{15 + (i % 10)}.03.2026',
+#             'time': f'{10 + (i % 8)}:{30 * (i % 2):02d}',
+#             'table': str((i % 10) + 1),
+#             'stage': stage,
+#             'match_num': str(100 + i),
+#             'player1': p1[0],
+#             'player2': p2[0],
+#             'rating1': p1[2],
+#             'rating2': p2[2],
+#             'region1': p1[1],
+#             'region2': p2[1],
+#             'scores': scores,
+#             'total_score1': str(score1),
+#             'total_score2': str(score2),
+#             'winner': p1[0] if score1 > score2 else p2[0],
+#             'final_score': f'{score1}:{score2}'
+#         }
+#         test_data.append(data)
     
-    return test_data
+#     return test_data
     # Создаем PDF
-    pdf = BegunokPDF("Begunki_mnogo_stranits.pdf")
-    pdf.add_begunki(begunki_data)
-    pdf.save()
+# pdf = BegunokPDF("Begunki_mnogo_stranits.pdf")
+# pdf.add_begunki(begunki_data)
+# pdf.save()
 
-# Основная программа
-if __name__ == "__main__":
-    # Сколько бегунков нужно создать
-    NUM_BEGUNKI = 10  # Можно изменить на любое число
+# # Основная программа
+# if __name__ == "__main__":
+#     # Сколько бегунков нужно создать
+#     NUM_BEGUNKI = 10  # Можно изменить на любое число
     
-    print(f"Генерация {NUM_BEGUNKI} бегунков...")
+#     print(f"Генерация {NUM_BEGUNKI} бегунков...")
     
-    # Генерируем тестовые данные
-    begunki_data = generate_test_data(NUM_BEGUNKI)
+#     # Генерируем тестовые данные
+#     begunki_data = generate_test_data(NUM_BEGUNKI)
     
-    # Создаем PDF
-    pdf = BegunokPDF("Begunki_mnogo_stranits.pdf")
-    pdf.add_begunki(begunki_data)
-    pdf.save()
+#     # Создаем PDF
+#     pdf = BegunokPDF("Begunki_mnogo_stranits.pdf")
+#     pdf.add_begunki(begunki_data)
+#     pdf.save()
     
-    # Выводим информацию
-    pages = (NUM_BEGUNKI + 1) // 2
-    print(f"Создано {NUM_BEGUNKI} бегунков на {pages} страницах")
-    print(f"Файл: {pdf.filename}")
+#     # Выводим информацию
+#     pages = (NUM_BEGUNKI + 1) // 2
+#     print(f"Создано {NUM_BEGUNKI} бегунков на {pages} страницах")
+#     print(f"Файл: {pdf.filename}")
     
-    # Выводим первые несколько записей для проверки
-    print("\nПервые 3 бегунка:")
-    for i, data in enumerate(begunki_data[:3], 1):
-        print(f"  {i}. Матч №{data['match_num']}: {data['player1']} vs {data['player2']} - {data['final_score']}")
+#     # Выводим первые несколько записей для проверки
+#     print("\nПервые 3 бегунка:")
+#     for i, data in enumerate(begunki_data[:3], 1):
+#         print(f"  {i}. Матч №{data['match_num']}: {data['player1']} vs {data['player2']} - {data['final_score']}")
 
-# Пример ручного создания с конкретными данными
-# def create_custom_begunki():
-    # """Пример создания с пользовательскими данными"""
-    
-    # # Ваши данные для бегунков
-    # my_begunki = [
-    #     {
-    #         'date': '20.03.2026',
-    #         'time': '09:00',
-    #         'table': '1',
-    #         'stage': '1/8 финала',
-    #         'match_num': '5'
-    #     },
-    #     {
-    #         'date': '20.03.2026',
-    #         'time': '10:30',
-    #         'table': '2',
-    #         'stage': '1/4 финала',
-    #         'match_num': '18'            
-    #     }
-    #     # Добавьте сколько нужно бегунков
-    # ]
-    
-    # pdf = BegunokPDF("Begunki_na_zakaz.pdf")
-    # pdf.add_begunki(my_begunki)
-    # pdf.save()
-
-# Раскомментируйте для использования своих данных
-# create_custom_begunki()

@@ -1,0 +1,22 @@
+2026-03-04 13:24:10,408 - ERROR - Необработанное исключение: TypeError: unhashable type: 'list'
+2026-03-04 13:24:10,425 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15105, in begunki_made
+    pdf.add_begunki(begunki_data)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15524, in add_begunki
+    elements = self.create_begunok(data, i)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15337, in create_begunok
+    table = Table(table_data, colWidths, rowHeights)
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 981, in __init__
+    super(Table, self).__init__(alias=alias)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 879, in __init__
+    self._update_hash()
+    ~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 887, in _update_hash
+    self._hash = self._get_hash()
+                 ~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 1014, in _get_hash
+    return hash((self.__class__, self._path, self._alias, self._model))
+TypeError: unhashable type: 'list'

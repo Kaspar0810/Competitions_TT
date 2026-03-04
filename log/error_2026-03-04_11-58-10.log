@@ -1,0 +1,7 @@
+2026-03-04 11:58:27,984 - ERROR - Необработанное исключение: NameError: name 'generate_test_data' is not defined
+2026-03-04 11:58:27,984 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15075, in begunki_made
+    begunki_data = generate_test_data(NUM_BEGUNKI)
+                   ^^^^^^^^^^^^^^^^^^
+NameError: name 'generate_test_data' is not defined
