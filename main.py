@@ -15107,7 +15107,11 @@ def begunki_made():
                 pl_1 = "X"
                 city_1 = ""
             else:
-                pl_1 = pl1_full[:znak]
+                pl_1_fio = pl1_full[:znak]
+                znak_1 = pl_1_fio.rfind(" ")
+                pl_1_fi = pl_1_fio[:znak_1]
+                pl_1_o = pl_1_fio[znak_1 + 1:]
+                pl_1 = f"{pl_1_fi}\n{pl_1_o}"
                 city_1 = pl1_full[znak + 1:]
             pl2_full = res.player2
             znak = pl2_full.find('/')
@@ -15115,7 +15119,11 @@ def begunki_made():
                 pl_2 = "X"
                 city_2 = ""
             else:
-                pl_2 = pl2_full[:znak]
+                pl_2_fio = pl2_full[:znak]
+                znak_1 = pl_2_fio.rfind(" ")
+                pl_2_fi = pl_2_fio[:znak_1]
+                pl_2_o = pl_2_fio[znak_1 + 1:]
+                pl_2 = f"{pl_2_fi}\n{pl_2_o}"
                 city_2 = pl2_full[znak + 1:]
             data = {'date': date_str,
                     'time': time_str,

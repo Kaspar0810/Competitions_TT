@@ -146,12 +146,12 @@ class BegunokPDF:
         
         # Строки 11-12: пустые (для участников)
         row11 = [""] * cols
-        row11[0] =  f"{data.get('pl_1', '___')}"
-        row11[11] =  f"{data.get('city_1', '___')}"
+        row11[0] =  f"{data.get('player1', '___')}"
+        row11[11] =  f"{data.get('city1', '___')}"
         table_data.append(row11)
         row12 = [""] * cols
-        row12[0] =  f"{data.get('pl_2', '___')}"
-        row12[11] =  f"{data.get('city_2', '___')}"
+        row12[0] =  f"{data.get('player2', '___')}"
+        row12[11] =  f"{data.get('city2', '___')}"
         table_data.append(row12)
         
         # Строка 13: пустая
