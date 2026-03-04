@@ -14938,7 +14938,8 @@ def begunki_made():
     tours = my_win.comboBox_select_tours.currentText()
 
     id_system = system_id(stage=number_group) if stage == "Финальный" else system_id(stage)
-
+    systems = system.select().where(System.id == id_system).get()
+    type_table = systems.type_table
     #  ======= выбор бегунков полный или укороченный
 
     for i in my_win.groupBox_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
@@ -15094,10 +15095,37 @@ def begunki_made():
             if table is None:
                 table = ""
             match_num = res.tours
+            if type_table == "сетка":
+                stage = res.stage_net
+            elif type_table ==   "круг":
+                stage = res.tours
+            if stage is None:
+                stage = ""
+            pl1_full = res.player1
+            znak = pl1_full.find('/')
+            if znak == -1:
+                pl_1 = "X"
+                city_1 = ""
+            else:
+                pl_1 = pl1_full[:znak]
+                city_1 = pl1_full[znak + 1:]
+            pl2_full = res.player2
+            znak = pl2_full.find('/')
+            if znak == -1:
+                pl_2 = "X"
+                city_2 = ""
+            else:
+                pl_2 = pl2_full[:znak]
+                city_2 = pl2_full[znak + 1:]
             data = {'date': date_str,
                     'time': time_str,
                     'table': table,
-                    'match_num': match_num
+                    'match_num': match_num,
+                    'stage': stage,
+                    'player1':pl_1,
+                    'city1': city_1,
+                    'player2':pl_2,
+                    'city2': city_2
                     }
             begunki_data.append(data)
 
@@ -23289,8 +23317,8 @@ def format_date_schedule():
 #     print("Все записи обновлены")
 # =======        
 # def proba(): 
-    # ======================
-    # myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
+#     # ======================
+#     myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
     # ========== создать таблицу    
     # class Choice_double_player(BaseModel):
     #     double_player = CharField(70)    
@@ -23348,7 +23376,7 @@ def format_date_schedule():
         # migrate(migrator.rename_column('results', 'schedule_time', 'fio_city')) # Переименование столбца (таблица, старое название, новое название столбца)
 
         # Добавляем столбец player_double_id 
-        # migrate(migrator.add_column('results', 'stage_net', CharField(null=True))) # null=True допускает пустое значение
+#         migrate(migrator.add_column('results', 'stage_net', CharField(null=True))) # null=True допускает пустое значение
    
 #     db.close()
 # my_win.Button_proba.clicked.connect(proba) # запуск пробной функции

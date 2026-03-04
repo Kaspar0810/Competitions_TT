@@ -123,7 +123,7 @@ class BegunokPDF:
         
         # Строка 9: Ф.И.О. участников ... (заголовки таблицы)
         row9 = [""] * cols
-        row9[0] = "Ф.И.О. участников"
+        row9[0] = "Ф.И.О. участников"        
         row9[9] = "R"
         row9[11] = "Субъект РФ"
         row9[16] = "П"
@@ -146,8 +146,12 @@ class BegunokPDF:
         
         # Строки 11-12: пустые (для участников)
         row11 = [""] * cols
+        row11[0] =  f"{data.get('pl_1', '___')}"
+        row11[11] =  f"{data.get('city_1', '___')}"
         table_data.append(row11)
         row12 = [""] * cols
+        row12[0] =  f"{data.get('pl_2', '___')}"
+        row12[11] =  f"{data.get('city_2', '___')}"
         table_data.append(row12)
         
         # Строка 13: пустая
@@ -257,7 +261,7 @@ class BegunokPDF:
         # Стиль таблицы - точная копия всех линий
         style = [
             # Все линии сетки - черные, тонкие
-            # ('GRID', (0, 0), (-1, -1), 0.2, colors.lightgrey),
+            ('GRID', (0, 0), (-1, -1), 0.2, colors.lightgrey),
             
             # Основной шрифт
             ('FONTNAME', (0, 0), (-1, -1), 'DejaVuSerif'),
