@@ -1,4 +1,5 @@
 import os
+from sys import platform
 from datetime import datetime
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -11,6 +12,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.platypus import SimpleDocTemplate, Spacer
 from reportlab.pdfbase.pdfmetrics import registerFontFamily
+
 
 # Регистрация шрифта для кириллицы
 registerFontFamily('DejaVuSerif', normal='DejaVuSerif',
@@ -210,13 +212,13 @@ class BegunokPDF:
         # Строка 29: П1 - одно штрафное очко
         row29 = [""] * cols
         row29[2] = "П1 -"
-        row29[3] = "одно штрафное очко"
+        row29[4] = "одно штрафное очко"
         table_data.append(row29)
         
         # Строка 30: П2 - два штрафных очка
         row30 = [""] * cols
         row30[2] = "П2 -"
-        row30[3] = "два штрафных очка"
+        row30[4] = "два штрафных очка"
         table_data.append(row30)
         
         # Строка 31: пустая
@@ -230,19 +232,32 @@ class BegunokPDF:
         col_widths_list = [col_width] * cols
         row_heights_list = [row_height] * rows
         # Увеличиваем высоту для некоторых строк
-        row_heights_list[0] = 6 * mm
-        row_heights_list[1] = 6 * mm
-        row_heights_list[2] = 6 * mm
-        row_heights_list[9] = 7 * mm
-        row_heights_list[10] = 4 * mm
-
-        # table = Table(table_data, colWidths=col_widths, rowHeights=[row_height] * rows)
+        row_heights_list[2] = 3 * mm
+        row_heights_list[8] = 3 * mm
+        row_heights_list[9] = 3.8 * mm
+        row_heights_list[10] = 3.8 * mm
+        row_heights_list[11] = 7 * mm
+        row_heights_list[12] = 7 * mm
+        row_heights_list[13] = 3 * mm
+        row_heights_list[15] = 7 * mm
+        row_heights_list[16] = 3 * mm
+        row_heights_list[18] = 6 * mm
+        row_heights_list[19] = 6 * mm
+        row_heights_list[20] = 3 * mm
+        row_heights_list[21] = 3.5 * mm
+        row_heights_list[22] = 6 * mm
+        row_heights_list[23] = 6 * mm
+        row_heights_list[24] = 3 * mm
+        row_heights_list[26] = 3 * mm
+        row_heights_list[27] = 3.5 * mm
+        row_heights_list[28] = 3.5 * mm
+        
         table = Table(table_data, colWidths=col_widths_list, rowHeights=row_heights_list)
 
         # Стиль таблицы - точная копия всех линий
         style = [
             # Все линии сетки - черные, тонкие
-            ('GRID', (0, 0), (-1, -1), 0.2, colors.lightgrey),
+            # ('GRID', (0, 0), (-1, -1), 0.2, colors.lightgrey),
             
             # Основной шрифт
             ('FONTNAME', (0, 0), (-1, -1), 'DejaVuSerif'),
@@ -269,13 +284,15 @@ class BegunokPDF:
             ('SPAN', (33, 9), (35, 10)),  # Общий счет в партиях (колонки 19-27)
             ('SPAN', (19, 9), (32, 9)),  # счет в партиях (колонки 19-27)     
             # Жирный шрифт для заголовков
-            ('FONTSIZE', (0, 3), (20, 3), 12),
+            ('FONTSIZE', (0, 3), (20, 3), 11),
             ('FONTNAME', (0, 0), (0, 2), 'DejaVuSerif-Italic'),  # Министерство и федерация
             ('FONTNAME', (0, 3), (20, 3), 'DejaVuSerif-Bold'),  # Протокол
             ('FONTSIZE', (0, 4), (20, 4), 9),
             ('FONTNAME', (0, 4), (20, 5), 'DejaVuSerif'),  # Всероссийские соревнования
             ('FONTNAME', (23, 3), (23, 8), 'DejaVuSerif-Bold'),  # Протокол
-            
+            ('FONTNAME', (33, 9), (35, 10), 'DejaVuSerif'),  # Всероссийские соревнования
+            ('FONTSIZE', (33, 9), (35, 10), 6),
+
             # Центрирование некоторых заголовков
             ('ALIGN', (0, 0), (35, 0), 'CENTER'),  # минспорта
             ('ALIGN', (0, 1), (35, 1), 'CENTER'),  # ФНТР
@@ -429,94 +446,10 @@ class BegunokPDF:
             # Добавляем разрыв страницы после каждого второго бегунка
             if i % BEGUNKI_PER_PAGE == 0 and i < len(begunki_data):
                 self.story.append(PageBreak())
-                
+        return self.story        
     
     def save(self):
         """Сохраняет PDF документ"""
         self.doc.build(self.story)
         print(f"PDF '{self.filename}' успешно создан!")
-
-# # Функция для генерации тестовых данных
-# def generate_test_data(count):
-#     """Генерирует тестовые данные для указанного количества бегунков"""
-#     test_data = []
-    
-#     players = [
-#         ("Иванов Иван Иванович", "Москва", "2650"),
-#         ("Петров Петр Петрович", "Санкт-Петербург", "2580"),
-#         ("Сидоров Сидор Сидорович", "Казань", "2710"),
-#         ("Смирнов Андрей Андреевич", "Екатеринбург", "2630"),
-#         ("Кузнецов Дмитрий Дмитриевич", "Новосибирск", "2590"),
-#         ("Попов Алексей Алексеевич", "Красноярск", "2550"),
-#         ("Васильев Сергей Сергеевич", "Сочи", "2610"),
-#         ("Михайлов Михаил Михайлович", "Ростов-на-Дону", "2570"),
-#         ("Федоров Федор Федорович", "Самара", "2620"),
-#         ("Алексеев Алексей Алексеевич", "Омск", "2560"),
-#     ]
-    
-#     stages = ["1/32 финала", "1/16 финала", "1/8 финала", "1/4 финала", "1/2 финала", "Финал"]
-    
-#     for i in range(count):
-#         p1, p2 = players[i % len(players)], players[(i + 1) % len(players)]
-#         stage = stages[i % len(stages)]
         
-#         # Генерируем случайный счет
-#         score1, score2 = 3, (i % 3)  # 3:0, 3:1 или 3:2
-#         if score2 == 0:
-#             scores = ["11", "11", "11", "0", "0"]
-#         elif score2 == 1:
-#             scores = ["11", "9", "11", "0", "0"]
-#         else:
-#             scores = ["11", "9", "11", "8", "11"]
-        
-#         data = {
-#             'date': f'{15 + (i % 10)}.03.2026',
-#             'time': f'{10 + (i % 8)}:{30 * (i % 2):02d}',
-#             'table': str((i % 10) + 1),
-#             'stage': stage,
-#             'match_num': str(100 + i),
-#             'player1': p1[0],
-#             'player2': p2[0],
-#             'rating1': p1[2],
-#             'rating2': p2[2],
-#             'region1': p1[1],
-#             'region2': p2[1],
-#             'scores': scores,
-#             'total_score1': str(score1),
-#             'total_score2': str(score2),
-#             'winner': p1[0] if score1 > score2 else p2[0],
-#             'final_score': f'{score1}:{score2}'
-#         }
-#         test_data.append(data)
-    
-#     return test_data
-    # Создаем PDF
-# pdf = BegunokPDF("Begunki_mnogo_stranits.pdf")
-# pdf.add_begunki(begunki_data)
-# pdf.save()
-
-# # Основная программа
-# if __name__ == "__main__":
-#     # Сколько бегунков нужно создать
-#     NUM_BEGUNKI = 10  # Можно изменить на любое число
-    
-#     print(f"Генерация {NUM_BEGUNKI} бегунков...")
-    
-#     # Генерируем тестовые данные
-#     begunki_data = generate_test_data(NUM_BEGUNKI)
-    
-#     # Создаем PDF
-#     pdf = BegunokPDF("Begunki_mnogo_stranits.pdf")
-#     pdf.add_begunki(begunki_data)
-#     pdf.save()
-    
-#     # Выводим информацию
-#     pages = (NUM_BEGUNKI + 1) // 2
-#     print(f"Создано {NUM_BEGUNKI} бегунков на {pages} страницах")
-#     print(f"Файл: {pdf.filename}")
-    
-#     # Выводим первые несколько записей для проверки
-#     print("\nПервые 3 бегунка:")
-#     for i, data in enumerate(begunki_data[:3], 1):
-#         print(f"  {i}. Матч №{data['match_num']}: {data['player1']} vs {data['player2']} - {data['final_score']}")
-

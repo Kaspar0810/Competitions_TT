@@ -270,6 +270,7 @@ class Result(BaseModel):
     schedule_date = DateField()
     schedule_time = TimeField()
     schedule_table = CharField()
+    stage_net = CharField(15)
     
     class Meta:
         db_table = "results"
