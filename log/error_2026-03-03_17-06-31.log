@@ -1,7 +1,0 @@
-2026-03-03 17:06:46,536 - ERROR - Необработанное исключение: TypeError: list indices must be integers or slices, not str
-2026-03-03 17:06:46,538 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 15082, in begunki_made
-    data['date'] = date
-    ~~~~^^^^^^^^
-TypeError: list indices must be integers or slices, not str

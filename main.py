@@ -16173,7 +16173,7 @@ def schedule_str(schedule_dict, match_num):
         if date_time_table_txt[1].minute == 0:
             time_str_rus = f"{date_time_table_txt[1].hour}:{date_time_table_txt[1].minute}0"
         else:
-            time_str_rus = f"{ddate_time_table_txt[1].hour}:{date_time_table_txt[1].minute}"
+            time_str_rus = f"{date_time_table_txt[1].hour}:{date_time_table_txt[1].minute}"
         schedule_full = f"{date_str_rus}/{time_str_rus}/ст.{table_txt}"
 
     return schedule_full

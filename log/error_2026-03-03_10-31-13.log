@@ -1,9 +1,0 @@
-2026-03-03 10:31:35,569 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'create_begunok' where it is not associated with a value
-2026-03-03 10:31:35,572 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 14953, in begunki_made
-    ts = begunok_full()
-  File "c:\Users\Alex\Competitions_TT\main.py", line 15117, in begunok_full
-    create_begunok()
-    ^^^^^^^^^^^^^^
-UnboundLocalError: cannot access local variable 'create_begunok' where it is not associated with a value
