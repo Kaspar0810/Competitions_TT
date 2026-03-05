@@ -1,0 +1,7 @@
+2026-03-05 12:30:45,089 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'results' where it is not associated with a value
+2026-03-05 12:30:45,090 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15091, in begunki_made
+    for res in results:
+               ^^^^^^^
+UnboundLocalError: cannot access local variable 'results' where it is not associated with a value
