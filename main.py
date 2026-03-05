@@ -16159,21 +16159,22 @@ def schedule_str(schedule_dict, match_num):
     """Преобразует дату и время из таблицы базы данных и получает расписание для ячейки на сетке"""
     months_dict = {1:"янв", 2: "фев", 3: "мар", 4: "апр", 5: "мая", 6: "июн", 7:"июл",
                    8: "авг", 9: "сен", 10: "окт", 11: "ноя", 12: "дек"}
-    date_time_txt = schedule_dict[match_num] 
-    date_txt = date_time_txt[0]
-    time_txt = date_time_txt[1]
+    date_time_table_txt = schedule_dict[match_num] 
+    date_txt = date_time_table_txt[0]
+    time_txt = date_time_table_txt[1]
+    table_txt = date_time_table_txt[2]
     if date_txt is None and time_txt is None:
         schedule_full = ""
     elif time_txt is None:
-        date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"
+        date_str_rus = f"{date_time_table_txt[0].day} {months_dict[date_time_table_txt[0].month]}"
         schedule_full = f"{date_str_rus}"
     else:
-        date_str_rus = f"{date_time_txt[0].day} {months_dict[date_time_txt[0].month]}"        
-        if date_time_txt[1].minute == 0:
-            time_str_rus = f"{date_time_txt[1].hour}:{date_time_txt[1].minute}0"
+        date_str_rus = f"{date_time_table_txt[0].day} {months_dict[date_time_table_txt[0].month]}"        
+        if date_time_table_txt[1].minute == 0:
+            time_str_rus = f"{date_time_table_txt[1].hour}:{date_time_table_txt[1].minute}0"
         else:
-            time_str_rus = f"{date_time_txt[1].hour}:{date_time_txt[1].minute}"
-        schedule_full = f"{date_str_rus}/{time_str_rus}"
+            time_str_rus = f"{ddate_time_table_txt[1].hour}:{date_time_table_txt[1].minute}"
+        schedule_full = f"{date_str_rus}/{time_str_rus}/ст.{table_txt}"
 
     return schedule_full
 
@@ -16190,7 +16191,8 @@ def find_match_numbers_in_results_db(match_num, fin):
         if int(num) == match_num:
             date_match = res_num.schedule_date
             time_match = res_num.schedule_time
-            schedule_list = [date_match, time_match]
+            table_match = res_num.schedule_table
+            schedule_list = [date_match, time_match, table_match]
             schedule_dict[match_num] = schedule_list
             return schedule_dict
 
