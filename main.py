@@ -22956,7 +22956,11 @@ def load_combo_schedule_time():
         number = idx + 1
         month = format_with_leading_zero(number)
         date_str = f"{year}-{month}-{day}"
-    results = Result.select().where((Result.title_id == title_id()) & (Result.schedule_date == date_str)).order_by(Result.schedule_time)
+    if fin == "все":
+        result_fin = Result.select().where(Result.title_id == title_id())
+    else:
+        result_fin = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
+    results = result_fin.select().where(Result.schedule_date == date_str).order_by(Result.schedule_time)
     for i in results:
         s_time = i.schedule_time
         if s_time is not None:
@@ -23024,10 +23028,13 @@ def check_schedule():
 
 def schedule_filter():
     """фильтрация расписания по дате и времени"""
+    msgBox = QMessageBox()
     schedule_date_txt = my_win.comboBox_filter_schedule_date.currentText()
     schedule_time_txt = my_win.comboBox_filter_schedule_time.currentText()
     fin = my_win.comboBox_select_group_schedule.currentText()
     if schedule_time_txt == "":
+        txt_fin = "всех финалов" if fin == "все" else fin
+        reply = msgBox.information(my_win, 'Уведомление', f"На {schedule_date_txt} для {txt_fin}\n не создано расписание по времени.", msgBox.Ok) 
         return
     month_dict = {"января": "01", "февраля": "02", "марта": "03", "апреля": "04", "мая": "05", "июня": "06",
                   "июля": "07", "августа": "08", "сентября": "09", "октября": "10", "ноября": "11", "декабря": "12"}
@@ -23050,7 +23057,11 @@ def schedule_filter():
     if schedule_time_txt == "все время":
         player_list = results.select().where((Result.schedule_date == date_str) & (Result.number_group == fin))
     else:
-        player_list = results.select().where((Result.schedule_date == date_str) & (Result.schedule_time == time_str))
+        if fin == "все":
+            result_fin = Result.select().where(Result.title_id == title_id())
+        else:
+            result_fin = results.select().where(Result.number_group == fin)
+        player_list = result_fin.select().where((Result.schedule_date == date_str) & (Result.schedule_time == time_str))
     fill_table_schedule(player_list)
     my_win.Button_print_begunki_full.setEnabled(True)
 
@@ -23369,9 +23380,12 @@ def format_date_schedule():
     date_str = f"{year}-{month}-{day}"
     return  date_str
 
-
-
-
+def schedule_reset():
+    """сброс фильтра по расписанию"""
+    my_win.comboBox_select_group_schedule.clear()
+    my_win.comboBox_filter_schedule_time.clear()
+    my_win.comboBox_select_stage_schedule.setCurrentIndex(0)
+    schedule_filter()
 
 # def proba():
 #     choices = Choice.select()
@@ -23665,5 +23679,6 @@ my_win.Button_add_double.clicked.connect(add_delete_double_player_to_list)
 my_win.Button_double_sort_R.clicked.connect(sort_double_player)
 my_win.Button_double_sort_region.clicked.connect(sort_double_player)
 my_win.Button_filter_schedule.clicked.connect(schedule_filter)
+my_win.Button_schedule_reset.clicked.connect(schedule_reset)
 my_win.Button_pay.clicked.connect(check_pay)
 sys.exit(app.exec())

@@ -1,0 +1,7 @@
+2026-03-05 20:45:51,397 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'filter_schedule_time'
+2026-03-05 20:45:51,397 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 23380, in schedule_reset
+    my_win.filter_schedule_time.clear()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'filter_schedule_time'
