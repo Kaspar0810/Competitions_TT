@@ -16230,7 +16230,8 @@ def find_match_numbers_in_table(table_data, fin):
                     if col_idx != 0 and match_num > 0:
                         schedule_dict = find_match_numbers_in_results_db(match_num, fin)
                         schedule_full_str = schedule_str(schedule_dict, match_num)
-                       
+                        if match_num == 60:
+                            row_idx +=3
                         match_positions[match_num] = (row_idx, col_idx)
                         schedule_positions[match_num] = (row_idx, col_idx - 1)
                         schedule[match_num] = schedule_full_str
@@ -17470,7 +17471,7 @@ def setka_32_full_made(fin):
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
     for i in range(0, strok):
-        # column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= нумерация встреч сетки ==========
@@ -17643,8 +17644,8 @@ def setka_32_full_made(fin):
     for i in range(0, 12, 2):
             fn = ('VALIGN', (i, 0), (i, -1), 'TOP')
             style.append(fn)
-    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    # style.append(fn)
+    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
@@ -17986,13 +17987,16 @@ def setka_32_2_made(fin):
     draw_num_lost_2(row_n=71, row_step=8, col_n=10, revers_number=1, number_of_game=29, player=2, data=data) # номера минус проигравшие встречи -29-30
 
     number_of_game = draw_num_2(row_n=74, row_step=2, col_n=2, number_of_columns=2, number_of_game=32, player=16, data=data) # рисует номера встреч 33-47 
-    number_of_game = draw_num_2(row_n=74, row_step=4, col_n=6, number_of_columns=2, number_of_game=48, player=16, data=data) # рисует номера встреч 48-55
-    number_of_game = draw_num_2(row_n=74, row_step=8, col_n=10, number_of_columns=1, number_of_game=56, player=16, data=data) # рисует номера встреч 56-57
-    number_of_game = draw_num_2(row_n=72, row_step=8, col_n=12, number_of_columns=1, number_of_game=58, player=16, data=data) # рисует номера встреч 58-59
+    # number_of_game = draw_num_2(row_n=74, row_step=4, col_n=6, number_of_columns=2, number_of_game=48, player=16, data=data) # рисует номера встреч 48-55
+    number_of_game = draw_num_2(row_n=75, row_step=4, col_n=6, number_of_columns=2, number_of_game=48, player=16, data=data) # рисует номера встреч 48-55
+    # number_of_game = draw_num_2(row_n=74, row_step=8, col_n=10, number_of_columns=1, number_of_game=56, player=16, data=data) # рисует номера встреч 56-57
+    number_of_game = draw_num_2(row_n=77, row_step=8, col_n=10, number_of_columns=1, number_of_game=56, player=16, data=data) # рисует номера встреч 56-57
+    # number_of_game = draw_num_2(row_n=72, row_step=8, col_n=12, number_of_columns=1, number_of_game=58, player=16, data=data) # рисует номера встреч 58-59
+    number_of_game = draw_num_2(row_n=74, row_step=8, col_n=12, number_of_columns=1, number_of_game=58, player=16, data=data) # рисует номера встреч 58-59
     number_of_game = draw_num(row_n=112, row_step=2, col_n=2, number_of_columns=2, number_of_game=63, player=4, data=data) # рисует номера встреч 63-65
     number_of_game = draw_num(row_n=124, row_step=2, col_n=2, number_of_columns=2, number_of_game=67, player=4, data=data) # рисует номера встреч 67-69
 
-    data[75][14] = str(number_of_game - 10)  # создание номеров встреч (60)
+    data[82][14] = str(number_of_game - 10)  # создание номеров встреч (60)
     data[98][12] = str((number_of_game - 10) * -1)  # номер проигравшего финал (-60)
     data[102][12] = str(number_of_game - 9)  # создание номеров встреч (61)
     data[106][12] = str((number_of_game - 9) * -1)  # номер проигравшего финал (-61)
@@ -18074,8 +18078,8 @@ def setka_32_2_made(fin):
     for k in range(0, 17, 16):
         fn = ('BOX', (12, 72 + k), (12, 77 + k), 1, colors.darkblue)
         style.append(fn) 
-        fn = ('SPAN', (12, 72 + k), (12, 77 + k))  # встреча 32
-        style.append(fn)       
+        # fn = ('SPAN', (12, 72 + k), (12, 77 + k))  # встреча 58-59
+        # style.append(fn)       
         fn = ('BACKGROUND', (12, 72 + k), (12, 77 + k), colors.lightyellow)  # встречи 32 за 3-4 место
         style.append(fn) 
            
@@ -18084,8 +18088,8 @@ def setka_32_2_made(fin):
         style.append(fn)
     fn = ('BOX', (14, 75), (14, 90), 1, colors.darkblue)
     style.append(fn) 
-    fn = ('SPAN', (14, 75), (14, 90))  # встреча 32
-    style.append(fn)       
+    # fn = ('SPAN', (14, 75), (14, 90))  # встреча 60
+    # style.append(fn)       
     fn = ('BACKGROUND', (14, 75), (14, 90), colors.lightyellow)  # встречи 32 за 3-4 место
     style.append(fn)  
     # # ======= встречи (61) за 5-6 место =====
@@ -18112,25 +18116,25 @@ def setka_32_2_made(fin):
     style = draw_mesta(row=148, col=7, player=8, style=style) # рисует линии сетки за места(номер строки, участники)
    # ======= встречи (64) за 19-20 место =====
     style = draw_setka(9, 156, 2, style) # рисует кусок сетки(номер столбца, номер строки на 2 человека)
-    style = draw_mesta(row=157, col=10, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
+    style = draw_mesta(row=157, col=11, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
     # ======= встречи (33-35) за 21-24 место =====
     style = draw_setka(3, 160, 4, style) # рисует кусок сетки(номер столбца, номер строки на 4 человека)
-    style = draw_mesta(row=163, col=6, player=4, style=style) # рисует линии сетки за места(номер строки, участники)
+    style = draw_mesta(row=163, col=7, player=4, style=style) # рисует линии сетки за места(номер строки, участники)
     # ======= встречи (68) за 25-26 место =====
     style = draw_setka(9, 171, 2, style) # рисует кусок сетки(номер столбца, номер строки на 2 человека)
-    style = draw_mesta(row=172, col=10, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
+    style = draw_mesta(row=172, col=11, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
     # ======= встречи (69 - 75) за 25-26 место =====
     style = draw_setka(1, 171, 8, style) # рисует кусок сетки(номер столбца, номер строки на 8 человека)
     style = draw_mesta(row=178, col=7, player=8, style=style) # рисует линии сетки за места(номер строки, участники)
     # ======= встречи (64) за 25-26 место =====
     style = draw_setka(9, 186, 2, style) # рисует кусок сетки(номер столбца, номер строки на 2 человека)
-    style = draw_mesta(row=187, col=10, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
+    style = draw_mesta(row=187, col=11, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
      # ======= встречи (64) за 25-26 место =====
     style = draw_setka(3, 192, 4, style) # рисует кусок сетки(номер столбца, номер строки на 2 человека)
-    style = draw_mesta(row=195, col=6, player=4, style=style) # рисует линии сетки за места(номер строки, участники)
+    style = draw_mesta(row=195, col=7, player=4, style=style) # рисует линии сетки за места(номер строки, участники)
      # ======= встречи (64) за 25-26 место =====
     style = draw_setka(9, 201, 2, style) # рисует кусок сетки(номер столбца, номер строки на 2 человека)
-    style = draw_mesta(row=202, col=10, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
+    style = draw_mesta(row=202, col=11, player=2, style=style) # рисует линии сетки за места(номер строки, участники)
    
 # =========================================
     for i in range(0, 15, 2):
@@ -20851,8 +20855,8 @@ def draw_setka_2(col, row, num, style):
     for m in range(col + 1, col_fin + 1, 2):
         s *= 2
         for q in range(row_b, row_fin, s * 2):  # встречи 33-34
-            fn = ('SPAN', (m, q), (m, q + s - 1 ))             
-            style_set.append(fn)
+            # fn = ('SPAN', (m, q), (m, q + s - 1 ))             
+            # style_set.append(fn)
             fn = ('BACKGROUND', (m, q), (m, q + s - 1 ), colors.lightyellow)  
             style_set.append(fn) 
             fn = ('BOX', (m, q), (m, q + s - 1), 1, colors.darkblue)
@@ -20917,7 +20921,7 @@ def draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, 
     return number_of_game
 
 def _draw_num(row_n, row_step, col_n, number_of_columns, number_of_game, player, data):
-    """рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
+    """старый вариант  - рисует номера встреч, row_n - начальный ряд, col_n - начальный столбец, 
     number_of_game - начальный номер встречи, player - кол-во участников, number_of_columns - кол-во столбцов """
     s = 1
     col_f = col_n + number_of_columns * 2 - 1
