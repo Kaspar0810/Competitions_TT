@@ -7748,168 +7748,13 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_select_group_begunki">
-      <property name="geometry">
-       <rect>
-        <x>126</x>
-        <y>270</y>
-        <width>106</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="editable">
-       <bool>false</bool>
-      </property>
-      <property name="insertPolicy">
-       <enum>QComboBox::InsertAlphabetically</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_68">
-      <property name="geometry">
-       <rect>
-        <x>129</x>
-        <y>245</y>
-        <width>107</width>
-        <height>19</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
-      <property name="text">
-       <string>Группа, финал</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox_select_stage_begunki">
-      <property name="geometry">
-       <rect>
-        <x>3</x>
-        <y>270</y>
-        <width>115</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="editable">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_69">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>245</y>
-        <width>94</width>
-        <height>19</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
-      <property name="text">
-       <string>Выбор этапа</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_range_tours">
-      <property name="geometry">
-       <rect>
-        <x>116</x>
-        <y>320</y>
-        <width>110</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox_select_tours">
-      <property name="geometry">
-       <rect>
-        <x>3</x>
-        <y>320</y>
-        <width>104</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_70">
-      <property name="geometry">
-       <rect>
-        <x>45</x>
-        <y>298</y>
-        <width>125</width>
-        <height>19</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
-      <property name="text">
-       <string>Диапазон печати</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="Button_print_begunki">
-      <property name="geometry">
-       <rect>
-        <x>3</x>
-        <y>350</y>
-        <width>104</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>10</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
-      <property name="text">
-       <string>Печать</string>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="groupBox_4">
       <property name="geometry">
        <rect>
-        <x>5</x>
-        <y>200</y>
-        <width>225</width>
-        <height>41</height>
+        <x>3</x>
+        <y>220</y>
+        <width>230</width>
+        <height>161</height>
        </rect>
       </property>
       <property name="font">
@@ -7921,60 +7766,176 @@
       <property name="title">
        <string>Бегунки</string>
       </property>
-      <widget class="QRadioButton" name="radioButton_begunok_shot">
+      <widget class="QComboBox" name="comboBox_begunok_time">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>101</width>
-         <height>17</height>
+         <x>112</x>
+         <y>130</y>
+         <width>110</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
-       <property name="text">
-        <string>Маленький</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
       </widget>
-      <widget class="QRadioButton" name="radioButton_begunok_full">
+      <widget class="QLabel" name="label_69">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>20</y>
-         <width>82</width>
-         <height>17</height>
+         <x>6</x>
+         <y>25</y>
+         <width>94</width>
+         <height>19</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <family>Times New Roman</family>
+         <pointsize>11</pointsize>
+         <italic>true</italic>
         </font>
        </property>
        <property name="text">
-        <string>Полный</string>
+        <string>Выбор этапа</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QComboBox" name="comboBox_begunok_time">
-      <property name="geometry">
-       <rect>
-        <x>115</x>
-        <y>350</y>
-        <width>110</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
+      <widget class="QComboBox" name="comboBox_select_stage_begunki">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>50</y>
+         <width>104</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_select_group_begunki">
+       <property name="geometry">
+        <rect>
+         <x>112</x>
+         <y>50</y>
+         <width>110</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <property name="insertPolicy">
+        <enum>QComboBox::InsertAlphabetically</enum>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_select_tours">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>100</y>
+         <width>104</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_68">
+       <property name="geometry">
+        <rect>
+         <x>124</x>
+         <y>25</y>
+         <width>107</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>11</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>Группа, финал</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEdit_range_tours">
+       <property name="geometry">
+        <rect>
+         <x>112</x>
+         <y>100</y>
+         <width>110</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_70">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>78</y>
+         <width>125</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>11</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>Диапазон печати</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="Button_print_begunki">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>130</y>
+         <width>104</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>Печать</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>

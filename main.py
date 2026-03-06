@@ -15081,9 +15081,11 @@ def begunki_made():
         schedule_date = convert_rus_date_to_mysql(schedule_date_str)
         schedule_time = my_win.comboBox_filter_schedule_time.currentText()
         stage = my_win.comboBox_select_stage_schedule.currentText()
-        id_system = system_id(stage=number_group) if stage == "Финальный" else system_id(stage)
-        systems = system.select().where(System.id == id_system).get()
-        type_table = systems.type_table
+        if stage == "Финальный":
+            pass
+        else:
+            id_system = system_id(stage)
+    
         if schedule_time == "все время" and number_group != "все":            
             results = result.select().where((Result.number_group == number_group) & (Result.schedule_date == schedule_date))
         elif number_group == "все":
@@ -15094,6 +15096,12 @@ def begunki_made():
 
         for res in results:
             date = res.schedule_date
+            if number_group == "все":
+                fin = res.number_group # номер финала по id результатов
+            else:
+                fin = number_group
+            type_table = find_type_table(fin)
+
             if date is None:
                 date_str = ""
             else:
@@ -15176,6 +15184,14 @@ def begunki_made():
     elif platform == "win32":  # Windows...
         os.system(f"{view_file}")
     os.chdir("..") # возврат на предыдущий уровень
+
+def find_type_table(fin):
+    """получаем тип таблица по финалу"""
+    id_system = system_id(stage=fin)
+    systems = System.select().where(System.id == id_system).get()
+    type_table = systems.type_table
+
+    return type_table
 
 def select_stage_for_schedule():
     """выбор финалов или номеров групп для фильтра расписания"""
@@ -22875,7 +22891,7 @@ def fill_table_schedule(player_list):
    
     player_selected = player_list.dicts().execute()    
     row_count = len(player_selected)  # кол-во строк в таблице
-    num_columns = [0, 2, 3, 4, 5, 17, 18, 19] # номера столбцов в таблице базы данных, откуда брать данные
+    num_columns = [0, 2, 3, 4, 5, 17, 18, 19, 20] # номера столбцов в таблице базы данных, откуда брать данные
     # выделение несколких строк по клику мышью
     my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
     my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -22890,14 +22906,16 @@ def fill_table_schedule(player_list):
             if item_6 != "None":
                     item_6 = format_mysql_date(date_str=item_6)
             if schedule_current == "Только дата":
-                model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата'])
-                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6] 
+                model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'стадия'])
+                item_7 = str(list(player_selected[row].values())[num_columns[6]])
+                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7] 
             else:
-                model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол'])               
+                model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол', 'стадия'])               
                 item_7_txt = str(list(player_selected[row].values())[num_columns[6]])
                 item_7 = item_7_txt[:5] 
                 item_8 = str(list(player_selected[row].values())[num_columns[7]])
-                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8]
+                item_9 = str(list(player_selected[row].values())[num_columns[8]])
+                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9]
 
             data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
     my_win.tableView_schedule.setModel(model)
@@ -22972,10 +22990,6 @@ def load_combo_schedule_time():
     if len(time_list) > 0:
         time_list.insert(0, "все время")
         my_win.comboBox_filter_schedule_time.addItems(time_list)
-    # else:
-    #     if fin != "все" or fin != "":
-    #         reply = msgBox.information(my_win, 'Уведомление', f"На {date_txt} для {fin} не создано расписание\n по времени.", msgBox.Ok) 
-    # my_win.comboBox_begunok_time.addItems(time_list)
 
 def format_with_leading_zero(number):
     """Форматирует число, добавляя ведущий ноль если нужно"""
