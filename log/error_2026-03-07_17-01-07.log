@@ -1,0 +1,12 @@
+2026-03-07 17:05:17,015 - ERROR - Необработанное исключение: ValueError: too many values to unpack (expected 3)
+2026-03-07 17:05:17,017 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6238, in whrite_stadia_on_net
+    stadia = generate_all_match_titles(max_match = 80)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 18496, in generate_all_match_titles
+    match_titles[i] = get_match_title(i)
+                      ~~~~~~~~~~~~~~~^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 18277, in get_match_title
+    for round_name, (start, end, title) in structure.items():
+                    ^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)

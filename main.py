@@ -733,47 +733,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         button_comp_enabled()
 
 
-
-    # def fast_change_comp(self):
-    #     """Быстрый переход между соревнованиями"""
-    #     sender = my_win.sender()
-    #     button_list = [Button_turnir_1, Button_turnir_2, Button_turnir_3, Button_turnir_4]
-    #     font_und = QFont("DejaVuSans-Bold", 10)
-    #     font_und.setUnderline(True)
-    #     font_no_und = QFont("DejaVuSans-Bold", 10)
-    #     font_no_und.setUnderline(False)
-
-    #     for j in range(0, 4):
-    #         if sender == Button_turnir_1:
-    #             if j == 0:
-    #                 button_list[j].setFont(font_und)
-    #                 button_list[j].setFlat(True)
-    #             else:
-    #                 button_list[j].setFont(font_no_und)
-    #                 button_list[j].setFlat(False)
-    #         elif sender == Button_turnir_2:
-    #             if j == 1:
-    #                 button_list[j].setFont(font_und)
-    #                 button_list[j].setFlat(True)
-    #             else:
-    #                 button_list[j].setFont(font_no_und)
-    #                 button_list[j].setFlat(False)   
-    #         elif sender == Button_turnir_3:             
-    #             if j == 2:
-    #                 button_list[j].setFont(font_und)
-    #                 button_list[j].setFlat(True)
-    #             else:
-    #                 button_list[j].setFont(font_no_und)
-    #                 button_list[j].setFlat(False) 
-    #         elif sender == Button_turnir_4:
-    #             if j == 3:
-    #                 button_list[j].setFont(font_und)
-    #                 button_list[j].setFlat(True)
-    #             else:
-    #                 button_list[j].setFont(font_no_und)
-    #                 button_list[j].setFlat(False)
-    #     button_comp_enabled()
-
     def check_debitor_R(self):
         check_player_whitout_R()
 
@@ -6274,6 +6233,10 @@ def player_in_setka_and_write_Game_list_and_Result(fin, posev_data):
             results = Result(number_group=fin, system_stage=st, player1=pl1, player2=pl2,
                              tours=i, title_id=title_id(),system_id=id_system).save()
 
+def whrite_stadia_on_net():
+    """записывает стадию в таблицу -Result-"""
+    stadia = generate_all_match_titles(max_match = 32)
+    print (stadia)
 
 def player_in_one_table(fin):
     """Соревнования из одной таблицы, создание и заполнение Game_list, Result (создание жеребьевки в круг)"""
@@ -17089,8 +17052,8 @@ def setka_16_full_made(fin):
             style.append(fn)
     # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
     # style.append(fn)
-    for b in style_color_schedule:
-        ts.append(b)
+    # for b in style_color_schedule:
+    #     ts.append(b)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     t.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
                            ('FONTNAME', (0, 0), (-1, -1), "DejaVuSerif"),
@@ -17438,8 +17401,6 @@ def setka_32_made(fin):
     doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
     os.chdir("..")
     return tds
-
-
 
 
 def setka_32_full_made(fin):
@@ -18206,6 +18167,166 @@ def setka_32_2_made(fin):
     doc.build(elements, onFirstPage=func_zagolovok, onLaterPages=func_zagolovok)
     os.chdir("..")
     return tds
+
+
+# ======  написание стадий сетки ===============
+def get_match_title(match_number, highest_place=17, total_players=16):
+    """
+    Определяет название стадии матча по его номеру в турнирной сетке
+    на основе структуры из Excel-файла.
+    
+    Аргументы:
+    match_number (int): Номер встречи
+    highest_place (int): Наивысшее место в данной сетке
+    total_players (int): Количество участников (8, 16 или 32)
+    
+    Возвращает:
+    str: Название стадии матча
+    """
+    
+        # Проверка корректности параметров
+    valid_sizes = [8, 16, 32]
+    if total_players not in valid_sizes:
+        return f"Ошибка: поддерживаются только сетки на {valid_sizes} участников"
+    
+    # Расчет базовых параметров
+    if total_players == 32:
+        max_match = 80
+        # Структура для 32 участников (как в Excel)
+        main_rounds = {
+            'first_round': (1, 16, f"1/16 финала"),
+            'second_round': (17, 24, f"1/8 финала"),
+            'quarter': (25, 28, f"1/4 финала"),
+            'semi': (29, 32, f"1/2 финала")
+        }
+        
+        # Стыковые матчи - распределение мест
+        consolation = [
+            # Места 33-36 (финал основной сетки)
+            {'matches': [37, 38], 'offset': 0, 'type': 'final_group'},
+            # Места 37-40
+            {'matches': [33, 34, 35, 36], 'offset': 4, 'type': 'full_group'},
+            # Места 41-44
+            {'matches': [39, 40, 41, 42], 'offset': 8, 'type': 'full_group'},
+            # Места 45-48
+            {'matches': [43, 44, 45, 46], 'offset': 12, 'type': 'full_group'},
+            # Места 49-52
+            {'matches': [47, 48, 49, 50], 'offset': 16, 'type': 'full_group'},
+            # Места 53-56
+            {'matches': [51, 52, 53, 54], 'offset': 20, 'type': 'full_group'},
+            # Места 57-60
+            {'matches': [55, 56, 57, 58], 'offset': 24, 'type': 'full_group'},
+            # Места 61-64
+            {'matches': [59, 60, 61, 62], 'offset': 28, 'type': 'full_group'},
+        ]
+    elif total_players == 16:
+        max_match = 40
+        # Структура для 16 участников
+        main_rounds = {
+            'first_round': (1, 8, f"1/8 финала"),
+            'quarter': (9, 12, f"1/4 финала"),
+            'semi': (13, 14, f"1/2 финала"),
+            'final': (15, 15, f"финал")
+        }
+        
+        consolation = [
+            # Места 17-18 (финал основной сетки)
+            {'matches': [19, 20], 'offset': 0, 'type': 'final_group'},
+            # Места 19-22
+            {'matches': [16, 17, 18, 21], 'offset': 2, 'type': 'mixed_group'},
+            # Места 23-26
+            {'matches': [22, 23, 24, 25], 'offset': 6, 'type': 'full_group'},
+            # Места 27-30
+            {'matches': [26, 27, 28, 29], 'offset': 10, 'type': 'full_group'},
+            # Места 31-32
+            {'matches': [30, 31, 32, 33], 'offset': 14, 'type': 'full_group'},
+        ]
+    else:  # total_players == 8
+        max_match = 20
+        # Структура для 8 участников
+        main_rounds = {
+            'first_round': (1, 4, f"1/4 финала"),
+            'semi': (5, 6, f"1/2 финала"),
+            'final': (7, 7, f"финал")
+        }
+        
+        consolation = [
+            # Места 9-10 (финал основной сетки)
+            {'matches': [9, 10], 'offset': 0, 'type': 'final_group'},
+            # Места 11-14
+            {'matches': [8, 11, 12, 13], 'offset': 2, 'type': 'mixed_group'},
+            # Места 15-16
+            {'matches': [14, 15, 16, 17], 'offset': 6, 'type': 'full_group'},
+        ]
+    
+    # Проверка на допустимый номер матча
+    if match_number < 1 or match_number > max_match:
+        return f"Матч {match_number} (вне диапазона для {total_players} участников)"
+    
+    # Проверка основной сетки
+    for round_name, round_data in main_rounds.items():
+        start, end, title = round_data
+        if start <= match_number <= end:
+            return title
+    
+    # Проверка стыковых матчей
+    for group in consolation:
+        if match_number in group['matches']:
+            idx = group['matches'].index(match_number)
+            offset = group['offset']
+            
+            if group['type'] == 'final_group':
+                # Для финальной группы (2 матча)
+                if idx == 0:  # Финал за highest_place - highest_place+1
+                    return f"Финал за {highest_place + offset}-{highest_place + offset + 1} место"
+                else:  # Матч за highest_place+2 - highest_place+3
+                    return f"Матч за {highest_place + offset + 2}-{highest_place + offset + 3} место"
+            
+            elif group['type'] == 'full_group':
+                # Полная группа из 4 матчей
+                if idx == 0 or idx == 1:  # Полуфиналы
+                    start_place = highest_place + offset
+                    end_place = highest_place + offset + 3
+                    return f"За {start_place}-{end_place} место (1/2 финала)"
+                elif idx == 2:  # Финал группы
+                    return f"Финал за {highest_place + offset}-{highest_place + offset + 1} место"
+                else:  # Матч за 3-4 место в группе
+                    return f"Матч за {highest_place + offset + 2}-{highest_place + offset + 3} место"
+            
+            elif group['type'] == 'mixed_group':
+                # Смешанная группа (адаптация для 16 и 8 участников)
+                if idx == 0 or idx == 1:  # Полуфиналы
+                    start_place = highest_place + offset
+                    end_place = highest_place + offset + 3
+                    return f"За {start_place}-{end_place} место (1/2 финала)"
+                elif idx == 2:  # Финал
+                    return f"Финал за {highest_place + offset}-{highest_place + offset + 1} место"
+                else:  # Матч за 3-4 место
+                    return f"Матч за {highest_place + offset + 2}-{highest_place + offset + 3} место"
+    
+    return f"Матч {match_number} (стадия не определена)"
+
+def generate_all_match_titles(max_match=80):
+    """
+    Генерирует словарь со всеми названиями матчей от 1 до 80
+    
+    Аргументы:
+    start_place (int): Начальное место (по умолчанию 65)
+    
+    Возвращает:
+    dict: Словарь {номер_матча: название}
+    """
+    match_titles = {}
+    for i in range(1, max_match + 1):
+        match_titles[i] = get_match_title(i)
+    return match_titles
+
+
+
+
+# ========================
+
+
 
 def schedule_data(data, fin):
     """расписание на стетке"""
@@ -22911,8 +23032,7 @@ def fill_table_schedule(player_list):
                     item_6 = format_mysql_date(date_str=item_6)
             if schedule_current == "Только дата":
                 model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'стадия'])
-                item_7 = str(list(player_selected[row].values())[num_columns[6]])
-                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7] 
+                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6] 
             else:
                 model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол', 'стадия'])               
                 item_7_txt = str(list(player_selected[row].values())[num_columns[6]])
@@ -23492,7 +23612,7 @@ def schedule_reset():
 #         migrate(migrator.add_column('results', 'stage_net', CharField(null=True))) # null=True допускает пустое значение
    
 #     db.close()
-# my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
+my_win.Button_proba.clicked.connect(whrite_stadia_on_net) # запуск пробной функции
 
 my_win.btn_select_range.clicked.connect(select_rows_with_options)
 my_win.btn_number_table.clicked.connect(select_numbers_tables)
