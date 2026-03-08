@@ -634,6 +634,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         short_name = titles.short_name_comp
         count = len(short_name)
         s_name = short_name[:count - 1]
+        r_date_clone = titles.r_date
         if pl_gamer == 'Девочки':
             gm = 'Мальчики'
             pol = 'M'
@@ -679,14 +680,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     tab_enabled="Титул Участники", 
                     multiregion=titles.multiregion,
                     otchestvo=titles.otchestvo,
-                    r_date = ""
+                    r_date = r_date_clone
                     ).save()
 
             # получение последней записи в таблице
         t_id_last = Title.select().order_by(Title.id.desc()).get()
         system = System(title_id=t_id_last, total_athletes=0, total_group=0, max_player=0, stage="", type_table="",
                             page_vid="", label_string="", kol_game_string="", choice_flag=False, score_flag=5,
-                            visible_game=False, stage_exit="", mesta_exit=0, no_game="", r_date="").save()
+                            visible_game=False, stage_exit="", mesta_exit=0, no_game="", sex="").save()
         my_win.tabWidget.setCurrentIndex(0)
         db_r(gamer=gm)
         db_select_title()
