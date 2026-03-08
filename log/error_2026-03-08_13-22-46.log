@@ -1,0 +1,10 @@
+2026-03-08 13:23:39,343 - ERROR - Необработанное исключение: TypeError: 'int' object is not iterable
+2026-03-08 13:23:39,345 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1108, in choice
+    player_in_setka_and_write_Game_list_and_Result(fin, posev_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6245, in player_in_setka_and_write_Game_list_and_Result
+    for k in results:
+             ^^^^^^^
+TypeError: 'int' object is not iterable
