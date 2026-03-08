@@ -1,7 +1,0 @@
-2026-03-05 20:44:23,260 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'comboBox_select_group'
-2026-03-05 20:44:23,261 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 23379, in schedule_reset
-    my_win.comboBox_select_group.clear()
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'MainWindow' object has no attribute 'comboBox_select_group'

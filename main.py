@@ -10949,7 +10949,8 @@ def choice_setka_automat(fin, flag, count_exit): # вариант жеребье
                 if flag == 3:
                     choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
                 else:
-                    choice_posev = choice.select().where(Choice.mesto_group == nums[n])          
+                    choice_posev = choice.select().where(Choice.mesto_group.in_(nums))
+                    # choice_posev = choice.select().where(Choice.mesto_group == nums[n])          
             elif stage_exit == "1-й полуфинал" or stage_exit == "2-й полуфинал": # выходят из полуфинала
                 real_all_player_in_final = len(choice.select().where((Choice.semi_final == stage_exit) & (Choice.mesto_semi_final.in_(nums))))
                 # == число игроков в конкретном посеве финала 
