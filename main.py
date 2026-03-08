@@ -1583,25 +1583,32 @@ class StartWindow(QMainWindow, Ui_Form):
         result = msgBox.question(my_win, "", "Вы действительно хотите создать новые соревнования?",
                                  msgBox.Ok, msgBox.Cancel)
         if result == msgBox.Ok:
-            gamer = ("Мальчики", "Девочки", "Юноши",
-                     "Девушки", "Юниоры", "Юниорки", "Мужчины", "Женщины")
-            gamer, ok = QInputDialog.getItem(
-                my_win, "Участники", "Выберите категорию спортсменов", gamer, 0, False)
+            vid_competitions = ["Личные", "Командные"]
+            result_vid =  gamer, ok = QInputDialog.getItem(
+                    my_win, "Соревнования", "Выберите вид соревнований", vid_competitions, 0, False)
+            
+            if result_vid == "Личные":        
+                gamer = ("Мальчики", "Девочки", "Юноши",
+                        "Девушки", "Юниоры", "Юниорки", "Мужчины", "Женщины")
+                gamer, ok = QInputDialog.getItem(
+                    my_win, "Участники", "Выберите категорию спортсменов", gamer, 0, False)
 
-            title = Title(name="", sredi="", vozrast="", data_start="", data_end="", mesto="", referee="",
-                          kat_ref="", secretary="", kat_sec="", gamer=gamer, full_name_comp="", pdf_comp="",
-                          short_name_comp="", tab_enabled="Титул", multiregion="", r_date="").save()
-            # получение последней записи в таблице
-            t_id = Title.select().order_by(Title.id.desc()).get()
-            id_title = t_id.id
-            my_win.lineEdit_title_gamer.setText(gamer)
-            db_r(gamer)
-            system = System(title_id=id_title, total_athletes=0, total_group=0, max_player=0, stage="", type_table="",
-                            page_vid="", label_string="", kol_game_string="", choice_flag=False, score_flag=5,
-                            visible_game=False, stage_exit="", mesta_exit=0, no_game="").save()
-            self.close()
-            tab_enabled(id_title)
-            my_win.show()
+                title = Title(name="", sredi="", vozrast="", data_start="", data_end="", mesto="", referee="",
+                            kat_ref="", secretary="", kat_sec="", gamer=gamer, full_name_comp="", pdf_comp="",
+                            short_name_comp="", tab_enabled="Титул", multiregion="", r_date="").save()
+                # получение последней записи в таблице
+                t_id = Title.select().order_by(Title.id.desc()).get()
+                id_title = t_id.id
+                my_win.lineEdit_title_gamer.setText(gamer)
+                db_r(gamer)
+                system = System(title_id=id_title, total_athletes=0, total_group=0, max_player=0, stage="", type_table="",
+                                page_vid="", label_string="", kol_game_string="", choice_flag=False, score_flag=5,
+                                visible_game=False, stage_exit="", mesta_exit=0, no_game="").save()
+                self.close()
+                tab_enabled(id_title)
+                my_win.show()
+            else: # командные соревнования
+                pass
         else:
             return
 
