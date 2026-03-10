@@ -8270,10 +8270,10 @@ def enter_score(none_player=0):
                 pl1 = k.player1
                 pl2 = k.player2
                 if pl1 in player_match:
-                    app = Result.update(player1="", winner="", points_win="", score_in_game="", score_win="", loser="", points_loser="", score_loser="").where(Result.id == k)
+                    app = Result.update(player1="", winner="", points_win=None, score_in_game="", score_win="", loser="", points_loser=None, score_loser="").where(Result.id == k)
                     app.execute()
                 elif pl2 in player_match:
-                    app = Result.update(player2="", winner="", points_win="", score_in_game="", score_win="", loser="", points_loser="", score_loser="").where(Result.id == k)
+                    app = Result.update(player2="", winner="", points_win=None, score_in_game="", score_win="", loser="", points_loser=None, score_loser="").where(Result.id == k)
                     app.execute()
     # ==============================================
     if tab_etap == 2:  # записывает в -Result- сыгранный матч со сносками на соответствующие строки победителя и проигравшего
@@ -17458,7 +17458,7 @@ def setka_32_full_made(fin):
     fin_title = f'Финальные соревнования.({first_mesto}-{last_mesto} место)' # титул на таблице
     strok = 207
     for i in range(0, strok):
-        column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
+        # column_count[12] = i  # нумерация 10 столбца для удобного просмотра таблицы
         list_tmp = column_count.copy()
         data.append(list_tmp)
     # ========= нумерация встреч сетки ==========
@@ -17631,8 +17631,8 @@ def setka_32_full_made(fin):
     for i in range(0, 12, 2):
             fn = ('VALIGN', (i, 0), (i, -1), 'TOP')
             style.append(fn)
-    fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
-    style.append(fn)
+    # fn = ('INNERGRID', (0, 0), (-1, -1), 0.01, colors.grey)  # временное отображение сетки
+    # style.append(fn)
     ts = style   # стиль таблицы (список оформления строк и шрифта)
     for b in style_color:
         ts.append(b)
