@@ -8256,6 +8256,7 @@ def enter_score(none_player=0):
         # ==== убирает расписание встречи после сыгранной игры
         result.schedule_date = ""
         result.shedule_time = ""
+        result.schedule_table = ""
         result.save()
     #  == попытка удалить встречи с игроками задействованных в редактировани счета по сетке
     if flag_edit_match is not None and type == "сетка":
