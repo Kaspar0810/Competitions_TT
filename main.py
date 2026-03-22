@@ -7,6 +7,8 @@ import traceback
 import os
 import logging
 from datetime import datetime
+
+# import proba_pf
  
 def setup_logging(log_directory="log"):
     """Настройка системы логирования"""
@@ -69,7 +71,7 @@ from reportlab.lib.colors import *
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm, mm
 from reportlab.lib.enums import TA_CENTER
-from reportlab.platypus import TableStyle, Paragraph, SimpleDocTemplate, KeepTogether, Table
+from reportlab.platypus import TableStyle, Paragraph, SimpleDocTemplate, KeepTogether, Table, Spacer
 from reportlab.platypus import Table as PlatypusTable, PageBreak
 from reportlab.pdfgen.canvas import Canvas 
 
@@ -1077,9 +1079,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 etap_replacing = etap_exit + "е"
             fin_replacing = fin.replace("й", "ого") + "а"
             if fin is not None:
-                checking_flag = checking_possibility_choice(stage) # флаг жеребьевки этапа, если True значит все игры предварительного или полуфиналов сыграны
-                if checking_flag is False:
-                    return
+                # checking_flag = checking_possibility_choice(stage) # флаг жеребьевки этапа, если True значит все игры предварительного или полуфиналов сыграны
+                # if checking_flag is False:
+                #     return
                 check_flag = check_choice(fin) # была ли сделана жеребьевка
                 if check_flag is True:
                     reply = msg.information(my_win, 'Уведомление', f"Жеребъевка {fin} была произведена,"
@@ -1588,7 +1590,7 @@ class StartWindow(QMainWindow, Ui_Form):
             result_vid =  gamer, ok = QInputDialog.getItem(
                     my_win, "Соревнования", "Выберите вид соревнований", vid_competitions, 0, False)
             
-            if result_vid == "Личные":        
+            if result_vid == ("Личные", True):        
                 gamer = ("Мальчики", "Девочки", "Юноши",
                         "Девушки", "Юниоры", "Юниорки", "Мужчины", "Женщины")
                 gamer, ok = QInputDialog.getItem(
@@ -4650,7 +4652,7 @@ def page():
 
         Button_view = QPushButton(my_win.tabWidget) # (в каком виджете размещена)
         Button_view.resize(100, 80) # размеры кнопки (длина 120, ширина 50)
-        Button_view.move(850, 100) # разммещение кнопки (от левого края 850, от верхнего 60) от виджета в котором размещен
+        Button_view.move(850, 105) # разммещение кнопки (от левого края 850, от верхнего 60) от виджета в котором размещен
         joined_path = os.path.join(pathlib.Path.cwd(), 'icons', 'view_pdf.png')
         Button_view.setIcon(QtGui.QIcon(joined_path))
         Button_view.setIconSize(QtCore.QSize(96, 128))
@@ -4671,7 +4673,7 @@ def page():
         # Создаем кнопку очистки полей
         if not hasattr(my_win, 'Button_clear_field_result'):
             my_win.Button_clear_field_result = QPushButton("Очистить\nполя", my_win.tabWidget)
-            my_win.Button_clear_field_result.resize(70, 36)
+            my_win.Button_clear_field_result.resize(70, 30)
             my_win.Button_clear_field_result.move(870, 37)  # Смещаем ниже чекбокса
             my_win.Button_clear_field_result.setEnabled(False)
             my_win.Button_clear_field_result.setStyleSheet("""
@@ -4707,6 +4709,58 @@ def page():
         except:
             pass
         my_win.Button_clear_field_result.clicked.connect(clear_score_fields)
+        # ======= вариант кнопки удаления игры ==============
+            # Создаем чекбокс защиты
+        if not hasattr(my_win, 'checkBox_delete_result'):
+            my_win.checkBox_delete_result = QCheckBox("", my_win.tabWidget)
+            my_win.checkBox_delete_result.resize(100, 80)
+            my_win.checkBox_delete_result.move(850, 44)
+            my_win.checkBox_delete_result.setToolTip("Установите флажок для разблокировки кнопки удаления")
+            my_win.checkBox_delete_result.show()
+        else:
+            my_win.checkBox_clear_field_result.show()
+        
+        # Создаем кнопку очистки полей
+        if not hasattr(my_win, 'Button_delete_result'):
+            my_win.Button_delete_result = QPushButton("Удалить\nрезультат", my_win.tabWidget)
+            my_win.Button_delete_result.resize(70, 30)
+            my_win.Button_delete_result.move(870, 70)  # Смещаем ниже чекбокса
+            my_win.Button_delete_result.setEnabled(False)
+            my_win.Button_delete_result.setStyleSheet("""
+                QPushButton {
+                    background-color: #cccccc;
+                    color: #666666;
+                    border: 1px solid #999999;
+                    border-radius: 3px;
+                }
+                QPushButton:enabled {
+                    background-#F5F5F5;
+                    color: black;
+                    font-weight: bold;
+                    border: 2px solid #cc0000;
+                }
+                QPushButton:enabled:hover {
+                    background-color: #ff6666;
+                }
+            """)
+            my_win.Button_delete_result.show()
+        else:
+            my_win.Button_delete_result.show()
+        
+        # Подключаем сигналы (отключаем старые соединения, чтобы не было дублирования)
+        try:
+            my_win.checkBox_delete_result.stateChanged.disconnect()
+        except:
+            pass
+        my_win.checkBox_delete_result.stateChanged.connect(toggle_delete_result_button)
+        
+        try:
+            my_win.Button_delete_result.clicked.disconnect()
+        except:
+            pass
+        my_win.Button_delete_result.clicked.connect(delete_result)
+
+        #==============================
 
             # == определяет разигрывается 3-е место или нет и в зависимости от этого включает кнопку и checkBox
         if "1-й финал" in choice_etap:
@@ -4844,8 +4898,9 @@ def page():
         my_win.comboBox_second_group.setEnabled(False)
         my_win.timeEdit_schedule.hide()
         my_win.label_79.hide()
+        my_win.label_91.hide()
         my_win.btn_number_table.hide()
-        my_win.btn_select_range.hide()
+        my_win.btn_select_range.show()
         my_win.lineEdit_all_table.hide()
         my_win.Button_print_begunki_full.setEnabled(False)
         load_combo_schedule_stage()
@@ -4967,7 +5022,37 @@ def clear_score_fields():
         line.clear()
      # Сбрасываем чекбокс защиты
     my_win.checkBox_clear_field_result.setChecked(False)
-  
+
+def toggle_delete_result_button(state):
+    """Включение/выключение кнопки удаления результата встречи в зависимости от состояния чекбокса"""
+    if state == Qt.Checked:
+        my_win.Button_delete_result.setEnabled(True)
+        my_win.Button_delete_result.setToolTip("Нажмите для удаления результаты встречи")
+    else:
+        my_win.Button_delete_result.setEnabled(False)
+        my_win.Button_delete_result.setToolTip("Установите флажок защиты для разблокировки")
+
+def delete_result():
+    """удаляет результат встречи в DB"""
+    msgBox = QMessageBox()
+    indices = my_win.tableView.selectionModel().selectedRows()
+    if len(indices) == 0:
+        reply = msgBox.information(my_win, 'Уведомление', "Вы не отметили номер встреч\n для записи расписания", msgBox.Ok) 
+        return
+    for index in sorted(indices):
+        rows = index.row()
+        id_vst = my_win.tableView.model().index(rows, 0).data() # данные ячейки tableView
+        vst = my_win.tableView.model().index(rows, 2).data() # данные ячейки tableView
+        Result.update(winner=None, points_win=None, score_in_game=None,
+                       score_win=None, loser=None, points_loser=None, 
+                       score_loser=None).where(Result.id == id_vst).execute()
+
+    line_edit_list = [my_win.lineEdit_pl1_score_total, my_win.lineEdit_pl2_score_total,
+                       my_win.lineEdit_player1, my_win.lineEdit_player2]
+    for line in line_edit_list:
+        line.clear()
+     # Сбрасываем чекбокс защиты
+    my_win.checkBox_delete_result.setChecked(False) 
 
 def otchestvo_input():
     """если требуется отчество то включает поле и выводит в listView сохраненые данные"""
@@ -6786,6 +6871,7 @@ def player_in_table_group_and_write_Game_list_Result(stage):
                     first = int(match[:znak])  # игрок под номером в группе
                     # игрок под номером в группе
                     second = int(match[znak + 1:])
+                    
                     pl1_id = gr[first * 2 - 2][1]  # фамилия первого игрока
                     # z = pl1_id.find("/") # находит черту
                     # pl1 = pl1_id[:z] # отделяет фамилия от ид
@@ -8254,9 +8340,9 @@ def enter_score(none_player=0):
         result.points_loser = l
         result.score_loser = ts_loser
         # ==== убирает расписание встречи после сыгранной игры
-        result.schedule_date = ""
-        result.shedule_time = ""
-        result.schedule_table = ""
+        result.schedule_date = None
+        result.shedule_time = None
+        result.schedule_table = None
         result.save()
     #  == попытка удалить встречи с игроками задействованных в редактировани счета по сетке
     if flag_edit_match is not None and type == "сетка":
@@ -8271,10 +8357,10 @@ def enter_score(none_player=0):
                 pl1 = k.player1
                 pl2 = k.player2
                 if pl1 in player_match:
-                    app = Result.update(player1="", winner="", points_win=None, score_in_game="", score_win="", loser="", points_loser=None, score_loser="").where(Result.id == k)
+                    app = Result.update(player1=None, winner=None, points_win=None, score_in_game=None, score_win=None, loser=None, points_loser=None, score_loser=None).where(Result.id == k)
                     app.execute()
                 elif pl2 in player_match:
-                    app = Result.update(player2="", winner="", points_win=None, score_in_game="", score_win="", loser="", points_loser=None, score_loser="").where(Result.id == k)
+                    app = Result.update(player2=None, winner=None, points_win=None, score_in_game=None, score_win=None, loser=None, points_loser=None, score_loser=None).where(Result.id == k)
                     app.execute()
     # ==============================================
     if tab_etap == 2:  # записывает в -Result- сыгранный матч со сносками на соответствующие строки победителя и проигравшего
@@ -9094,7 +9180,7 @@ def reset_filter():
     load_combo()
 
 
-def choice_semifinal_automat(stage):
+def _choice_semifinal_automat(stage):
     """жеребьевка полуфиналов"""
     mesto_first = 0
     system = System.select().where(System.title_id == title_id())
@@ -9134,6 +9220,249 @@ def choice_semifinal_automat(stage):
         system.save()
     player_in_table_group_and_write_Game_list_Result(stage)
 
+
+def choice_semifinal_automat(stage):
+    """жеребьевка полуфиналов вариант когда не полный состав групп"""
+    """Основная функция"""
+    # try:
+    print("Начинаем формирование полуфиналов...")
+    
+    # 1. Создаем группы полуфинала
+    semi_groups = create_semi_final_groups(stage)
+    print(f"Сформировано {len(semi_groups)} групп полуфинала")
+    
+    # 2. Заполняем столбцы в таблице Choice
+    fill_semi_final_columns(semi_groups)
+    print("Заполнены данные о полуфиналах в таблице Choice")
+    
+    # 3. Создаем встречи в таблице Result
+    create_semi_final_matches(stage)
+    print("Созданы встречи для полуфиналов")
+    
+    # 4. Переносим результаты предыдущих встреч
+    transfer_previous_matches()
+    print("Перенесены результаты предыдущих встреч")
+    
+    print("Жеребьевка полуфинала успешно завершена!")
+        
+    # except Exception as e:
+    #     print(f"Произошла ошибка: {e}")
+    #     db.rollback()
+    # finally:
+    #     db.close()
+
+def create_semi_final_groups(stage):
+    """Создание групп 1-го полуфинала с учетом регионов"""
+    system = System.select().where(System.title_id == title_id())
+    systems = system.select().where(System.stage == "Предварительный").get()
+    choices = Choice.select().where(Choice.title_id == title_id())
+    total_group = systems.total_group
+    id_system = system_id(stage)
+    system_stage = system.select().where(System.id == id_system).get()
+    mesta_exit = system_stage.mesta_exit
+     # определение мест в ПФ, выходящих из группы
+    if stage == "1-й полуфинал": 
+        mesto_first = 1
+    else:
+        system_stage = system.select().where(System.stage == "1-й полуфинал").get()
+        mesta_exit = system_stage.mesta_exit
+        mesto_first = mesta_exit + 1
+    # Получаем всех спортсменов, занявших 1 и 2 места в предварительных группах
+    players = []
+    for group_num in range(1, total_group + 1):  # 32 группы
+        group_name = f"{group_num} группа"
+        
+        # Получаем 1-е место
+        first_place = choices.select().where((Choice.group == group_name) & (Choice.mesto_group == mesto_first)).first()
+        
+        # Получаем 2-е место
+        second_place = choices.select().where((Choice.group == group_name) & (Choice.mesto_group == mesto_first + 1)).first()
+        
+        if first_place and second_place:
+            players.append({
+                'group_num': group_num,
+                'first': first_place,
+                'second': second_place
+            })
+    
+    # Принцип стыковых встреч: 1-32, 2-31, 3-30 и т.д.
+    semi_groups = []
+    used_groups = set()
+    
+    # Сначала формируем пары групп по принципу стыковых встреч
+    pairs = []
+    for i in range(1, total_group // 2 + 1):
+        group1_num = i
+        group2_num = total_group + 1 - i
+        pairs.append((group1_num, group2_num))
+    
+    # Функция для проверки регионов
+    def check_regions(first1, first2):
+        return first1.region != first2.region
+
+    # Формируем группы полуфинала с учетом регионов
+    for group1_num, group2_num in pairs:
+        group1 = next(p for p in players if p['group_num'] == group1_num)
+        group2 = next(p for p in players if p['group_num'] == group2_num)
+        
+        first1, second1 = group1['first'], group1['second']
+        first2, second2 = group2['first'], group2['second']
+        
+        # Проверяем регионы первых мест
+        if not check_regions(first1, first2):
+            # Если регионы совпадают, ищем замену
+            swapped = False
+            
+            # Ищем соседнюю группу для обмена
+            for swap_offset in [1, -1, 2, -2]:  # пробуем соседние группы
+                swap_group_num = group1_num + swap_offset
+                if 1 <= swap_group_num <= 32 and swap_group_num not in [g for g, _ in pairs]:
+                    swap_group = next((p for p in players if p['group_num'] == swap_group_num), None)
+                    if swap_group:
+                        swap_first = swap_group['first']
+                        if check_regions(first1, swap_first):
+                            # Меняем группы
+                            pairs[pairs.index((group1_num, group2_num))] = (swap_group_num, group2_num)
+                            swapped = True
+                            break
+            
+            if not swapped:
+                # Если не нашли замену, оставляем как есть
+                pass
+        
+        # Создаем группу полуфинала
+        sf_group = {
+            'sf_group_num': len(semi_groups) + 1,
+            'players': [first1, second1, first2, second2]
+        }
+        semi_groups.append(sf_group)
+    
+    return semi_groups
+
+def fill_semi_final_columns(semi_groups):
+    """Заполнение столбцов semi_final, posev_sf, sf_group в таблице Choice"""
+    
+    for sf_group in semi_groups:
+        sf_group_num = sf_group['sf_group_num']
+        players = sf_group['players']
+        
+        # Порядковый номер в группе: 1-4
+        for idx, player in enumerate(players, 1):
+            player.semi_final = '1-й полуфинал'
+            player.posev_sf = idx
+            player.sf_group = f"{sf_group_num} группа"
+            player.save()
+
+def create_semi_final_matches(stage):
+    """Создание встреч для групп полуфинала"""
+ 
+    id_system = system_id(stage)
+
+    sf_groups = Choice.select().where((Choice.title_id == title_id()) & (Choice.semi_final == 1))
+    count = len(sf_groups)
+    for sf_group in sf_groups:
+        group_name = sf_group.sf_group
+        
+        # Получаем игроков группы, отсортированных по posev_sf
+        players_id = list(sf_groups.select().where(Choice.sf_group == group_name).order_by(Choice.posev_sf))
+        pl_id_list = []
+        for k in players_id:
+            pl_id_list.append(k.player_choice_id)
+
+        # if len(players_id) == 4:
+        if len(pl_id_list) == 4:
+            # Туры для 4-х спортсменов в группе
+            tours_list = [
+                (1, 3), (2, 4),  # 1 тур
+                (1, 2), (3, 4),  # 2 тур
+                (1, 4), (2, 3)   # 3 тур
+            ]
+            
+            for tour_num, (pos1, pos2) in enumerate(tours_list, 1):
+                pl1_choice_id = pl_id_list[pos1 - 1]
+                pl2_choice_id = pl_id_list[pos2 - 1]
+                pl1_fio = Player.select().where((Player.title_id == title_id()) & (Player.id == pl1_choice_id)).get()
+                pl2_fio = Player.select().where((Player.title_id == title_id()) & (Player.id == pl2_choice_id)).get()
+                player1 = pl1_fio.fio_city
+                player2 = pl2_fio.fio_city
+                tours_str = f"{pos1}-{pos2}"
+                # Создаем запись в Result
+                with db:
+                    results = Result(number_group=group_name, system_stage=stage, 
+                                         player1=player1, player2=player2,
+                                         tours=tours_str, title_id=title_id(), 
+                                         system_id=id_system).save()
+ 
+def transfer_previous_matches():
+    """Перенос встреч, которые уже игрались в предварительном этапе"""
+    
+    # Получаем все встречи полуфинала
+    semi_matches = Result.select().where((Result.title_id == title_id()) & (Result.tours.contains('тур')))
+    
+    for match in semi_matches:
+        # Ищем в таблице Result встречи из предварительного этапа
+        previous_match = Result.select().where(
+            (Result.player1 == match.player1) & 
+            (Result.player2 == match.player2) &
+            (Result.tours != match.tours)
+        ).first()
+        
+        if previous_match:
+            # Копируем данные из предыдущей встречи
+            match.winner = previous_match.winner
+            match.score_in_game = previous_match.score_in_game
+            match.score_in_win = previous_match.score_in_win
+            match.loser = previous_match.loser
+            match.score_loser = previous_match.score_loser
+            match.save()
+        else:
+            # Ищем встречу с переставленными игроками
+            previous_match_rev = Result.select().where(
+                (Result.player1 == match.player2) & 
+                (Result.player2 == match.player1) &
+                (Result.tours != match.tours)
+            ).first()
+            
+            if previous_match_rev:
+                match.winner = previous_match_rev.winner
+                match.score_in_game = previous_match_rev.score_in_game
+                match.score_in_win = previous_match_rev.score_in_win
+                match.loser = previous_match_rev.loser
+                match.score_loser = previous_match_rev.score_loser
+                match.save()
+
+    # id_system = system_id(stage)
+    # system_stage = system.select().where(System.id == id_system).get()
+    # mesta_exit = system_stage.mesta_exit
+    # # определение мест в ПФ, выходящих из группы
+    # if stage == "1-й полуфинал": 
+    #     mesto_first = 1
+    # else:
+    #     system_stage = system.select().where(System.stage == "1-й полуфинал").get()
+    #     mesta_exit = system_stage.mesta_exit
+    #     mesto_first = mesta_exit + 1
+
+    # for k in range(1, total_group + 1):
+    #     choices = Choice.select().where((Choice.title_id == title_id()) & (Choice.group == f"{k} группа"))
+    #     p = 0 if k <= total_group // 2 else mesta_exit
+    #     n = k if k <= total_group // 2 else total_group - k + 1
+    #     for i in range(mesto_first, mesta_exit + mesto_first):
+    #         p += 1
+    #         choice_mesta = choices.select().where(Choice.mesto_group == i)
+    #         count = len(choice_mesta)
+    #         if count == 0:
+    #             break
+    #         with db:
+    #             choice_mesta = choices.select().where(Choice.mesto_group == i).get() # записывает в db номер полуфинала
+    #             choice_mesta.semi_final = stage
+    #             choice_mesta.sf_group = f"{n} группа" # номера группы полуфинала
+    #             choice_mesta.posev_sf = p # номер посева
+    #             choice_mesta.save()
+    # with db:  # записывает в систему, что произведена жеребъевка
+    #     system = System.get(System.id == id_system)
+    #     system.choice_flag = True
+    #     system.save()
+    # player_in_table_group_and_write_Game_list_Result(stage)
 
 def choice_gr_automat():
     "новая система жеребьевки групп"
@@ -9503,7 +9832,6 @@ def choice_gr_automat():
             fill_table_after_choice()
             player_in_table_group_and_write_Game_list_Result(stage)
 
-
 def choice_save_manual_group(id_fam_region_list, group):
     """записывает в таблицу -Choice- результаты ручной жеребьевки"""
     posev = 0
@@ -9524,7 +9852,6 @@ def choice_save_manual_group(id_fam_region_list, group):
                         choice.posev_group = posev
                         choice.save()
         row += 1
-
 
 def out_red(text):
     "\033[34m{}".format(text)
@@ -16209,6 +16536,12 @@ def find_match_numbers_in_table(table_data, fin):
     match_positions = {}
     schedule_positions = {}
     schedule = {}
+    flag = 0
+    # == НАХОДИТ КАКАЯ СЕТКА (-2) ИЛИ НЕТ ====
+    systems = System.select().where((System.title_id == title_id()) & (System.stage == fin)).get()
+    net_label = systems.label_string
+    if net_label == "Сетка (-2) на 32 участников":
+        flag = 1
     for row_idx, row in enumerate(table_data):
         for col_idx, cell in enumerate(row):
             if cell and isinstance(cell, str):
@@ -16220,7 +16553,9 @@ def find_match_numbers_in_table(table_data, fin):
                     if col_idx != 0 and match_num > 0:
                         schedule_dict = find_match_numbers_in_results_db(match_num, fin)
                         schedule_full_str = schedule_str(schedule_dict, match_num)
-                        if match_num == 60:
+                        # ЕСЛИ СЕТКА 32-2
+                        if flag == 1 and match_num == 60:
+                        # if match_num == 60:
                             row_idx +=3
                         match_positions[match_num] = (row_idx, col_idx)
                         schedule_positions[match_num] = (row_idx, col_idx - 1)
@@ -22787,22 +23122,31 @@ def convert_rus_date_to_mysql(schedule_date_str):
 def schedule_net():
     """Создает расписание встречи в финалах по сетке по дате времени и номеру стола"""
     fin = []
-
+    stage_list = []
+    group_list = ["Предварительный", "1-й полуфинал", "2-й полуфинал"]
     system = System.select().where(System.title_id == title_id())
-    table, ok = QInputDialog.getInt(
-                    my_win, "Cтолы", "Укажите количество столов.",0)
-    my_win.lineEdit_all_table.setText(str(table))
-    
+    for i in my_win.frame_4.findChildren(QRadioButton): # перебирает радиокнопки и определяет какая отмечена
+        if i.isChecked():
+            schedule_current = i.text()
+            break
+    if schedule_current == "Полное":    
+        table, ok = QInputDialog.getInt(
+                        my_win, "Cтолы", "Укажите количество столов.",0)
+        my_win.lineEdit_all_table.setText(str(table))
+    # ==== вариант с группами или финалами по сетке ===
     for sys in system:  # отбирает финалы с сеткой
-        if sys.stage != "Предварительный" and sys.stage != "Полуфиналы":
-            txt = sys.label_string
-            txt = txt[:5]
-            if txt == "Сетка":
-                fin.append(sys.stage)
+        if sys.type_table != "круг":
+            stage = sys.stage
+            stage_list.append(stage)
     fin, ok = QInputDialog.getItem(
-                    my_win, "Финалы", "Выберите финал, где создать расписание.", fin, 0, False)
-
-    player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
+            my_win, "Этапы", "Выберите этап, где создать расписание.", stage_list, 0, False)
+    if ok:
+        if fin in group_list: # если групповые этапы
+            player_list = Result.select().where((Result.title_id == title_id()) & (Result.system_stage == fin))
+        else: # финал по сетке
+            player_list = Result.select().where((Result.title_id == title_id()) & (Result.number_group == fin))
+    else:
+        return
 
     fill_table_schedule(player_list)
     load_combo_schedule_date()
@@ -23062,7 +23406,8 @@ def fill_table_schedule(player_list):
    
     player_selected = player_list.dicts().execute()    
     row_count = len(player_selected)  # кол-во строк в таблице
-    num_columns = [0, 2, 3, 4, 5, 17, 18, 19, 20] # номера столбцов в таблице базы данных, откуда брать данные
+    # num_columns = [0, 2, 3, 4, 5, 17, 18, 19, 20, 14] # номера столбцов в таблице базы данных, откуда брать данные
+    num_columns = [0, 2, 3, 4, 5, 17, 18, 19, 20, 14] # номера столбцов в таблице базы данных, откуда брать данные
     # выделение несколких строк по клику мышью
     my_win.tableView_schedule.setSelectionBehavior(QAbstractItemView.SelectRows)
     my_win.tableView_schedule.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -23080,12 +23425,15 @@ def fill_table_schedule(player_list):
                 model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'стадия'])
                 data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6] 
             else:
-                model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол', 'стадия'])               
+                model.setHorizontalHeaderLabels(['id','Этап', '№ встречи','Игрок-1', 'Игрок-2', 'дата', 'время', 'стол', 'стадия', 'тур'])               
                 item_7_txt = str(list(player_selected[row].values())[num_columns[6]])
                 item_7 = item_7_txt[:5] 
                 item_8 = str(list(player_selected[row].values())[num_columns[7]])
                 item_9 = str(list(player_selected[row].values())[num_columns[8]])
-                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9]
+                
+                # data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9]
+                item_10 = str(list(player_selected[row].values())[num_columns[9]])
+                data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9, item_10]
 
             data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
     my_win.tableView_schedule.setModel(model)
@@ -23124,6 +23472,19 @@ def load_combo_schedule_date():
         date_list.append(date_str)
     my_win.comboBox_schedule_date.addItems(date_list)
     my_win.comboBox_filter_schedule_date.addItems(date_list)
+
+def load_combo_schedule_tours():
+    """загружает в комбо туры встреч для расписания"""
+    tour_list = []
+    stage =  my_win.comboBox_select_stage_schedule.currentText()
+    my_win.comboBox_filter_schedule_tour.clear()
+
+    results = Result.select().where((Result.title_id == title_id()) & (Result.system_stage == stage))
+    for i in results:
+        tour = i.tours
+        if tour not in tours_list:
+            tour_list.append(tour)
+    my_win.comboBox_filter_schedule_tour.addItems(tour_list)
 
 def load_combo_schedule_time():
     """Заполнение комбобокса для фильтра расписания"""
@@ -23538,13 +23899,15 @@ def schedule_field():
         my_win.lineEdit_all_table.show()
         my_win.comboBox_begunok_time.show()
         my_win.label_79.show()
+        my_win.label_91.show()
     else:
         my_win.timeEdit_schedule.hide() 
-        my_win.btn_select_range.hide()
+        my_win.btn_select_range.show()
         my_win.btn_number_table.hide()
         my_win.lineEdit_all_table.hide()
         my_win.comboBox_begunok_time.hide()
-        my_win.label_79.hide()  
+        my_win.label_79.hide() 
+        my_win.label_91.hide() 
 
 def format_date_schedule():
     """форматирутет дату расписания для DB"""
@@ -23570,6 +23933,196 @@ def schedule_reset():
     my_win.comboBox_filter_schedule_time.clear()
     my_win.comboBox_select_stage_schedule.setCurrentIndex(0)
     schedule_filter()
+
+# class GroupSchedulePDF:
+#     # from reportlab.lib import colors
+#     # from reportlab.lib.pagesizes import A4, landscape
+#     # from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
+#     # from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+#     # from reportlab.lib.units import cm
+#     # from reportlab.pdfbase import pdfmetrics
+#     # from reportlab.pdfbase.ttfonts import TTFont
+#     # from datetime import datetime
+
+#     def __init__(self, filename='schedule.pdf'):
+#         self.filename = filename
+#         self.doc = SimpleDocTemplate(
+#             filename,
+#             pagesize=landscape(A4),
+#             rightMargin=1*cm,
+#             leftMargin=1*cm,
+#             topMargin=1.5*cm,
+#             bottomMargin=1*cm
+#         )
+#         self.styles = getSampleStyleSheet()
+#         self.elements = []
+        
+#     def add_title(self):
+#         """Добавление заголовка"""
+#         title_style = PS(
+#             'CustomTitle',
+#             parent=self.styles['Heading1'],
+#             fontSize=18,
+#             alignment=1,
+#             textColor=colors.darkblue,
+#             spaceAfter=20
+#         )
+#         title = Paragraph("Расписание игр", title_style)
+#         self.elements.append(title)
+        
+#         # Дата создания
+#         date_style = PS(
+#             'DateStyle',
+#             parent=self.styles['Normal'],
+#             fontSize=10,
+#             alignment=2,
+#             textColor=colors.grey
+#         )
+#         date_text = Paragraph(f"Создано: {datetime.now().strftime('%d.%m.%Y %H:%M')}", date_style)
+#         self.elements.append(date_text)
+#         self.elements.append(Spacer(1, 10))
+    
+#     def create_group_table(self, group_name, rows):
+#         """Создание таблицы для одной группы"""
+        
+#         # Заголовок группы
+#         group_style = PS(
+#             'GroupStyle',
+#             parent=self.styles['Heading2'],
+#             fontSize=14,
+#             textColor=colors.darkblue,
+#             spaceAfter=5,
+#             spaceBefore=10,
+#             alignment=0
+#         )
+#         self.elements.append(Paragraph(f"Группа: {group_name}", group_style))
+        
+#         # Подготовка данных
+#         table_data = []
+        
+#         # Заголовки
+#         headers = ['№', 'Дата', 'Время', 'Стол', 'Тур', 'Игрок 1', 'Игрок 2']
+#         table_data.append(headers)
+        
+#         # Данные
+#         for idx, row in enumerate(rows, 1):
+#             # Форматирование даты
+#             if row['schedule_date']:
+#                 if isinstance(row['schedule_date'], datetime):
+#                     date_str = row['schedule_date'].strftime('%d.%m.%Y')
+#                 else:
+#                     date_str = str(row['schedule_date'])
+#             else:
+#                 date_str = ''
+            
+#             table_row = [
+#                 str(idx),
+#                 date_str,
+#                 str(row['schedule_time'] or ''),
+#                 str(row['schedule_table'] or ''),
+#                 str(row['tours'] or ''),
+#                 str(row['player1'] or ''),
+#                 str(row['player2'] or '')
+#             ]
+#             table_data.append(table_row)
+        
+#         # Настройка ширины колонок
+#         col_widths = [0.8*cm, 2.2*cm, 1.8*cm, 1.8*cm, 1.8*cm, 4.5*cm, 4.5*cm]
+        
+#         # Создание таблицы
+#         table = Table(table_data, colWidths=col_widths, repeatRows=1)
+        
+#         # Стили
+#         style = TableStyle([
+#             # Заголовок
+#             ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
+#             ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+#             ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+#             ('FONTNAME', (0, 0), (-1, 0), 'DejaVuSerif-Bold'),
+#             ('FONTSIZE', (0, 0), (-1, 0), 10),
+            
+#             # Все ячейки
+#             ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+#             ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+#             ('FONTNAME', (0, 1), (-1, -1), 'DejaVuSerif'),
+#             ('FONTSIZE', (0, 1), (-1, -1), 9),
+#             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            
+#             # Границы
+#             ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+#             ('BOX', (0, 0), (-1, -1), 1, colors.black),
+            
+#             # Выравнивание
+#             ('ALIGN', (0, 1), (0, -1), 'CENTER'),
+#             ('ALIGN', (2, 1), (4, -1), 'CENTER'),
+            
+#             # Чередование цветов
+#             ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.whitesmoke, colors.white]),
+#         ])
+        
+#         table.setStyle(style)
+#         self.elements.append(table)
+#         self.elements.append(Spacer(1, 15))
+    
+#     def build(self, grouped_data):
+#         """Построение PDF"""
+#         self.add_title()
+        
+#         for group_name, rows in grouped_data.items():
+#             self.create_group_table(group_name, rows)
+        
+#         self.doc.build(self.elements)
+#         print(f"PDF создан: {self.filename}")
+
+#     def main():
+  
+#         # ====
+#         result_group = Result.select().where(Result.title_id == title_id())
+        
+#         # Группировка данных
+#         grouped_data = {}
+
+#         # query = (result_group.select(Result.id, fn.ROW_NUMBER().over(order_by=[Result.id]).alias('row_num'))
+#         #         .order_by(Result.id))
+
+#         for row in result_group:
+#             group = row.number_group
+#             # group = row['number_group']
+#             if group not in grouped_data:
+#                 grouped_data[group] = []
+#             grouped_data[group].append(row)
+        
+#         # Создание PDF
+#         pdf = GroupSchedulePDF('groups_schedule.pdf')
+#         pdf.build(grouped_data)
+        
+    # except mysql.connector.Error as error:
+    #     print(f"Ошибка MySQL: {error}")
+    # finally:
+    #     if connection.is_connected():
+    #         cursor.close()
+    #         connection.close()
+# def get_row_number_by_id(row_id):
+#     """Получить порядковый номер пользователя по ID"""
+    
+#     # Подзапрос с нумерацией
+#     subquery = (Result
+#                 .select(Result.id, 
+#                         fn.ROW_NUMBER().over(order_by=[Result.id]).alias('row_num'))
+#                 .alias('numbered_users'))
+    
+#     # Основной запрос для получения номера конкретного пользователя
+#     query = (Result
+#              .select(subquery.c.row_num)
+#              .from_(subquery)
+#              .where(subquery.c.id == Result_id))
+#     Result
+#     result = query.scalar()
+#     return result
+
+# Использование
+# user_row = get_row_number_by_id(42)
+# print(f"Пользователь с ID 42 находится на позиции {user_row}")
 
 # def proba():
 #     choices = Choice.select()
@@ -23658,7 +24211,7 @@ def schedule_reset():
 #         migrate(migrator.add_column('results', 'stage_net', CharField(null=True))) # null=True допускает пустое значение
    
 #     db.close()
-# my_win.Button_proba.clicked.connect(whrite_stadia_on_net) # запуск пробной функции
+# my_win.Button_proba.clicked.connect(GroupSchedulePDF.main) # запуск пробной функции
 
 my_win.btn_select_range.clicked.connect(select_rows_with_options)
 my_win.btn_number_table.clicked.connect(select_numbers_tables)
@@ -23766,6 +24319,7 @@ my_win.comboBox_kategor_sec.currentTextChanged.connect(add_referee_to_db)
 my_win.comboBox_select_stage_schedule.currentTextChanged.connect(select_stage_for_schedule)
 my_win.comboBox_select_group_schedule.currentTextChanged.connect(load_combo_schedule_time)
 my_win.comboBox_filter_schedule_date.currentTextChanged.connect(load_combo_schedule_time)
+my_win.comboBox_select_stage_schedule.currentTextChanged.connect(load_combo_schedule_tours)
 
 
 # =======  отслеживание переключение чекбоксов =========

@@ -7519,9 +7519,9 @@
       <widget class="QLabel" name="label_89">
        <property name="geometry">
         <rect>
-         <x>33</x>
+         <x>21</x>
          <y>71</y>
-         <width>59</width>
+         <width>41</width>
          <height>20</height>
         </rect>
        </property>
@@ -7535,15 +7535,15 @@
         </font>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;По дате&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Дата&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_90">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>99</x>
          <y>70</y>
-         <width>82</width>
+         <width>41</width>
          <height>19</height>
         </rect>
        </property>
@@ -7557,7 +7557,7 @@
         </font>
        </property>
        <property name="text">
-        <string>По времени</string>
+        <string>Время</string>
        </property>
       </widget>
       <widget class="QComboBox" name="comboBox_filter_schedule_date">
@@ -7565,7 +7565,7 @@
         <rect>
          <x>3</x>
          <y>90</y>
-         <width>110</width>
+         <width>76</width>
          <height>25</height>
         </rect>
        </property>
@@ -7584,9 +7584,9 @@
       <widget class="QComboBox" name="comboBox_filter_schedule_time">
        <property name="geometry">
         <rect>
-         <x>119</x>
+         <x>85</x>
          <y>90</y>
-         <width>110</width>
+         <width>70</width>
          <height>25</height>
         </rect>
        </property>
@@ -7732,6 +7732,43 @@
        </property>
        <property name="text">
         <string>Печать полных бегунков</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_97">
+       <property name="geometry">
+        <rect>
+         <x>183</x>
+         <y>70</y>
+         <width>41</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <italic>true</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Тур</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_filter_schedule_tour">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>90</y>
+         <width>70</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
        </property>
       </widget>
      </widget>

@@ -1,0 +1,70 @@
+2026-03-18 17:57:28,706 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-03-18 17:57:28,707 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1026, in choice
+    choice_semifinal_automat(stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9135, in choice_semifinal_automat
+    player_in_table_group_and_write_Game_list_Result(stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 6748, in player_in_table_group_and_write_Game_list_Result
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15520, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 14740, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19160, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19258, in tdt_news
+    tbl_tmp[i - 1][1] = fam
+    ~~~~~~~^^^^^^^
+IndexError: list index out of range
+2026-03-18 17:58:31,249 - ERROR - Необработанное исключение: KeyError: 3
+2026-03-18 17:58:31,250 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5988, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8420, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15520, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 14740, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19160, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19271, in tdt_news
+    td_color = score_in_table(td, num_gr)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19504, in score_in_table
+    plr2 = total_score[p2]
+           ~~~~~~~~~~~^^^^
+KeyError: 3
+2026-03-18 17:59:28,012 - ERROR - Необработанное исключение: KeyError: 3
+2026-03-18 17:59:28,012 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5988, in view
+    view_file = made_pdf_table_for_view(sender)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 8420, in made_pdf_table_for_view
+    table_made(pv, stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15520, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 14740, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19160, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19271, in tdt_news
+    td_color = score_in_table(td, num_gr)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 19504, in score_in_table
+    plr2 = total_score[p2]
+           ~~~~~~~~~~~^^^^
+KeyError: 3

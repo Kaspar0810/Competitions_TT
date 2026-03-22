@@ -1,0 +1,14 @@
+2026-03-20 11:40:01,699 - ERROR - Необработанное исключение: AttributeError: 'NoneType' object has no attribute 'selectedRows'
+2026-03-20 11:40:01,701 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5036, in delete_result
+    indices = my_win.tableView_schedule.selectionModel().selectedRows()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'selectedRows'
+2026-03-20 11:40:08,440 - ERROR - Необработанное исключение: AttributeError: 'NoneType' object has no attribute 'selectedRows'
+2026-03-20 11:40:08,443 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 5036, in delete_result
+    indices = my_win.tableView_schedule.selectionModel().selectedRows()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'selectedRows'

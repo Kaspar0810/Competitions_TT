@@ -1,0 +1,26 @@
+2026-03-19 09:07:04,468 - ERROR - Необработанное исключение: UnboundLocalError: cannot access local variable 'begunki_data' where it is not associated with a value
+2026-03-19 09:07:04,469 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 15170, in begunki_made
+    pdf.add_begunki(begunki_data)
+                    ^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'begunki_data' where it is not associated with a value
+2026-03-19 09:07:33,840 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-03-19 09:07:33,841 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1133, in choice
+    posev_data = player_choice_in_setka(fin)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 20783, in player_choice_in_setka
+    posev = choice_setka_automat(fin, flag, count_exit)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 11047, in choice_setka_automat
+    num_id_player = choice_net_automat(full_posev, count_exit, free_num, posevs_num, nums)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 10020, in choice_net_automat
+    placement = draw_out_groups_two_person(sorted_sportsmen, free_num)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9960, in draw_out_groups_two_person
+    num_for_free = sec_half[0] if half_sev == 1 else fir_half[0]
+                                                     ~~~~~~~~^^^
+IndexError: list index out of range
