@@ -1,0 +1,20 @@
+2026-03-22 19:05:54,731 - ERROR - Необработанное исключение: ValueError: invalid literal for int() with base 10: 'None'
+2026-03-22 19:05:54,732 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6073, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8506, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15854, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15074, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19502, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19613, in tdt_news
+    td_color = score_in_table(td, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 19848, in score_in_table
+    plr2 = plr2 + int(tp2)  # прибавляет очки 2-ого игрока
+                  ~~~^^^^^
+ValueError: invalid literal for int() with base 10: 'None'

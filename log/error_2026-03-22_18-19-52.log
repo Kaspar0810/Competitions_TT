@@ -1,0 +1,10 @@
+2026-03-22 18:20:12,572 - ERROR - Необработанное исключение: TypeError: transfer_previous_matches() missing 1 required positional argument: 'stage'
+2026-03-22 18:20:12,574 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1028, in choice
+    choice_semifinal_automat(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9243, in choice_semifinal_automat
+    transfer_previous_matches()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+TypeError: transfer_previous_matches() missing 1 required positional argument: 'stage'

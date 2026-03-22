@@ -1027,14 +1027,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     # === вставить ручной вид жеребьевки
                     choice_semifinal_automat(stage)
 # ======= заполнение сыграныыми играми в группах
-                    reply = msg.information(my_win, 'Уведомление', f"Хотите заполнить {stage} результатами "
-                                                                            f"встреч, сыгранных в группах.",                                                                            
-                                            msg.Ok,
-                                            msg.Cancel)
-                    if reply == msg.Ok:
-                        load_playing_game_in_table_for_semifinal(stage)
-                    else:
-                        return
+                    # reply = msg.information(my_win, 'Уведомление', f"Хотите заполнить {stage} результатами "
+                    #                                                         f"встреч, сыгранных в группах.",                                                                            
+                    #                         msg.Ok,
+                    #                         msg.Cancel)
+                    # if reply == msg.Ok:
+                    #     load_playing_game_in_table_for_semifinal(stage)
+                    # else:
+                    #     return
                     add_open_tab(tab_page="Результаты")
                     my_win.tabWidget.setCurrentIndex(4)
                     my_win.ed_etap_Action.setEnabled(True) # включает меню - редактирование жеребьеввки групп
@@ -9240,7 +9240,7 @@ def choice_semifinal_automat(stage):
     print("Созданы встречи для полуфиналов")
     
     # 4. Переносим результаты предыдущих встреч
-    transfer_previous_matches()
+    transfer_previous_matches(stage)
     print("Перенесены результаты предыдущих встреч")
     
     print("Жеребьевка полуфинала успешно завершена!")
@@ -9355,16 +9355,18 @@ def fill_semi_final_columns(semi_groups):
 
 def create_semi_final_matches(stage):
     """Создание встреч для групп полуфинала"""
- 
+    group_name_list = []
     id_system = system_id(stage)
 
     sf_groups = Choice.select().where((Choice.title_id == title_id()) & (Choice.semi_final == 1))
-    count = len(sf_groups)
+
     for sf_group in sf_groups:
         group_name = sf_group.sf_group
-        
+        if group_name not in group_name_list:
+            group_name_list.append(group_name)
+    for gr in group_name_list:
         # Получаем игроков группы, отсортированных по posev_sf
-        players_id = list(sf_groups.select().where(Choice.sf_group == group_name).order_by(Choice.posev_sf))
+        players_id = list(sf_groups.select().where(Choice.sf_group == gr).order_by(Choice.posev_sf))
         pl_id_list = []
         for k in players_id:
             pl_id_list.append(k.player_choice_id)
@@ -9372,10 +9374,10 @@ def create_semi_final_matches(stage):
         # if len(players_id) == 4:
         if len(pl_id_list) == 4:
             # Туры для 4-х спортсменов в группе
-            tours_list = [
-                (1, 3), (2, 4),  # 1 тур
-                (1, 2), (3, 4),  # 2 тур
-                (1, 4), (2, 3)   # 3 тур
+            tours_list = [                
+                (1, 2), (3, 4),  # 1 тур
+                (1, 4), (2, 3),  # 2 тур
+                (1, 3), (2, 4)  # 3 тур
             ]
             
             for tour_num, (pos1, pos2) in enumerate(tours_list, 1):
@@ -9388,47 +9390,63 @@ def create_semi_final_matches(stage):
                 tours_str = f"{pos1}-{pos2}"
                 # Создаем запись в Result
                 with db:
-                    results = Result(number_group=group_name, system_stage=stage, 
+                    results = Result(number_group=gr, system_stage=stage, 
                                          player1=player1, player2=player2,
                                          tours=tours_str, title_id=title_id(), 
                                          system_id=id_system).save()
  
-def transfer_previous_matches():
+def transfer_previous_matches(stage):
     """Перенос встреч, которые уже игрались в предварительном этапе"""
     
     # Получаем все встречи полуфинала
-    semi_matches = Result.select().where((Result.title_id == title_id()) & (Result.tours.contains('тур')))
+    # semi_matches = Result.select().where((Result.title_id == title_id()) & (Result.tours.contains('тур')))
+    semi_matches = Result.select().where((Result.title_id == title_id()) & (Result.system_stage == stage))
     
     for match in semi_matches:
         # Ищем в таблице Result встречи из предварительного этапа
+        # previous_match = Result.select().where(
+        #     (Result.player1 == match.player1) & 
+        #     (Result.player2 == match.player2) &
+        #     (Result.tours != match.tours)
+        # ).first()
+
         previous_match = Result.select().where(
+            (Result.title_id == title_id()) &
             (Result.player1 == match.player1) & 
-            (Result.player2 == match.player2) &
-            (Result.tours != match.tours)
+            (Result.player2 == match.player2)
         ).first()
         
         if previous_match:
             # Копируем данные из предыдущей встречи
             match.winner = previous_match.winner
+            match.points_win = previous_match.points_win
             match.score_in_game = previous_match.score_in_game
-            match.score_in_win = previous_match.score_in_win
-            match.loser = previous_match.loser
+            match.score_win = previous_match.score_win
+            match.loser = previous_match.loser        
             match.score_loser = previous_match.score_loser
+            match.points_loser = previous_match.points_loser
             match.save()
         else:
             # Ищем встречу с переставленными игроками
+            # previous_match_rev = Result.select().where(
+            #     (Result.player1 == match.player2) & 
+            #     (Result.player2 == match.player1) &
+            #     (Result.tours != match.tours)
+            # ).first()
             previous_match_rev = Result.select().where(
+                (Result.title_id == title_id()) &
                 (Result.player1 == match.player2) & 
-                (Result.player2 == match.player1) &
-                (Result.tours != match.tours)
+                (Result.player2 == match.player1)
             ).first()
             
             if previous_match_rev:
                 match.winner = previous_match_rev.winner
+                match.points_win = previous_match_rev.points_win
                 match.score_in_game = previous_match_rev.score_in_game
-                match.score_in_win = previous_match_rev.score_in_win
-                match.loser = previous_match_rev.loser
+                match.score_win = previous_match_rev.score_win
+                match.loser = previous_match_rev.loser        
                 match.score_loser = previous_match_rev.score_loser
+                match.points_loser = previous_match_rev.points_loser
                 match.save()
 
     # id_system = system_id(stage)

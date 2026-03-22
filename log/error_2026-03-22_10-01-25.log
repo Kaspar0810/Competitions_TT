@@ -1,0 +1,158 @@
+2026-03-22 10:19:10,355 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:10,356 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 736, in fast_change_comp
+    button_comp_enabled()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 2137, in button_comp_enabled
+    list_player_pdf(player_list)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5562, in list_player_pdf
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:42,665 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:42,665 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22710, in made_pdf_list
+    list_referee_pdf()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16472, in list_referee_pdf
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:46,890 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:46,891 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22713, in made_pdf_list
+    list_regions_pdf()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16249, in list_regions_pdf
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:48,494 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:48,494 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5562, in list_player_pdf
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:51,241 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:51,241 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22662, in made_list_players_for_pdf_file
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:56,791 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:56,792 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 5562, in list_player_pdf
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:19:58,179 - ERROR - Необработанное исключение: AttributeError: 'NoneType' object has no attribute 'text'
+2026-03-22 10:19:58,179 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22715, in made_pdf_list
+    list_winners_pdf()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16268, in list_winners_pdf
+    bday = my_win.tableWidget.item(l, 2).text()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'text'
+2026-03-22 10:20:00,522 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:00,523 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22662, in made_list_players_for_pdf_file
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:03,077 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: 'table_pdf'
+2026-03-22 10:20:03,077 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 22513, in view_all_page_pdf
+    all_pdf_files_list = os.listdir("table_pdf")
+FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: 'table_pdf'
+2026-03-22 10:20:12,634 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:12,634 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6073, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8506, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15943, in table_made
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:31,608 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:31,608 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6073, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8506, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15943, in table_made
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:42,756 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:20:42,757 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6073, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8506, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15943, in table_made
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:21:08,264 - ERROR - Необработанное исключение: FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
+2026-03-22 10:21:08,264 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6073, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8506, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15943, in table_made
+    change_dir(catalog)
+    ~~~~~~~~~~^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 21255, in change_dir
+    os.chdir("table_pdf") # переходит в каталог pdf
+    ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Не удается найти указанный файл: 'table_pdf'
