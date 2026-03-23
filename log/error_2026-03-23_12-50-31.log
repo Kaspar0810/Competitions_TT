@@ -1,0 +1,12 @@
+2026-03-23 12:51:02,201 - ERROR - Необработанное исключение: NameError: name 'swap_ofset' is not defined
+2026-03-23 12:51:02,205 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1028, in choice
+    choice_semifinal_automat(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9229, in choice_semifinal_automat
+    semi_groups = create_semi_final_groups(stage)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9321, in create_semi_final_groups
+    pairs[pairs.index((group1_num, group2_num))] = (group1_num - swap_ofset, group2_num)
+                                                                 ^^^^^^^^^^
+NameError: name 'swap_ofset' is not defined
