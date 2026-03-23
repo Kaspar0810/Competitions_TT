@@ -9788,7 +9788,7 @@ def create_matches_for_semi_final(semi_final_num, sf_groups):
                     Result.create(
                         system_stage=f"{semi_final_num}-й полуфинал",
                         number_group=group_name,
-                        tours=tour,
+                        tours=tours_str,
                         player1=player1.family,
                         player2=player2.family
                     )
