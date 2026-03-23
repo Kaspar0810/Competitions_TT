@@ -9446,8 +9446,7 @@ def _choice_semifinal_automat(stage):
 
 # ======= 2-й вариант =================================
 def choice_semifinal_automat(stage):
-    # import random
-    # from peewee import *
+    """автоматическая жеребьевка полуфиналов"""
     try:
         # Очищаем предыдущие данные полуфиналов
         # Choice.update(
@@ -9481,11 +9480,11 @@ def choice_semifinal_automat(stage):
         # Создаем 1-й полуфинал
         if stage == "1-й полуфинал":
             sf1_groups = create_semi_final_1(mesto_first)
-            create_matches_for_semi_final(1, sf1_groups)
+            create_matches_for_semi_final(1, sf1_groups, stage)
         else:
             # Создаем 2-й полуфинал
             sf2_groups = create_semi_final_2()
-            create_matches_for_semi_final(2, sf2_groups)
+            create_matches_for_semi_final(2, sf2_groups, stage)
         
         # # Создаем встречи для обоих полуфиналов
         # create_matches_for_semi_final(1, sf1_groups)
@@ -9505,44 +9504,6 @@ def choice_semifinal_automat(stage):
         raise
     finally:
         db.close()
-# # Подключение к базе данных
-# db = MySQLDatabase('your_database', user='your_user', password='your_password', host='localhost')
-
-# # Определение моделей
-# class Choice(Model):
-#     family = CharField()  # фамилия имя/регион
-#     region = CharField()  # регион
-#     group = CharField()   # группа в предварительном этапе (например, "1 группа")
-#     mesto_group = IntegerField()  # занятое место в предварительном этапе
-#     semi_final = IntegerField(null=True)  # номер полуфинала (1 или 2)
-#     sf_group = CharField(null=True)  # группа в полуфинале (например, "1 группа")
-#     posev_sf = IntegerField(null=True)  # порядковый номер в группе полуфинала
-    
-#     class Meta:
-#         database = db
-#         table_name = 'Choice'
-
-# class Result(Model):
-#     system_stage = CharField(null=True)  # этап соревнований (1-й полуфинал, 2-й полуфинал)
-#     number_group = CharField(null=True)  # номер группы в полуфинале
-#     tours = CharField(null=True)  # номера игроков, которые встречаются (1-2, 3-4 и т.д.)
-#     player1 = CharField()  # фамилия имя/регион первого игрока
-#     player2 = CharField()  # фамилия имя/регион второго игрока
-#     winner = CharField(null=True)  # победитель
-#     points_win = IntegerField(default=2, null=True)  # очки победителя
-#     score_in_game = CharField(null=True)  # счет в игре (например, "3:0")
-#     score_win = CharField(null=True)  # забитые очки победителя (например, "3,7,6")
-#     loser = CharField(null=True)  # проигравший
-#     points_loser = IntegerField(default=1, null=True)  # очки проигравшего
-#     score_loser = CharField(null=True)  # счет проигравшего (например, "0:3")
-    
-#     class Meta:
-#         database = db
-#         table_name = 'Result'
-
-# # Создание таблиц (если не существуют)
-# db.connect()
-# db.create_tables([Choice, Result], safe=True)
 
 def get_players_by_group_and_place(group_num, places):
     """
@@ -9719,13 +9680,14 @@ def create_semi_final_2():
     print(f"Сформировано {len(sf2_groups)} групп 2-го полуфинала")
     return sf2_groups
 
-def create_matches_for_semi_final(semi_final_num, sf_groups):
+def create_matches_for_semi_final(semi_final_num, sf_groups, stage):
     """
     Создание встреч для групп полуфинала
     """
     print(f"\nСоздаем встречи для {semi_final_num}-го полуфинала...")
+
     results = Result.select().where(Result.title_id == title_id())
-    
+    id_system = system_id(stage)
     # Туры для 4-х спортсменов
     tours_4 = ['1-2', '3-4', '1-4', '2-3', '1-3', '2-4']
     # Туры для 3-х спортсменов (если в группе 3 человека)
@@ -9761,20 +9723,22 @@ def create_matches_for_semi_final(semi_final_num, sf_groups):
                 player1 = pl1_fio.fio_city
                 player2 = pl2_fio.fio_city
                 tours_str = f"{pos1}-{pos2}"
-                # Проверяем, не играли ли эти игроки в предварительном этапе
+ 
+                with db:
+                    res = Result(number_group=group_name, system_stage=stage, 
+                            player1=player1, player2=player2,
+                            tours=tours_str, title_id=title_id(), 
+                            system_id=id_system)
+                    res.save()
+                last_id = res.id
+                    
+                 # Проверяем, не играли ли эти игроки в предварительном этапе
                 previous_match = results.select().where(
                     ((Result.player1 == player1) & (Result.player2 == player2)) |
                     ((Result.player1 == player2) & (Result.player2 == player1))
                 ).first()
-                
-                if previous_match:
-                    # Копируем результаты предыдущей встречи
-                    Result.create(
-                        system_stage=f"{semi_final_num}-й полуфинал",
-                        number_group=group_name,
-                        tours=tours_str,
-                        player1=player1,
-                        player2=player2,
+                if previous_match:                       
+                    Result.update(system_stage=f"{semi_final_num}-й полуфинал",
                         winner=previous_match.winner,
                         points_win=previous_match.points_win,
                         score_in_game=previous_match.score_in_game,
@@ -9782,19 +9746,10 @@ def create_matches_for_semi_final(semi_final_num, sf_groups):
                         loser=previous_match.loser,
                         points_loser=previous_match.points_loser,
                         score_loser=previous_match.score_loser
-                    )
-                else:
-                    # Создаем пустую встречу без результатов
-                    Result.create(
-                        system_stage=f"{semi_final_num}-й полуфинал",
-                        number_group=group_name,
-                        tours=tours_str,
-                        player1=player1.family,
-                        player2=player2.family
-                    )
+                    ).where(Result.id == last_id).execute()
     
     # Подсчитываем созданные встречи
-    total_matches = Result.select().where(
+    total_matches = results.select().where(
         Result.system_stage == f"{semi_final_num}-й полуфинал"
     ).count()
     print(f"Создано {total_matches} встреч для {semi_final_num}-го полуфинала")
@@ -9806,10 +9761,10 @@ def transfer_matches_from_previous_stage():
     """
     print("\nПереносим результаты встреч из предварительного этапа...")
     
+    results = Result.select().where(Result.title_id == title_id())
+    
     # Получаем все встречи полуфиналов
-    semi_matches = Result.select().where(
-        Result.system_stage.is_null(False)
-    )
+    semi_matches = results.select().where(Result.system_stage.is_null(False))
     
     transferred_count = 0
     
@@ -9817,11 +9772,11 @@ def transfer_matches_from_previous_stage():
         # Проверяем, является ли тур одним из первых двух (1-2 или 3-4)
         if match.tours in ['1-2', '3-4']:
             # Ищем предыдущую встречу этих игроков
-            previous_match = Result.select().where(
+            previous_match = results.select().where(
                 ((Result.player1 == match.player1) & (Result.player2 == match.player2)) |
                 ((Result.player1 == match.player2) & (Result.player2 == match.player1))
             ).where(
-                Result.system_stage.is_null()  # встречи предварительного этапа
+                results.system_stage.is_null()  # встречи предварительного этапа
             ).first()
             
             if previous_match and not match.winner:

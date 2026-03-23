@@ -1,0 +1,13 @@
+2026-03-23 22:36:33,407 - ERROR - Необработанное исключение: AttributeError: 'ModelSelect' object has no attribute 'system_stage'
+2026-03-23 22:36:33,408 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1028, in choice
+    choice_semifinal_automat(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9494, in choice_semifinal_automat
+    transfer_matches_from_previous_stage()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9779, in transfer_matches_from_previous_stage
+    results.system_stage.is_null()  # встречи предварительного этапа
+    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ModelSelect' object has no attribute 'system_stage'
