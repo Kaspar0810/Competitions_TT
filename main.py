@@ -810,8 +810,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         subprocess.run(restore_command, shell=True)
         cnx.commit()
 
-        print("Database restored successfully!")
-        my_win.statusbar.showMessage("Импорт базы данных завершен успешно", 5000)
+        # print("Database restored successfully!")
+        # my_win.statusbar.showMessage("Импорт базы данных завершен успешно", 5000)
+        QtWidgets.QMessageBox.information(
+                    my_win, "Успешно", f"Импорт DB : Импорт базы данных завершен успешно!"
+                )
         cursor.close()
         cnx.close()
         my_win.tabWidget.setCurrentIndex(1)
@@ -9448,15 +9451,6 @@ def _choice_semifinal_automat(stage):
 def choice_semifinal_automat(stage):
     """автоматическая жеребьевка полуфиналов"""
     try:
-        # Очищаем предыдущие данные полуфиналов
-        # Choice.update(
-        #     semi_final=None,
-        #     sf_group=None,
-        #     posev_sf=None
-        # ).where(
-        #     (Choice.semi_final == 1)
-        #     # (Choice.semi_final == 1) | (Choice.semi_final == 2)
-        # ).execute()
         #  """Создание групп 1-го полуфинала с учетом регионов"""
         system = System.select().where(System.title_id == title_id())
         systems = system.select().where(System.stage == "Предварительный").get()
@@ -9473,10 +9467,6 @@ def choice_semifinal_automat(stage):
             mesta_exit = system_stage.mesta_exit
         mesto_first = mesta_exit + 1
         
-        # Result.delete().where(
-        #     Result.system_stage.is_null(False)
-        # ).execute()
-        
         # Создаем 1-й полуфинал
         if stage == "1-й полуфинал":
             sf1_groups = create_semi_final_1(mesto_first)
@@ -9486,17 +9476,14 @@ def choice_semifinal_automat(stage):
             sf2_groups = create_semi_final_2()
             create_matches_for_semi_final(2, sf2_groups, stage)
         
-        # # Создаем встречи для обоих полуфиналов
-        # create_matches_for_semi_final(1, sf1_groups)
-        # create_matches_for_semi_final(2, sf2_groups)
-        
         # Переносим результаты из предварительного этапа
-        transfer_matches_from_previous_stage()
+        transfer_matches_from_previous_stage(stage)
+
+        QtWidgets.QMessageBox.information(
+                    my_win, "Успешно", f"Жеребьевка : {stage}\nс переносом игр из предварительного этапа\nзавершилась успешно!"
+                )
         
-        # Выводим статистику
-        print_statistics()
-        
-        print("\nЖеребьевка полуфиналов успешно завершена!")
+        # print("\nЖеребьевка полуфиналов успешно завершена!")
         
     except Exception as e:
         print(f"Произошла ошибка: {e}")
@@ -9754,7 +9741,7 @@ def create_matches_for_semi_final(semi_final_num, sf_groups, stage):
     ).count()
     print(f"Создано {total_matches} встреч для {semi_final_num}-го полуфинала")
 
-def transfer_matches_from_previous_stage():
+def transfer_matches_from_previous_stage(stage):
     """
     Перенос результатов встреч, сыгранных в предварительном этапе,
     для туров 1-2 и 3-4
@@ -9764,7 +9751,8 @@ def transfer_matches_from_previous_stage():
     results = Result.select().where(Result.title_id == title_id())
     
     # Получаем все встречи полуфиналов
-    semi_matches = results.select().where(Result.system_stage.is_null(False))
+    # semi_matches = results.select().where(Result.system_stage.is_null(False))
+    semi_matches = results.select().where(Result.system_stage == stage)
     
     transferred_count = 0
     
@@ -9776,7 +9764,8 @@ def transfer_matches_from_previous_stage():
                 ((Result.player1 == match.player1) & (Result.player2 == match.player2)) |
                 ((Result.player1 == match.player2) & (Result.player2 == match.player1))
             ).where(
-                results.system_stage.is_null()  # встречи предварительного этапа
+                # results.system_stage.is_null()  # встречи предварительного этапа
+                Result.system_stage == stage  # встречи предварительного этапа
             ).first()
             
             if previous_match and not match.winner:
@@ -9793,43 +9782,43 @@ def transfer_matches_from_previous_stage():
     
     print(f"Перенесено результатов: {transferred_count}")
 
-def print_statistics():
-    """
-    Вывод статистики по сформированным группам и встречам
-    """
-    print("\n" + "="*50)
-    print("СТАТИСТИКА ЖЕРЕБЬЕВКИ")
-    print("="*50)
+# def print_statistics():
+#     """
+#     Вывод статистики по сформированным группам и встречам
+#     """
+#     print("\n" + "="*50)
+#     print("СТАТИСТИКА ЖЕРЕБЬЕВКИ")
+#     print("="*50)
     
-    # Статистика по игрокам
-    for semi_final in [1, 2]:
-        players = Choice.select().where(Choice.semi_final == semi_final)
-        groups = players.distinct(Choice.sf_group)
+#     # Статистика по игрокам
+#     for semi_final in [1, 2]:
+#         players = Choice.select().where(Choice.semi_final == semi_final)
+#         groups = players.distinct(Choice.sf_group)
         
-        print(f"\n{semi_final}-й полуфинал:")
-        print(f"  Всего игроков: {players.count()}")
-        print(f"  Всего групп: {groups.count()}")
+#         print(f"\n{semi_final}-й полуфинал:")
+#         print(f"  Всего игроков: {players.count()}")
+#         print(f"  Всего групп: {groups.count()}")
         
-        # Информация по каждой группе
-        for group in groups:
-            group_players = players.where(Choice.sf_group == group.sf_group)
-            print(f"  Группа {group.sf_group}: {group_players.count()} игроков")
+#         # Информация по каждой группе
+#         for group in groups:
+#             group_players = players.where(Choice.sf_group == group.sf_group)
+#             print(f"  Группа {group.sf_group}: {group_players.count()} игроков")
     
-    # Статистика по встречам
-    for semi_final in [1, 2]:
-        matches = Result.select().where(Result.system_stage == f"{semi_final}-й полуфинал")
-        filled_matches = matches.where(Result.winner.is_null(False))
+#     # Статистика по встречам
+#     for semi_final in [1, 2]:
+#         matches = Result.select().where(Result.system_stage == f"{semi_final}-й полуфинал")
+#         filled_matches = matches.where(Result.winner.is_null(False))
         
-        print(f"\n{semi_final}-й полуфинал (встречи):")
-        print(f"  Всего встреч: {matches.count()}")
-        print(f"  Заполнено результатами: {filled_matches.count()}")
-        if matches.count() > 0:
-            print(f"  Процент заполнения: {filled_matches.count()/matches.count()*100:.1f}%")
+#         print(f"\n{semi_final}-й полуфинал (встречи):")
+#         print(f"  Всего встреч: {matches.count()}")
+#         print(f"  Заполнено результатами: {filled_matches.count()}")
+#         if matches.count() > 0:
+#             print(f"  Процент заполнения: {filled_matches.count()/matches.count()*100:.1f}%")
 
-def main():
-    """
-    Основная функция
-    """
+# def main():
+#     """
+#     Основная функция
+#     """
     # try:
     #     # Очищаем предыдущие данные полуфиналов
     #     Choice.update(
