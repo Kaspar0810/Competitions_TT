@@ -16687,9 +16687,9 @@ def list_regions_pdf():
     region_list = []
     tit = Title.get(Title.id == title_id())
     short_name = tit.short_name_comp
-    # regions = Player.select().where((Player.title_id == title_id()) & (Player.player != "x"))
-    reg = Player.select().where((Player.title_id == 66) | (Player.title_id == 67))
-    regions = reg.select().where(Player.player != "x")
+    regions = Player.select().where((Player.title_id == title_id()) & (Player.player != "x"))
+    # reg = Player.select().where((Player.title_id == 66) | (Player.title_id == 67))
+    # regions = reg.select().where(Player.player != "x")
 
     for k in regions:
         reg = k.region
@@ -23048,9 +23048,12 @@ def made_list_regions():
     my_win.radioButton_regions.setChecked(True)
     my_win.Button_made_page_pdf.setEnabled(True)
     my_win.tableWidget.clear()
+    my_win.tableWidget.show()
+    my_win.tabWidget.show()
+    # my_win.tabWidget_2.setCurrentIndex(2)
     region_list = []
-    # regions = Player.select().where(Player.title_id == title_id()) 
-    regions = Player.select().where((Player.title_id == 68) | (Player.title_id == 69))
+    regions = Player.select().where(Player.title_id == title_id()) 
+    # regions = Player.select().where((Player.title_id == 68) | (Player.title_id == 69))
     for k in regions:
         reg = k.region
         if reg != "":
