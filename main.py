@@ -9473,7 +9473,7 @@ def choice_semifinal_automat(stage):
             create_matches_for_semi_final(1, sf1_groups, stage)
         else:
             # Создаем 2-й полуфинал
-            sf2_groups = create_semi_final_2()
+            sf2_groups = create_semi_final_2(mesto_first)
             create_matches_for_semi_final(2, sf2_groups, stage)
         
         # Переносим результаты из предварительного этапа
@@ -9597,66 +9597,159 @@ def create_semi_final_1(mesto_first):
     print(f"Сформировано {len(sf_groups)} групп 1-го полуфинала")
     return sf_groups
 
-def create_semi_final_2():
+def create_semi_final_2(mesto_first):
     """
-    Создание групп 2-го полуфинала (игроки с 3-4 мест)
+    Создание групп 2-го полуфинала по 5-ти этапной схеме
     """
-    print("\nНачинаем формирование 2-го полуфинала...")
+    print("\n" + "="*60)
+    print("2-Й ПОЛУФИНАЛ")
+    print("="*60)
     
-    # Собираем игроков с 3-4 мест из всех групп
-    third_fourth_players = []
+    # ============ 1-й ЭТАП: Создаем 16 групп из 3-4 мест групп 1-16 ============
+    print("\n--- 1-й ЭТАП: Создание 16 групп из 3-4 мест групп 1-16 ---")
     
-    for group_num in range(1, 33):
-        group_name = f"{group_num} группа"
-        third_place = Choice.select().where(
-            (Choice.group == group_name) & (Choice.mesto_group == 3)
-        ).first()
-        
-        fourth_place = Choice.select().where(
-            (Choice.group == group_name) & (Choice.mesto_group == 4)
-        ).first()
-        
-        players_in_group = []
-        if third_place:
-            players_in_group.append(third_place)
-        if fourth_place:
-            players_in_group.append(fourth_place)
-        
-        if players_in_group:
-            third_fourth_players.append({
-                'group_num': group_num,
-                'players': players_in_group
-            })
+    # Собираем игроков с 3-4 мест из групп 1-16
+    groups_1_16_players = []
+    for group_num in range(1, 17):
+        players = get_players_by_group_and_place(group_num, [3, 4])
+        groups_1_16_players.append({
+            'group_num': group_num,
+            'players': players
+        })
+        if players:
+            print(f"  Группа {group_num}: {len(players)} игроков")
+            for p in players:
+                print(f"    - {p.family} ({p.region}) - {p.mesto_group} место")
     
-    # Разделяем на две части: группы 1-16 и 17-32
-    groups_1_16_third = [g for g in third_fourth_players if g['group_num'] <= 16]
-    groups_17_32_third = [g for g in third_fourth_players if g['group_num'] > 16]
-    
-    # Формируем группы 2-го полуфинала (стыковые встречи 1 с 32, 2 с 31 и т.д.)
+    # # Создаем 16 групп по принципу 1+16, 2+15, 3+14 и т.д.
     sf2_groups = []
-    
-    # Создаем словарь для быстрого доступа к игрокам по номеру группы
-    players_dict = {g['group_num']: g['players'] for g in third_fourth_players}
-    
-    # Формируем пары групп
     for i in range(1, 17):
         group1_num = i
-        group2_num = 33 - i
+        # group2_num = 17 - i
         
-        players1 = players_dict.get(group1_num, [])
-        players2 = players_dict.get(group2_num, [])
+        players1 = groups_1_16_players[group1_num - 1]['players']
+        # players2 = groups_1_16_players[group2_num - 1]['players']
         
-        # Объединяем игроков
-        all_players = players1 + players2
-        
-        if all_players:
-            sf_group = {
-                'sf_group_num': i,
-                'players': all_players
-            }
-            sf2_groups.append(sf_group)
+        all_players = players1
+        sf2_groups.append({
+            'sf_group_num': i,
+            'players': all_players,
+            'from_groups': [group1_num]
+        })
     
-    # Заполняем данные в таблице Choice для 2-го полуфинала
+    print(f"\nСоздано {len(sf2_groups)} групп:")
+    for group in sf2_groups:
+        print(f"  Группа {group['sf_group_num']}: {len(group['players'])} игроков (из групп {group['from_groups']})")
+    
+    # ============ 2-й, 3-й, 4-й ЭТАПЫ: Добавляем игроков из групп 17-32 ============
+    print("\n--- 2-й, 3-й, 4-й ЭТАПЫ: Добавление игроков из групп 17-32 ---")
+    
+    # Собираем игроков с 3-4 мест из групп 17-32
+    groups_17_32_players = []
+    for group_num in range(17, 33):
+        players = get_players_by_group_and_place(group_num, [3, 4])
+        if players:
+            groups_17_32_players.append({
+                'group_num': group_num,
+                'players': players
+            })
+    
+    print(f"\nИгроки из групп 17-32 для добавления:")
+    for g in groups_17_32_players:
+        print(f"  Группа {g['group_num']}: {len(g['players'])} игроков")
+        for p in g['players']:
+            print(f"    - {p.family} ({p.region}) - {p.mesto_group} место")
+    
+    # Список для отслеживания обработанных групп 17-32
+    processed_groups = set()
+    skipped_groups = []
+    
+    # Проходим по группам 17-32 в порядке возрастания
+    for source_group in groups_17_32_players:
+        source_group_num = source_group['group_num']
+        
+        # Определяем целевую группу полуфинала (17→16, 18→15, 19→14 и т.д.)
+        target_group_num = 33 - source_group_num
+        
+        print(f"\n--- Обработка группы {source_group_num} (целевая группа {target_group_num}) ---")
+        print(f"  Игроки для добавления: {[p.family for p in source_group['players']]}")
+        
+        # Находим целевую группу полуфинала
+        target_group = None
+        for g in sf2_groups:
+            if g['sf_group_num'] == target_group_num:
+                target_group = g
+                break
+        
+        if target_group:
+            # Проверяем текущее количество игроков в целевой группе
+            current_count = len(target_group['players'])
+            new_count = current_count + len(source_group['players'])
+            
+            print(f"  Текущее количество в группе {target_group_num}: {current_count}")
+            print(f"  После добавления будет: {new_count}")
+            
+            if new_count >= 3:
+                # Если после добавления будет 3 или более игроков, добавляем
+                print(f"  ✓ Добавляем игроков в группу {target_group_num}")
+                target_group['players'].extend(source_group['players'])
+                target_group['from_groups'].append(source_group_num)
+                processed_groups.add(source_group_num)
+            else:
+                # Если менее 3, ищем группу выше для перемещения
+                print(f"  ✗ После добавления будет {new_count} игроков (<3)")
+                print(f"  Ищем группу выше для перемещения...")
+                
+                # Ищем группу с меньшим номером (выше по порядку)
+                found = False
+                for check_group_num in range(target_group_num - 1, 0, -1):
+                    # Находим группу для проверки
+                    check_group = None
+                    for g in sf2_groups:
+                        if g['sf_group_num'] == check_group_num:
+                            check_group = g
+                            break
+                    
+                    if check_group:
+                        check_count = len(check_group['players'])
+                        new_check_count = check_count + len(source_group['players'])
+                        
+                        print(f"    Проверяем группу {check_group_num}: текущее {check_count}, после добавления {new_check_count}")
+                        
+                        if new_check_count >= 3:
+                            print(f"    ✓ Добавляем игроков в группу {check_group_num}")
+                            check_group['players'].extend(source_group['players'])
+                            check_group['from_groups'].append(source_group_num)
+                            processed_groups.add(source_group_num)
+                            found = True
+                            break
+                        else:
+                            print(f"    ✗ В группе {check_group_num} после добавления будет {new_check_count} (<3)")
+                            # Продолжаем искать выше
+                            continue
+                
+                if not found:
+                    # Если не нашли подходящую группу, добавляем в самую нижнюю возможную
+                    print(f"  Не найдено подходящей группы выше, добавляем в группу {target_group_num}")
+                    target_group['players'].extend(source_group['players'])
+                    target_group['from_groups'].append(source_group_num)
+                    processed_groups.add(source_group_num)
+                    skipped_groups.append(source_group_num)
+    
+    # ============ 5-й ЭТАП: Заполняем группы и создаем встречи ============
+    print("\n--- 5-й ЭТАП: Финальное формирование групп ---")
+    
+    # Сортируем группы по номеру
+    sf2_groups.sort(key=lambda x: x['sf_group_num'])
+    
+    print("\nИТОГОВЫЕ ГРУППЫ 2-ГО ПОЛУФИНАЛА:")
+    for group in sf2_groups:
+        print(f"\nГруппа {group['sf_group_num']}: {len(group['players'])} игроков")
+        print(f"  Исходные группы: {group['from_groups']}")
+        for idx, player in enumerate(group['players'], 1):
+            print(f"  {idx}. {player.family} ({player.region}) - {player.mesto_group} место из группы {player.group}")
+    
+    # Заполняем данные в таблице Choice
     for sf_group in sf2_groups:
         for idx, player in enumerate(sf_group['players'], 1):
             player.semi_final = 2
@@ -9664,8 +9757,10 @@ def create_semi_final_2():
             player.posev_sf = idx
             player.save()
     
-    print(f"Сформировано {len(sf2_groups)} групп 2-го полуфинала")
+    print(f"\nИТОГО: Сформировано {len(sf2_groups)} групп 2-го полуфинала")
+    
     return sf2_groups
+
 
 def create_matches_for_semi_final(semi_final_num, sf_groups, stage):
     """
