@@ -9643,7 +9643,7 @@ def create_semi_final_2(mesto_first):
     
     # ============ 2-й, 3-й, 4-й ЭТАПЫ: Добавляем игроков из групп 17-32 ============
     print("\n--- 2-й, 3-й, 4-й ЭТАПЫ: Добавление игроков из групп 17-32 ---")
-    
+
     # Собираем игроков с 3-4 мест из групп 17-32
     groups_17_32_players = []
     for group_num in range(17, 33):
@@ -9653,17 +9653,17 @@ def create_semi_final_2(mesto_first):
                 'group_num': group_num,
                 'players': players
             })
-    
+
     print(f"\nИгроки из групп 17-32 для добавления:")
     for g in groups_17_32_players:
         print(f"  Группа {g['group_num']}: {len(g['players'])} игроков")
         for p in g['players']:
             print(f"    - {p.family} ({p.region}) - {p.mesto_group} место")
-    
+
     # Список для отслеживания обработанных групп 17-32
     processed_groups = set()
     skipped_groups = []
-    
+
     # Проходим по группам 17-32 в порядке возрастания
     for source_group in groups_17_32_players:
         source_group_num = source_group['group_num']
@@ -9698,11 +9698,11 @@ def create_semi_final_2(mesto_first):
             else:
                 # Если менее 3, ищем группу выше для перемещения
                 print(f"  ✗ После добавления будет {new_count} игроков (<3)")
-                print(f"  Ищем группу выше для перемещения...")
+                print(f"  Ищем группу выше для перемещения, начиная с самой верхней...")
                 
-                # Ищем группу с меньшим номером (выше по порядку)
+                # Ищем группу, начиная с самой верхней (группа 1)
                 found = False
-                for check_group_num in range(target_group_num - 1, 0, -1):
+                for check_group_num in range(1, target_group_num):
                     # Находим группу для проверки
                     check_group = None
                     for g in sf2_groups:
@@ -9725,7 +9725,7 @@ def create_semi_final_2(mesto_first):
                             break
                         else:
                             print(f"    ✗ В группе {check_group_num} после добавления будет {new_check_count} (<3)")
-                            # Продолжаем искать выше
+                            # Продолжаем искать дальше
                             continue
                 
                 if not found:
