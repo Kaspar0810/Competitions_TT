@@ -1039,7 +1039,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     # else:
                     #     return
                     add_open_tab(tab_page="Результаты")
-                    my_win.tabWidget.setCurrentIndex(4)
+                    my_win.tabWidget.setCurrentIndex(3)
                     my_win.ed_etap_Action.setEnabled(True) # включает меню - редактирование жеребьеввки групп
                     return
                 else:
@@ -9489,8 +9489,8 @@ def choice_semifinal_automat(stage):
         print(f"Произошла ошибка: {e}")
         db.rollback()
         raise
-    finally:
-        db.close()
+    # finally:
+    #     db.close()
 
 def get_players_by_group_and_place(group_num, places):
     """
@@ -9673,12 +9673,13 @@ def create_semi_final_2(mesto_first):
         print(f"  Игроки для добавления: {[p.family for p in source_group['players']]}")
         
         # Находим целевую группу полуфинала
+        k = 0
         target_group = None
         for g in sf2_groups:
             if g['sf_group_num'] == target_group_num:
                 target_group = g
                 break
-        
+
         if target_group:
             # Проверяем текущее количество игроков в целевой группе
             current_count = len(target_group['players'])
@@ -9699,9 +9700,9 @@ def create_semi_final_2(mesto_first):
                 # Если менее 3, ищем группу выше для перемещения
                 print(f"  ✗ После добавления будет {new_count} игроков (<3)")
                 print(f"  Смещаем игроков группы {source_group_num} в группу {target_group_num - 1}")
-                
+                k += 1
                 # Смещаем на одну группу выше
-                new_target_group_num = target_group_num - 1
+                new_target_group_num = group_num_list[k]
                 
                 # Находим новую целевую группу
                 new_target_group = None
@@ -9735,8 +9736,9 @@ def create_semi_final_2(mesto_first):
                         
                         # Если и здесь менее 3, продолжаем смещать вверх, пока не найдем подходящую группу
                         found_suitable = False
-                        for shift in range(2, target_group_num):
-                            check_group_num = target_group_num - shift
+ 
+                        for shift in range(2, len(group_num_list) + 1):
+                            check_group_num = group_num_list[shift]
                             if check_group_num < 1:
                                 break
                             
@@ -9751,7 +9753,7 @@ def create_semi_final_2(mesto_first):
                                 check_new_count = check_current_count + len(source_group['players'])
                                 
                                 print(f"  Проверяем группу {check_group_num}: текущее {check_current_count}, после добавления {check_new_count}")
-                                
+
                                 if check_new_count >= 3:
                                     print(f"  ✓ Добавляем игроков в группу {check_group_num}")
                                     check_group['players'].extend(source_group['players'])

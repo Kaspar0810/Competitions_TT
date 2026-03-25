@@ -1,0 +1,12 @@
+2026-03-25 21:24:24,469 - ERROR - Необработанное исключение: NameError: name 'k' is not defined
+2026-03-25 21:24:24,471 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1031, in choice
+    choice_semifinal_automat(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9476, in choice_semifinal_automat
+    sf2_groups = create_semi_final_2(mesto_first)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9706, in create_semi_final_2
+    new_target_group_num = group_num_list[k]
+                                          ^
+NameError: name 'k' is not defined

@@ -1,0 +1,89 @@
+2026-03-25 22:25:34,442 - ERROR - Необработанное исключение: SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [70, 'Парный разряд', 1, 0]
+2026-03-25 22:25:34,445 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7297, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 4583, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 4340, in tool_page
+    page()
+    ~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 4825, in page
+    id_sys = sf.select().where(System.stage == "Парный разряд").get()
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\venv\Lib\site-packages\peewee.py", line 7300, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+                                  'not exist:\nSQL: %s\nParams: %s' %
+                                  (clone.model, sql, params))
+models.SystemDoesNotExist: <Model: System> instance matching query does not exist:
+SQL: SELECT `t1`.`id`, `t1`.`title_id`, `t1`.`total_athletes`, `t1`.`total_group`, `t1`.`max_player`, `t1`.`stage`, `t1`.`type_table`, `t1`.`page_vid`, `t1`.`label_string`, `t1`.`kol_game_string`, `t1`.`choice_flag`, `t1`.`score_flag`, `t1`.`visible_game`, `t1`.`stage_exit`, `t1`.`mesta_exit`, `t1`.`no_game`, `t1`.`sex` FROM `system` AS `t1` WHERE ((`t1`.`title_id` = %s) AND (`t1`.`stage` = %s)) LIMIT %s OFFSET %s
+Params: [70, 'Парный разряд', 1, 0]
+2026-03-25 22:25:52,018 - ERROR - Необработанное исключение: KeyError: 4
+2026-03-25 22:25:52,018 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6076, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8509, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16393, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15613, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20041, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20152, in tdt_news
+    td_color = score_in_table(td, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20385, in score_in_table
+    plr2 = total_score[p2]
+           ~~~~~~~~~~~^^^^
+KeyError: 4
+2026-03-25 22:27:52,091 - ERROR - Необработанное исключение: KeyError: 4
+2026-03-25 22:27:52,092 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6076, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8509, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16393, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15613, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20041, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20152, in tdt_news
+    td_color = score_in_table(td, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20385, in score_in_table
+    plr2 = total_score[p2]
+           ~~~~~~~~~~~^^^^
+KeyError: 4
+2026-03-25 22:34:58,922 - ERROR - Необработанное исключение: KeyError: 4
+2026-03-25 22:34:58,924 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 6076, in view
+    view_file = made_pdf_table_for_view(sender)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 8509, in made_pdf_table_for_view
+    table_made(pv, stage)
+    ~~~~~~~~~~^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 16393, in table_made
+    dict_table = tbl(stage, kg, ts, zagolovok, cW, rH)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 15613, in tbl
+    tdt_all = table_data(stage, kg)  # данные результатов в группах
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20041, in table_data
+    tdt_tmp = tdt_news(max_gamer, posev_data, count_player_group, tr, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20152, in tdt_news
+    td_color = score_in_table(td, num_gr)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 20385, in score_in_table
+    plr2 = total_score[p2]
+           ~~~~~~~~~~~^^^^
+KeyError: 4
