@@ -1,0 +1,12 @@
+2026-03-29 20:33:39,291 - ERROR - Необработанное исключение: IndexError: list index out of range
+2026-03-29 20:33:39,294 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1031, in choice
+    choice_semifinal_automat(stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9248, in choice_semifinal_automat
+    sf1_groups = create_semi_final_1(mesto_first)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9468, in create_semi_final_1
+    gr_1_16 = group_1_16[l]
+              ~~~~~~~~~~^^^
+IndexError: list index out of range

@@ -1,0 +1,12 @@
+2026-03-28 21:55:03,517 - ERROR - Необработанное исключение: TypeError: list indices must be integers or slices, not str
+2026-03-28 21:55:03,520 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1031, in choice
+    choice_semifinal_automat(stage)
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9248, in choice_semifinal_automat
+    sf1_groups = create_semi_final_1(mesto_first)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9479, in create_semi_final_1
+    first_place_17_32 = group_17_32['players'][0]  # 1-е место из 17-32 группы
+                        ~~~~~~~~~~~^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
