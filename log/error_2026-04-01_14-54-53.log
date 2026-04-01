@@ -1,0 +1,13 @@
+2026-04-01 14:55:13,543 - ERROR - Необработанное исключение: KeyError: 'sf_group_num'
+2026-04-01 14:55:13,544 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1031, in choice
+    choice_semifinal_automat(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9249, in choice_semifinal_automat
+    create_matches_for_semi_final(1, sf1_groups, stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9749, in create_matches_for_semi_final
+    group_name = f"{sf_group['sf_group_num']} группа"
+                    ~~~~~~~~^^^^^^^^^^^^^^^^
+KeyError: 'sf_group_num'
