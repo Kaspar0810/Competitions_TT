@@ -9230,7 +9230,7 @@ def choice_semifinal_automat(stage):
         #  """Создание групп 1-го полуфинала с учетом регионов"""
         system = System.select().where(System.title_id == title_id())
         systems = system.select().where(System.stage == "Предварительный").get()
-        choices = Choice.select().where(Choice.title_id == title_id())
+        # choices = Choice.select().where(Choice.title_id == title_id())
         total_group = systems.total_group
         id_system = system_id(stage)
         system_stage = system.select().where(System.id == id_system).get()
@@ -9245,11 +9245,11 @@ def choice_semifinal_automat(stage):
         
         # Создаем 1-й полуфинал
         if stage == "1-й полуфинал":
-            sf1_groups = create_semi_final_1(mesto_first)
+            sf1_groups = create_semi_final_1(mesto_first, total_group)
             create_matches_for_semi_final(1, sf1_groups, stage)
         else:
             # Создаем 2-й полуфинал
-            sf2_groups = create_semi_final_2(mesto_first)
+            sf2_groups = create_semi_final_2(mesto_first, total_group)
             create_matches_for_semi_final(2, sf2_groups, stage)
 
         QtWidgets.QMessageBox.information(
@@ -9276,120 +9276,22 @@ def get_players_by_group_and_place(group_num, places):
             players.append(player)
     return players
 
-# def _create_semi_final_1(mesto_first):
-#     """
-#     Создание групп 1-го полуфинала
-#     Игроки с 1-2 мест из групп 1-16 и 17-32 образуют 16 групп
-#     """
-#     print("Начинаем формирование 1-го полуфинала...")
-    
-#     # Шаг 1: Берем игроков с 1-2 мест из групп 1-16 (они будут на 1-2 позициях)
-#     groups_1_16 = []
-#     # for group_num in range(1, 17):
-#     for group_num in range(16, 0, -1):
-#         players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
-#         if len(players) == 2:
-#             groups_1_16.append({
-#                 'group_num': group_num,
-#                 'players': players  # [1-е место, 2-е место]
-#             })
-    
-#     # Шаг 2: Создаем список игроков из групп 17-32 для распределения (3-4 позиции)
-#     groups_17_32 = []
-#     # for group_num in range(17, 33):
-#     for group_num in range(32, 16, -1):
-#         players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
-#         if len(players) == 2:
-#             groups_17_32.append({
-#                 'group_num': group_num,
-#                 'players': players  # [1-е место, 2-е место]
-#             })
-    
-#     # Шаг 3: Распределяем группы 17-32 к группам 1-16 с учетом регионов
-#     # Группа 17 идет к группе 16, 18 к 15, 19 к 14 и т.д.
-#     sf_groups = []
-    
-#     # for idx in range(16):
-#     # group_num_list = [p for p in range(1, 17)] # генератор списка групп
-#     group_1_16_list = [gr_idx for gr_idx in range(1, 17)]
-#     group_1_16_list.sort(reverse=True)
-#     for idx in group_1_16_list:
-#         # Группа из первых 16 (будет на позициях 1-2)
-#         group_1_16 = groups_1_16[idx]
-#         group_1_16 = idx
-#         # Соответствующая группа из 17-32 (будет на позициях 3-4)
-#         # 16 группа (idx=15) получает 17 группу, 15 группа получает 18 и т.д.
-#         source_idx = 15 - idx
-#         if source_idx >= 0 and source_idx < len(groups_17_32):
-#             group_17_32 = groups_17_32[source_idx]
-#         else:
-#             continue
-        
-#         # Проверяем регионы первых мест (игроки, которые будут на 1 и 3 позициях)
-#         first_place_1_16 = group_1_16['players'][0]  # 1-е место из 1-16 группы
-#         first_place_17_32 = group_17_32['players'][0]  # 1-е место из 17-32 группы
-        
-#         # Если регионы совпадают, ищем другую группу
-#         if first_place_1_16.region == first_place_17_32.region:
-#             print(f"Совпадение регионов: {first_place_1_16.region} в группах {group_1_16['group_num']} и {group_17_32['group_num']}")
-            
-#             # Ищем подходящую группу для обмена
-#             found = False
-#             for offset in range(1, 16):
-#                 new_idx = source_idx + offset
-#                 # if new_idx < len(groups_17_32):
-#                 if new_idx < len(groups_1_16):
-#                     # candidate_group = groups_17_32[new_idx]
-#                     candidate_group = groups_1_16[new_idx]
-#                     candidate_first = candidate_group['players'][0]
-                    
-#                     if first_place_1_16.region != candidate_first.region:
-#                         print(f"  Найдена подходящая группа {candidate_group['group_num']} с регионом {candidate_first.region}")
-#                         group_1_16_list.remove(candidate_group['group_num'])
-#                         group_17_32 = candidate_group
-#                         found = True
-#                         break
-            
-#             if not found:
-#                 print(f"  Не найдено подходящей группы, оставляем как есть")
-        
-#         # Формируем группу полуфинала
-#         sf_group = {
-#             'sf_group_num': idx + 1,
-#             'players': [
-#                 group_1_16['players'][0],   # 1-е место из 1-16 (позиция 1)
-#                 group_1_16['players'][1],   # 2-е место из 1-16 (позиция 2)
-#                 group_17_32['players'][0],  # 1-е место из 17-32 (позиция 3)
-#                 group_17_32['players'][1]   # 2-е место из 17-32 (позиция 4)
-#             ]
-#         }
-#         sf_groups.append(sf_group)
-    
-#     # Заполняем данные в таблице Choice
-#     for sf_group in sf_groups:
-#         for idx, player in enumerate(sf_group['players'], 1):
-#             player.semi_final = 1
-#             player.sf_group = f"{sf_group['sf_group_num']} группа"
-#             player.posev_sf = idx
-#             player.save()
-    
-#     print(f"Сформировано {len(sf_groups)} групп 1-го полуфинала")
-#     return sf_groups
-
-def create_semi_final_1(mesto_first):
+def __create_semi_final_1(mesto_first, total_group):
     """жеребьевка 1-ого пф с разведением 1-х мест по регионам"""
     # Создаем 16 групп для второго полуфинала
     group_1_16 = []
-    for i in range(16, 0, -1):
+    mesto_first = 1
+    total_group = 32
+    count_gr_sf = total_group // 2
+
+    for i in range(count_gr_sf, 0, -1):
         group_1_16.append({
             'sf_group_num': i,
             'players': [],
             'from_groups': []
-        })
-    
+        })    
     # 1-й ЭТАП: Добавляем игроков с 1-2 мест из групп 1-16
-    print("\n--- 1-й ЭТАП: Игроки с 1-2 мест из групп 1-16 ---")
-    for group_num in range(1, 17):
+    for group_num in range(1, count_gr_sf + 1):
         players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
         if players:
             # Находим соответствующую группу полуфинала (такой же номер)
@@ -9397,14 +9299,11 @@ def create_semi_final_1(mesto_first):
                 if g['sf_group_num'] == group_num:
                     g['players'].extend(players)
                     g['from_groups'].append(group_num)
-                    print(f"Группа {group_num}: добавлено {len(players)} игроков с 3-4 мест")
-                    for p in players:
-                        print(f"  - {p.family} ({p.region}) - {p.mesto_group} место")
                     break
     
     # Собираем игроков с 3-4 мест из групп 17-32
     group_17_32 = []
-    for group_num in range(17, 33):
+    for group_num in range(count_gr_sf + 1, total_group + 1):
         players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
         if players:
             group_17_32.append({
@@ -9416,13 +9315,11 @@ def create_semi_final_1(mesto_first):
     # Начинаем с группы 17
     pending_groups = group_17_32.copy()
     processed_groups = set()
-    group_num_list_1_16 = [p for p in range(1, 17)] # генератор списка групп
+    group_num_list_1_16 = [p for p in range(1, count_gr_sf + 1)] # генератор списка групп
     group_num_list_1_16.sort(reverse=True)
-    group_num_list_17_32 = [p for p in range(17, 33)] # генератор списка групп
+    group_num_list_17_32 = [p for p in range(count_gr_sf + 1, total_group + 1)] # генератор списка групп
     # Продолжаем, пока есть необработанные группы
     k = 0
-    flag_same = 0
-
     while pending_groups:
         # Берем первую необработанную группу
         source_group = pending_groups.pop(0)
@@ -9432,14 +9329,46 @@ def create_semi_final_1(mesto_first):
         # target_group_num - номер группы полуфинала
         # source_group_num -номер группы предварительно этапа
         for l in range(16):
+            if k == len(group_num_list_1_16): 
+                # смена групп если в последней совпали регионы               
+                gr_num = 2
+                print(f"Проба заменить игроков из {source_group_num} в {gr_num}")
+                ind = find_index_by_group(group_1_16, 2)
+                gr_1_16 = group_1_16[ind]    
+                target_group_num = 2
+                target_group = gr_1_16
+                gr_1_16_region = gr_1_16['players'][0].region
+                ind = find_index_by_group(group_17_32, source_group_num)
+                gr_17_32 = group_17_32[ind] 
+                gr_17_32_region = gr_17_32['players'][0].region
+                if gr_1_16_region != gr_17_32_region:
+                    print(f"После проверки, регионы {source_group_num} и {gr_num} не совпадает\n проверяем дальше")
+                    ind = find_index_by_group(group_1_16, 1)
+                    gr_1_16 = group_1_16[ind]    
+                    target_group_num = 1
+                    gr_1_16_region = gr_1_16['players'][0].region
+                    old_group = source_group_num - 1
+                    ind = find_index_by_group(group_17_32, old_group)
+                    gr_17_32 = group_17_32[ind] 
+                    gr_17_32_region = gr_17_32['players'][0].region
+                    if gr_1_16_region != gr_17_32_region:
+                        print(f"После проверки, регионы {old_group} и {target_group_num} не совпадают\n меняем местами")
+                        target_group['players'].pop()
+                        target_group['players'].pop()
+                        target_group['players'].extend(source_group['players'])
+                        gr_change = target_group['from_groups'].pop()
+                        target_group['from_groups'].append(source_group_num)
+                        target_group_num = 1
+                        target_group = gr_1_16
+                        ind = find_index_by_group(group_17_32, gr_change)
+                        gr_17_32 = group_17_32[ind]
+                        target_group['players'].extend(gr_change['players'])
+                        target_group['from_groups'].append(gr_change)
+                k = 0
+
             gr_num = group_num_list_1_16[k]
             ind = find_index_by_group(group_1_16, gr_num)
-            gr_1_16 = group_1_16[ind]
-
-            if k == len(group_num_list_1_16):
-                print("больше нет групп")
-                k = 0
-                flag_same = 1
+            gr_1_16 = group_1_16[ind]    
             target_group_num = group_num_list_1_16[k]
             target_group = gr_1_16
             gr_1_16_region = gr_1_16['players'][0].region
@@ -9449,7 +9378,7 @@ def create_semi_final_1(mesto_first):
             gr_17_32_region = gr_17_32['players'][0].region
  
             # Проверяем регионы первых мест (игроки, которые будут на 1 и 3 позициях)            
-            if gr_1_16_region != gr_17_32_region or flag_same == 1:
+            if gr_1_16_region != gr_17_32_region:
                 target_group['players'].extend(source_group['players'])
                 target_group['from_groups'].append(source_group_num)
                 processed_groups.add(source_group_num)
@@ -9457,7 +9386,6 @@ def create_semi_final_1(mesto_first):
                 group_num_list_1_16.remove(target_group_num)
                 group_num_list_17_32.remove(source_group_num)
                 k = 0
-                flag_same = 0
                 break
             else:
                 k += 1
@@ -9475,6 +9403,176 @@ def create_semi_final_1(mesto_first):
     
     return group_1_16
 
+
+def create_semi_final_1(mesto_first, total_group):
+    """жеребьевка 1-ого пф с разведением 1-х мест по регионам"""
+    # Создаем 16 групп для второго полуфинала
+    group_1_16 = []
+
+    count_gr_sf = total_group // 2
+
+    for i in range(count_gr_sf, 0, -1):
+        group_1_16.append({
+            'sf_group_num': i,
+            'players': [],
+            'from_groups': []
+        })    
+    # 1-й ЭТАП: Добавляем игроков с 1-2 мест из групп 1-16
+    for group_num in range(1, count_gr_sf + 1):
+        players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
+        if players:
+            # Находим соответствующую группу полуфинала (такой же номер)
+            for g in group_1_16:
+                if g['sf_group_num'] == group_num:
+                    g['players'].extend(players)
+                    g['from_groups'].append(group_num)
+                    break
+    
+    # Собираем игроков с 3-4 мест из групп 17-32
+    group_17_32 = []
+    for group_num in range(count_gr_sf + 1, total_group + 1):
+        players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
+        if players:
+            group_17_32.append({
+                'sf_group_num': group_num,
+                'players': players
+            })
+            
+    # Создаем список для отслеживания еще не обработанных групп
+    # Начинаем с группы 17
+    pending_groups = group_17_32.copy()
+    processed_groups = set()
+    group_num_list_1_16 = [p for p in range(1, count_gr_sf + 1)] # генератор списка групп
+    group_num_list_1_16.sort(reverse=True)
+    group_num_list_17_32 = [p for p in range(count_gr_sf + 1, total_group + 1)] # генератор списка групп
+    
+    # Флаг для отслеживания конфликта регионов
+    region_conflict = False
+    conflict_groups = []
+    
+    # Продолжаем, пока есть необработанные группы
+    k = 0
+    while pending_groups:
+        # Берем первую необработанную группу
+        source_group = pending_groups.pop(0)
+        source_group_num = source_group['sf_group_num']
+
+        target_group = None
+        # target_group_num - номер группы полуфинала
+        # source_group_num -номер группы предварительно этапа
+        for l in range(16):
+            if k == len(group_num_list_1_16): 
+                # Проверка и замена групп при конфликте
+                if region_conflict:
+                    # Пытаемся поменять местами группы 32 и 31
+                    if total_group in group_num_list_17_32:
+                        
+                        # Если обе группы найдены, меняем их местами
+                        # if group_32_index is not None and group_31_index is not None:
+                        # Меняем местами в pending_groups
+                        # pending_groups[group_32_index], pending_groups[group_31_index] = \
+                        # pending_groups[group_31_index], pending_groups[group_32_index]
+
+                        # === проверяем вариант 2-я группа и 32 группа
+                        region = conflict_groups[0]['target_region']
+                        print(f"Проверяем группы 2 и {source_group_num}")
+                        if gr_17_32_region != region:
+                            # === проверяем вариант 1-я группа и группа, которая была посяна со 2-ой
+                            region = conflict_groups[0]['source_region']
+                            gr_source_num = conflict_groups[0]['source']
+ 
+                            idx = find_index_by_group(group_17_32, gr_source_num)
+                            gr_17_32 = group_17_32[idx]
+                            gr_17_32_region = gr_17_32['players'][0].region
+
+                            if gr_17_32_region != region:
+                                gr31_idx = find_index_by_group(group_17_32, gr_source_num)
+                                gr32_idx = find_index_by_group(group_17_32, source_group_num)
+
+                                group_17_32[gr32_idx], group_17_32[gr31_idx] = \
+                                group_17_32[gr31_idx], group_17_32[gr32_idx]
+
+                        
+                            print(f"Произведена замена групп: 32 и 31 местами для разрешения конфликта регионов")
+                            region_conflict = False
+                        conflict_groups = []
+                        # else:
+                        print(f"Невозможно произвести замену: группы 32 или 31 уже обработаны")
+                        # Выводим сообщение о конфликте для ручной замены
+                        print(f"ВНИМАНИЕ! Конфликт регионов при соединении групп:")
+                        for conf in conflict_groups:
+                            print(f"  - Группа полуфинала {conf['target']} и группа предварительного этапа {conf['source']}")
+                        print(f"Рекомендуемая замена: поменять местами группы 32 и 31")
+                        print(f"Текущее соединение: 1-32 и 2-31")
+                        print(f"После замены будет: 1-31 и 2-32")
+                        
+                        # Сбрасываем конфликт и продолжаем с исходным порядком
+                        region_conflict = False
+                        # Восстанавливаем исходный порядок в group_num_list_1_16
+                        group_num_list_1_16 = [p for p in range(1, count_gr_sf + 1)]
+                        group_num_list_1_16.sort(reverse=True)
+                
+                k = 0
+                if not region_conflict:
+                    break
+                
+            gr_num = group_num_list_1_16[k]
+            ind = find_index_by_group(group_1_16, gr_num)
+            gr_1_16 = group_1_16[ind]    
+            target_group_num = group_num_list_1_16[k]
+            target_group = gr_1_16
+            gr_1_16_region = gr_1_16['players'][0].region
+
+            ind = find_index_by_group(group_17_32, source_group_num)
+            gr_17_32 = group_17_32[ind] 
+            gr_17_32_region = gr_17_32['players'][0].region
+ 
+            # Проверяем регионы первых мест (игроки, которые будут на 1 и 3 позициях)            
+            if gr_1_16_region != gr_17_32_region:
+                target_group['players'].extend(source_group['players'])
+                target_group['from_groups'].append(source_group_num)
+                processed_groups.add(source_group_num)
+
+                group_num_list_1_16.remove(target_group_num)
+                group_num_list_17_32.remove(source_group_num)
+                k = 0
+                if target_group_num <= 2:
+                    region_conflict = True
+                    conflict_groups.append({
+                    'target': target_group_num,
+                    'source': source_group_num,
+                    'target_region': gr_1_16_region,
+                    'source_region': gr_17_32_region
+                })
+                    target_group['players'].extend(source_group['players'])
+                    target_group['from_groups'].append(source_group_num)
+                break
+            else:
+                # # Запоминаем конфликт
+                # region_conflict = True
+                # conflict_groups.append({
+                #     'target': target_group_num,
+                #     'source': source_group_num,
+                #     'target_region': gr_1_16_region,
+                #     'source_region': gr_17_32_region
+                # })
+                k += 1
+    
+    # Заполняем данные в таблице Choice
+    for sf_group in group_1_16:
+        sf_group_num = sf_group['sf_group_num']
+        players = sf_group['players']
+        
+        # Порядковый номер в группе: 1-4
+        for idx, player in enumerate(players, 1):
+            player.semi_final = 1
+            player.posev_sf = idx
+            player.sf_group = f"{sf_group_num} группа"
+            player.save()
+    
+    return group_1_16
+
+
 def find_index_by_group(data, gr_num):
     for index, item in enumerate(data):
         if item["sf_group_num"] == gr_num:
@@ -9482,11 +9580,13 @@ def find_index_by_group(data, gr_num):
 
     return -1  # если группа не найдена
 
-def create_semi_final_2(mesto_first):
+def create_semi_final_2(mesto_first, total_group):
     """жеребьевка 2-ого пф"""    
     # Создаем 16 групп для второго полуфинала
     sf2_groups = []
-    for i in range(1, 17):
+    count_gr_sf = total_group // 2
+
+    for i in range(1, count_gr_sf + 1):
         sf2_groups.append({
             'sf_group_num': i,
             'players': [],
@@ -9494,7 +9594,6 @@ def create_semi_final_2(mesto_first):
         })
     
     # 1-й ЭТАП: Добавляем игроков с 1-2 мест из групп 1-16
-    print("\n--- 1-й ЭТАП: Игроки с 1-2 мест из групп 1-16 ---")
     for group_num in range(1, 17):
         players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
         if players:
@@ -9508,37 +9607,23 @@ def create_semi_final_2(mesto_first):
                         print(f"  - {p.family} ({p.region}) - {p.mesto_group} место")
                     break
     
-    # # Выводим текущее состояние групп после 1-го этапа
-    # print("\n--- СОСТОЯНИЕ ГРУПП ПОСЛЕ 1-го ЭТАПА ---")
-    # for g in sf2_groups:
-    #     print(f"Группа {g['sf_group_num']}: {len(g['players'])} игроков")
-    #     for p in g['players']:
-    #         print(f"  - {p.family} ({p.region})")
-    
     # # 2-й, 3-й, 4-й ЭТАПЫ: Добавление игроков из групп 17-32
-    # print("\n--- 2-й, 3-й, 4-й ЭТАПЫ: Добавление игроков из групп 17-32 ---")
     
     # Собираем игроков с 3-4 мест из групп 17-32
     groups_17_32_players = []
-    for group_num in range(17, 33):
+    for group_num in range(count_gr_sf + 1, total_group + 1):
         players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
         if players:
             groups_17_32_players.append({
                 'group_num': group_num,
                 'players': players
             })
-    
-    # print(f"\nИгроки из групп 17-32 для добавления:")
-    # for g in groups_17_32_players:
-    #     print(f"  Группа {g['group_num']}: {len(g['players'])} игроков")
-    #     for p in g['players']:
-    #         print(f"    - {p.family} ({p.region}) - {p.mesto_group} место")
-    
+
     # Создаем список для отслеживания еще не обработанных групп
     # Начинаем с группы 17
     pending_groups = groups_17_32_players.copy()
     processed_groups = set()
-    group_num_list = [p for p in range(1, 17)] # генератор списка групп
+    group_num_list = [p for p in range(1, count_gr_sf + 1)] # генератор списка групп
     group_num_list.sort(reverse=True)
     # Продолжаем, пока есть необработанные группы
     while pending_groups:
@@ -9548,9 +9633,6 @@ def create_semi_final_2(mesto_first):
         
         # # Определяем целевую группу полуфинала (17→16, 18→15, 19→14 и т.д.)
         target_group_num = group_num_list[0]
-        
-        # print(f"\n--- Обработка группы {source_group_num} (целевая группа {target_group_num}) ---")
-        # print(f"  Игроки для добавления: {[p.family for p in source_group['players']]}")
         
         # Находим целевую группу полуфинала
         k = 0
@@ -9565,9 +9647,6 @@ def create_semi_final_2(mesto_first):
             current_count = len(target_group['players'])
             new_count = current_count + len(source_group['players'])
             
-            # print(f"  Текущее количество в группе {target_group_num}: {current_count}")
-            # print(f"  После добавления будет: {new_count}")
-            
             if new_count >= 3:
                 # Если после добавления будет 3 или более игроков, добавляем
                 print(f"  ✓ Добавляем игроков в группу {target_group_num}")
@@ -9578,8 +9657,6 @@ def create_semi_final_2(mesto_first):
                 group_num_list.remove(target_group_num)
             else:
                 # # Если менее 3, ищем группу выше для перемещения
-                # print(f"  ✗ После добавления будет {new_count} игроков (<3)")
-                # print(f"  Смещаем игроков группы {source_group_num} в группу {target_group_num - 1}")
                 k += 1
                 # Смещаем на одну группу выше
                 new_target_group_num = group_num_list[k]
@@ -9604,10 +9681,7 @@ def create_semi_final_2(mesto_first):
                         processed_groups.add(source_group_num)
 
                         group_num_list.remove(target_group_num)
-                    else:
-                        # print(f"  ✗ В группе {new_target_group_num} после добавления будет {new_new_count} (<3)")
-                        # print(f"  Продолжаем смещение выше...")
-                        
+                    else:                      
                         # Если и здесь менее 3, продолжаем смещать вверх, пока не найдем подходящую группу
                         found_suitable = False
  
@@ -9653,13 +9727,7 @@ def create_semi_final_2(mesto_first):
 
                                 group_num_list.remove(target_group_num)
       
-    # for g in sf2_groups:
-    #     print(f"\nГруппа {g['sf_group_num']}: {len(g['players'])} игроков")
-    #     print(f"  Из групп: {g['from_groups']}")
-    #     for p in g['players']:
-    #         print(f"    - {p.family} ({p.region}) - место в группе: {p.mesto_group}")
-    
-
+ 
     # Заполняем данные в таблице Choice
     for sf_group in sf2_groups:
         sf_group_num = sf_group['sf_group_num']

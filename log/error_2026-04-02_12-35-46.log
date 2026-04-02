@@ -1,0 +1,12 @@
+2026-04-02 12:36:06,993 - ERROR - Необработанное исключение: TypeError: 'int' object is not subscriptable
+2026-04-02 12:36:06,994 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1031, in choice
+    choice_semifinal_automat(stage)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9248, in choice_semifinal_automat
+    sf1_groups = create_semi_final_1(mesto_first, total_group)
+  File "c:\Users\Alex\Competitions_TT\main.py", line 9367, in create_semi_final_1
+    target_group['players'].extend(gr_change['players'])
+                                   ~~~~~~~~~^^^^^^^^^^^
+TypeError: 'int' object is not subscriptable

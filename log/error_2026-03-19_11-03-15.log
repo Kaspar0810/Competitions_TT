@@ -1,7 +1,0 @@
-2026-03-19 11:03:17,684 - ERROR - Необработанное исключение: AttributeError: 'str' object has no attribute 'strftime'
-2026-03-19 11:03:17,685 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1624, in last_competition
-    str_data = date_start.strftime("%Y-%B")
-               ^^^^^^^^^^^^^^^^^^^
-AttributeError: 'str' object has no attribute 'strftime'

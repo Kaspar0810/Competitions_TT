@@ -1,9 +1,0 @@
-2026-03-18 17:08:16,058 - ERROR - Необработанное исключение: IndexError: list index out of range
-2026-03-18 17:08:16,059 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 13181, in change_player_between_group_after_draw
-    player_in_table_group_and_write_Game_list_Result(stage)
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 6792, in player_in_table_group_and_write_Game_list_Result
-    pl2_id = gr[second * 2 - 2][1]  # фамилия второго игрока
-             ~~^^^^^^^^^^^^^^^^
-IndexError: list index out of range

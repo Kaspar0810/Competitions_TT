@@ -1,7 +1,0 @@
-2026-03-17 12:11:52,238 - ERROR - Необработанное исключение: AttributeError: 'str' object has no attribute 'append'
-2026-03-17 12:11:52,238 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 22799, in schedule_net
-    stage_list.append(stage)
-    ^^^^^^^^^^^^^^^^^
-AttributeError: 'str' object has no attribute 'append'

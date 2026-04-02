@@ -1,7 +1,0 @@
-2026-03-24 16:45:48,780 - ERROR - Необработанное исключение: AttributeError: 'MainWindow' object has no attribute 'tabwidget_2'
-2026-03-24 16:45:48,781 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 23051, in made_list_regions
-    my_win.tabwidget_2.setCurenntIndex(2)
-    ^^^^^^^^^^^^^^^^^^
-AttributeError: 'MainWindow' object has no attribute 'tabwidget_2'
