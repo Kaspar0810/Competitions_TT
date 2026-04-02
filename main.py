@@ -9481,7 +9481,7 @@ def create_semi_final_1(mesto_first, total_group):
                             region = conflict_groups[0]['source_region']
                             gr_source_num = conflict_groups[0]['source']
  
-                            idx = find_index_by_group(group_17_32, gr_source_num)
+                            idx = find_index_by_group(group_17_32, source_group_num)
                             gr_17_32 = group_17_32[idx]
                             gr_17_32_region = gr_17_32['players'][0].region
 
@@ -9544,8 +9544,8 @@ def create_semi_final_1(mesto_first, total_group):
                     'target_region': gr_1_16_region,
                     'source_region': gr_17_32_region
                 })
-                    target_group['players'].extend(source_group['players'])
-                    target_group['from_groups'].append(source_group_num)
+                    # target_group['players'].extend(source_group['players'])
+                    # target_group['from_groups'].append(source_group_num)
                 break
             else:
                 # # Запоминаем конфликт
