@@ -1801,9 +1801,9 @@ def delete_db_copy(del_files_list):
         for f in del_files_list:
             del_file = f"{parent_dir}\\{f}"
             os.remove(del_file)
-    QtWidgets.QMessageBox.information(
-                    my_win, "Успешно", "Удаление копий базы данных, созданных\n более 3-х дней завершилась успешно!"
-                )    
+        QtWidgets.QMessageBox.information(
+                        my_win, "Успешно", "Удаление копий базы данных, созданных\n более 3-х дней завершилась успешно!"
+                    )    
     else:
         return
 
