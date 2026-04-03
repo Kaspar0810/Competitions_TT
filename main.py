@@ -1801,6 +1801,9 @@ def delete_db_copy(del_files_list):
         for f in del_files_list:
             del_file = f"{parent_dir}\\{f}"
             os.remove(del_file)
+    QtWidgets.QMessageBox.information(
+                    my_win, "Успешно", "Удаление копий базы данных, созданных\n более 3-х дней завершилась успешно!"
+                )    
     else:
         return
 
@@ -9404,7 +9407,7 @@ def __create_semi_final_1(mesto_first, total_group):
     return group_1_16
 
 
-def create_semi_final_1(mesto_first, total_group):
+def ____create_semi_final_1(mesto_first, total_group):
     """жеребьевка 1-ого пф с разведением 1-х мест по регионам"""
     # Создаем 16 групп для второго полуфинала
     group_1_16 = []
@@ -9485,26 +9488,20 @@ def create_semi_final_1(mesto_first, total_group):
                             gr_17_32 = group_17_32[idx]
                             gr_17_32_region = gr_17_32['players'][0].region
 
-                            if gr_17_32_region != region:
+                            if gr_17_32_region == region:
                                 gr31_idx = find_index_by_group(group_17_32, gr_source_num)
                                 gr32_idx = find_index_by_group(group_17_32, source_group_num)
 
                                 group_17_32[gr32_idx], group_17_32[gr31_idx] = \
                                 group_17_32[gr31_idx], group_17_32[gr32_idx]
 
-                        
-                            print(f"Произведена замена групп: 32 и 31 местами для разрешения конфликта регионов")
+                
                             region_conflict = False
                         conflict_groups = []
-                        # else:
-                        print(f"Невозможно произвести замену: группы 32 или 31 уже обработаны")
                         # Выводим сообщение о конфликте для ручной замены
                         print(f"ВНИМАНИЕ! Конфликт регионов при соединении групп:")
                         for conf in conflict_groups:
                             print(f"  - Группа полуфинала {conf['target']} и группа предварительного этапа {conf['source']}")
-                        print(f"Рекомендуемая замена: поменять местами группы 32 и 31")
-                        print(f"Текущее соединение: 1-32 и 2-31")
-                        print(f"После замены будет: 1-31 и 2-32")
                         
                         # Сбрасываем конфликт и продолжаем с исходным порядком
                         region_conflict = False
@@ -9548,14 +9545,7 @@ def create_semi_final_1(mesto_first, total_group):
                     # target_group['from_groups'].append(source_group_num)
                 break
             else:
-                # # Запоминаем конфликт
-                # region_conflict = True
-                # conflict_groups.append({
-                #     'target': target_group_num,
-                #     'source': source_group_num,
-                #     'target_region': gr_1_16_region,
-                #     'source_region': gr_17_32_region
-                # })
+
                 k += 1
     
     # Заполняем данные в таблице Choice
@@ -9571,6 +9561,192 @@ def create_semi_final_1(mesto_first, total_group):
             player.save()
     
     return group_1_16
+
+
+
+#==== последгий вариант AI 0304_958 ====
+def create_semi_final_1(mesto_first, total_group):
+    """жеребьевка 1-ого пф с разведением 1-х мест по регионам"""
+    # Создаем 16 групп для второго полуфинала
+    group_1_16 = []
+
+    count_gr_sf = total_group // 2
+
+    for i in range(count_gr_sf, 0, -1):
+        group_1_16.append({
+            'sf_group_num': i,
+            'players': [],
+            'from_groups': []
+        })    
+    # 1-й ЭТАП: Добавляем игроков с 1-2 мест из групп 1-16
+    for group_num in range(1, count_gr_sf + 1):
+        players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
+        if players:
+            # Находим соответствующую группу полуфинала (такой же номер)
+            for g in group_1_16:
+                if g['sf_group_num'] == group_num:
+                    g['players'].extend(players)
+                    g['from_groups'].append(group_num)
+                    break
+    
+    # Собираем игроков с 3-4 мест из групп 17-32
+    group_17_32 = []
+    for group_num in range(count_gr_sf + 1, total_group + 1):
+        players = get_players_by_group_and_place(group_num, [mesto_first, mesto_first + 1])
+        if players:
+            group_17_32.append({
+                'sf_group_num': group_num,
+                'players': players
+            })
+            
+    # Создаем список для отслеживания еще не обработанных групп
+    pending_groups = group_17_32.copy()
+    processed_groups = set()
+    group_num_list_1_16 = [p for p in range(1, count_gr_sf + 1)]
+    group_num_list_1_16.sort(reverse=True)
+    group_num_list_17_32 = [p for p in range(count_gr_sf + 1, total_group + 1)]
+    
+    # Переменные для отслеживания последних групп
+    last_groups_conflict = False
+    conflict_info = None
+    
+    # Продолжаем, пока есть необработанные группы
+    k = 0
+    while pending_groups:
+        # Берем первую необработанную группу
+        source_group = pending_groups.pop(0)
+        source_group_num = source_group['sf_group_num']
+
+        target_group = None
+        
+        for l in range(16):
+            if k == len(group_num_list_1_16):
+                # Обработка конфликта для последних групп
+                if last_groups_conflict and conflict_info:
+                    # Получаем информацию о конфликте
+                    group_1_num = conflict_info['group_1']
+                    group_2_num = conflict_info['group_2']
+                    group_32_num = conflict_info['group_32']
+                    group_30_num = conflict_info['group_30']
+                    
+                    # Получаем регионы игроков
+                    idx_1 = find_index_by_group(group_1_16, group_1_num)
+                    idx_2 = find_index_by_group(group_1_16, group_2_num)
+                    idx_32 = find_index_by_group(group_17_32, group_32_num)
+                    idx_30 = find_index_by_group(group_17_32, group_30_num)
+                    
+                    if idx_1 != -1 and idx_2 != -1 and idx_32 != -1 and idx_30 != -1:
+                        region_1 = group_1_16[idx_1]['players'][0].region
+                        region_2 = group_1_16[idx_2]['players'][0].region
+                        region_32 = group_17_32[idx_32]['players'][0].region
+                        region_30 = group_17_32[idx_30]['players'][0].region
+                        
+                        # Проверяем вариант 1-30 и 2-32
+                        check_1_30 = (region_1 != region_30)
+                        check_2_32 = (region_2 != region_32)
+                        
+                        if check_1_30 and check_2_32:
+                            # Оба условия выполняются - производим замену
+                            print(f"Произведена замена групп: 32 и 30 местами")
+                            print(f"Новые пары: 1-{group_30_num} и 2-{group_32_num}")
+                            
+                            # Меняем местами группы 30 и 32 в group_17_32
+                            group_17_32[idx_32], group_17_32[idx_30] = \
+                            group_17_32[idx_30], group_17_32[idx_32]
+                            
+                            # Обновляем pending_groups для правильного порядка обработки
+                            for pg_idx, pg in enumerate(pending_groups):
+                                if pg['sf_group_num'] == group_32_num:
+                                    pending_groups[pg_idx]['sf_group_num'] = group_30_num
+                                elif pg['sf_group_num'] == group_30_num:
+                                    pending_groups[pg_idx]['sf_group_num'] = group_32_num
+                            
+                            # Сбрасываем конфликт
+                            last_groups_conflict = False
+                            conflict_info = None
+                        else:
+                            # Условие не выполняется - оставляем как есть
+                            QtWidgets.QMessageBox.information(
+                                                                my_win, "ВНИМАНИЕ", "Рекомендуется ручная замена игроков с 1-ми местами\n"
+                                                                f"в группе {group_1_num} оба спортсмена {region_1}!"
+                                                                )
+                            # print(f"Рекомендуется ручная замена игроков с 1-ми местами в группе {group_1_num} полуфинала")
+                            # print(f"Текущие пары оставлены: 1-{group_32_num} и 2-{group_30_num}")
+                            
+                            last_groups_conflict = False
+                            conflict_info = None
+                
+                k = 0
+                if not last_groups_conflict:
+                    break
+                
+            gr_num = group_num_list_1_16[k]
+            ind = find_index_by_group(group_1_16, gr_num)
+            if ind == -1:
+                k += 1
+                continue
+                
+            gr_1_16 = group_1_16[ind]    
+            target_group_num = group_num_list_1_16[k]
+            target_group = gr_1_16
+            gr_1_16_region = gr_1_16['players'][0].region
+
+            ind_32 = find_index_by_group(group_17_32, source_group_num)
+            if ind_32 == -1:
+                k += 1
+                continue
+                
+            gr_17_32 = group_17_32[ind_32] 
+            gr_17_32_region = gr_17_32['players'][0].region
+ 
+            # Проверяем регионы первых мест
+            if gr_1_16_region != gr_17_32_region:
+                target_group['players'].extend(source_group['players'])
+                target_group['from_groups'].append(source_group_num)
+                processed_groups.add(source_group_num)
+
+                group_num_list_1_16.remove(target_group_num)
+                group_num_list_17_32.remove(source_group_num)
+                k = 0
+                break
+            else:
+                # Если конфликт и остались последние 2 группы
+                if len(group_num_list_1_16) <= 2 and len(group_num_list_17_32) <= 2:
+                    last_groups_conflict = True 
+                    # последняя непосеянаая группа полуфинала
+                    gr1 = group_num_list_1_16[0]
+                    # группа последняя либо предпоследняя
+                    gr2 = 2 if gr1 == 1 else 1
+                    gr32 = source_group_num
+                    idx_2 = find_index_by_group(group_1_16, gr2) 
+                    gr_1_16 = group_1_16[idx_2]                   
+                    gr31 = gr_1_16['from_groups'][1]
+                    conflict_info = {
+                        'group_1': gr1,
+                        'group_2': gr2,
+                        'group_32': gr32,
+                        'group_30': gr31
+                        # 'group_1': group_num_list_1_16[0] if len(group_num_list_1_16) > 0 else None,
+                        # 'group_2': group_num_list_1_16[1] if len(group_num_list_1_16) > 1 else None,
+                        # 'group_32': group_num_list_17_32[1] if len(group_num_list_17_32) > 1 else group_num_list_17_32[0],
+                        # 'group_30': group_num_list_17_32[0] if len(group_num_list_17_32) > 0 else None
+                    }
+                k += 1
+    
+    # Заполняем данные в таблице Choice
+    for sf_group in group_1_16:
+        sf_group_num = sf_group['sf_group_num']
+        players = sf_group['players']
+        
+        # Порядковый номер в группе: 1-4
+        for idx, player in enumerate(players, 1):
+            player.semi_final = 1
+            player.posev_sf = idx
+            player.sf_group = f"{sf_group_num} группа"
+            player.save()
+    
+    return group_1_16
+
 
 
 def find_index_by_group(data, gr_num):
