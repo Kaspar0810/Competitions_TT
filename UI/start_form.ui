@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>737</width>
-    <height>237</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -370,6 +370,16 @@
      </layout>
     </item>
    </layout>
+  </widget>
+  <widget class="QCalendarWidget" name="calendarWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>230</y>
+     <width>312</width>
+     <height>183</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

@@ -1,0 +1,12 @@
+2026-04-03 12:54:26,573 - ERROR - Необработанное исключение: NameError: name 'QTextCharFormat' is not defined
+2026-04-03 12:54:26,709 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 2073, in <module>
+    fir_window = StartWindow()  # Создаём объект класса ExampleApp
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1536, in __init__
+    self.load_dates_from_db()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1581, in load_dates_from_db
+    highlight_format = QTextCharFormat()
+                       ^^^^^^^^^^^^^^^
+NameError: name 'QTextCharFormat' is not defined. Did you mean: 'self.QTextCharFormat'?

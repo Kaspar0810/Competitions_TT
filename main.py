@@ -83,10 +83,12 @@ from datetime import *
 from PyQt5 import *
 from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex, QItemSelectionModel, QTime, Qt, QTimer
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
-from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame, QTimeEdit
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame, QTimeEdit, QCalendarWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout, QToolTip
 from PyQt5.QtWidgets import QAbstractItemView, QFileDialog, QProgressDialog, QAction, QDesktopWidget, QTableView, QColorDialog, QMessageBox, QCheckBox
 from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5.QtCore import QDate
+from PyQt5.QtGui import QTextCharFormat, QColor
 
 import itertools
 from models import *
@@ -1507,15 +1509,19 @@ def update_player_list():
 
 class StartWindow(QMainWindow, Ui_Form):
     """Стартовое окно приветствия"""
+   
     def __init__(self):
         super(StartWindow, self).__init__()
         self.setupUi(self)  # загружает настройки формы(окна) из QT
         self.setWindowTitle('Добро пожаловать в COMPETITIONS_TT')
         self.setWindowIcon(QIcon("CTT.png"))
+        self.setFixedSize(739, 240)
+        
         self.Button_open.clicked.connect(self.open)
         self.Button_new.clicked.connect(self.new)
         self.Button_view_pdf.clicked.connect(self.view_competition_on_arhive)
-        self.Button_old.clicked.connect(self.last_competition)
+        # self.Button_old.clicked.connect(self.last_competition)
+        self.Button_old.clicked.connect(self.load_events_from_mysql)
         # self.Button_R.clicked.connect(self.r_load)
         self.LinkButton.clicked.connect(self.last_comp)
 
@@ -1523,6 +1529,37 @@ class StartWindow(QMainWindow, Ui_Form):
         self.Button_view_pdf.setEnabled(False)
         self.comboBox_arhive_year.setEnabled(False)
         self.comboBox_arhive_year.currentTextChanged.connect(self.choice_competition)
+        # == вариант виджета календаря == 
+        events_data = []
+        self.calendar = CustomCalendar(self)
+        self.calendar.hide()
+        self.setMouseTracking(True)
+        self.calendar.load_events_from_db(events_data)
+
+        # Словарь для хранения событий по датам {QDate: [список событий]}
+        # self.events_by_date = {}
+        # self.setMouseTracking(True)
+        # # Настройка формата для подсветки дат с событиями
+        # self.highlight_format = QTextCharFormat()
+        # self.highlight_format.setBackground(QColor("lightblue"))
+        # self.highlight_format.setForeground(QColor("darkblue"))
+        # self.highlight_format.setFontWeight(QFont.Bold)
+        
+        # # Подключаем сигнал наведения на ячейку
+        # self.entered.connect(self.on_date_entered)
+        # # self.entered.connect(self.on_date_entered)
+
+        # self.calendarWidget.hide()
+        # # 1. Настройка календаря
+        # self.setup_calendar()
+
+        # # 2. Загрузка дат из базы данных
+        # self.load_dates_from_db()
+
+        # # # 3. Подключение сигнала нажатия на дату
+        # # self.calendarWidget.clicked.connect(self.on_date_clicked)
+
+
         # ========== проверяет создана ли база, если нет то создает
         conn = pymysql.connect(host='localhost', user='root', password='db_pass')
         md = conn.cursor()
@@ -1552,6 +1589,113 @@ class StartWindow(QMainWindow, Ui_Form):
             self.Button_open.setEnabled(False)
             self.Button_old.setEnabled(False)   
     
+   
+    def __load_dates_from_db(self):
+        """Загружает даты из MySQL через Peewee и подсвечивает их в календаре"""
+        # Создаем формат для подсветки
+        highlight_format = QTextCharFormat()
+        highlight_format.setBackground(QColor("lightblue"))  # Цвет фона
+        highlight_format.setForeground(QColor("darkblue"))   # Цвет текста
+        highlight_format.setFontWeight(QtGui.QFont.Bold)    # Жирный шрифт
+
+        try:
+            # Запрос к базе данных через Peewee
+            # Допустим, у вас есть модель Event с полем event_date
+            # Получаем все уникальные даты, которые есть в таблице
+            events_with_dates = []  # Заглушка, замените на ваш реальный запрос
+
+            events_with_dates = Title.select(Title.data_start).distinct()
+            # events_with_dates = []  # Заглушка, замените на ваш реальный запрос
+
+            # Подсвечиваем каждую дату в календаре
+            for event in events_with_dates:
+                # event.event_date должен быть объектом datetime.date или QDate
+                date_to_highlight = QDate(
+                    event.data_start.year,
+                    event.data_start.month,
+                    event.data_start.day
+                )
+                self.calendarWidget.setDateTextFormat(date_to_highlight, highlight_format)
+                print(f"Подсвечена дата: {date_to_highlight.toString()}")
+
+        except Exception as e:
+            print(f"Ошибка при загрузке дат из БД: {e}")
+
+    # def on_date_clicked(self, date):
+    #     """Обрабатывает нажатие на дату в календаре"""
+    #     print(f"Выбрана дата: {date.toString('yyyy-MM-dd')}")
+
+    #     # Здесь вы можете сделать запрос в базу, чтобы показать события за этот день
+    #     # Например, вывести их в QListWidget или QTextEdit
+    #     try:
+    #         # Запрос через Peewee
+    #         # events_on_date = Event.select().where(Event.event_date == date.toPyDate())
+    #         events_on_date = [] # Заглушка
+
+    #         if events_on_date:
+    #             # Очищаем предыдущие данные, например, в listWidget
+    #             self.listWidget.clear()
+    #             for event in events_on_date:
+    #                 self.listWidget.addItem(event.name)  # Добавляем название события
+    #         else:
+    #             self.listWidget.clear()
+    #             self.listWidget.addItem("Нет событий на эту дату")
+
+    #     except Exception as e:
+    #         print(f"Ошибка при получении событий: {e}")
+
+    def __load_events_from_db(self, events_data):
+        """
+        Загрузить события из базы данных
+        events_data: список словарей или объектов с полями 'date' и 'title'
+        """
+        for event in events_data:
+            date = event['date'] if isinstance(event['date'], QDate) else QDate(
+                event['date'].year, event['date'].month, event['date'].day
+            )
+            title = event['title']
+            
+            if date in self.events_by_date:
+                self.events_by_date[date].append(title)
+            else:
+                self.events_by_date[date] = [title]
+                self.setDateTextFormat(date, self.highlight_format)
+
+    def __on_date_entered(self, date: QDate):
+        """Обработчик наведения курсора на дату"""
+        if date in self.events_by_date:
+            events = self.events_by_date[date]
+            # Формируем текст тултипа
+            if len(events) == 1:
+                tooltip_text = f"📅 Событие: {events[0]}"
+            else:
+                tooltip_text = f"📅 События ({len(events)}):\n• " + "\n• ".join(events)
+            
+            # Показываем тултип в позиции курсора
+            QToolTip.showText(self.mapToGlobal(self.cursor().pos()), tooltip_text, self)
+        else:
+            # Убираем тултип, если на дате нет событий
+            QToolTip.hideText()
+
+    def __set_events_for_date(self, date: QDate, events: list):
+        """Установить список событий для конкретной даты"""
+        self.events_by_date[date] = events
+        # Подсвечиваем дату
+        self.setDateTextFormat(date, self.highlight_format)
+
+    def __mouseMoveEvent(self, event):
+        """Обновляем тултип при движении мыши"""
+        # Получаем дату под курсором
+        date = self.dateAt(event.pos())
+        if date.isValid():
+            self.on_date_entered(date)
+        super().mouseMoveEvent(event)
+
+    def __dateAt(self, pos):
+        """Получить дату по координатам (упрощенная версия)"""
+        # Более точная реализация через hitTest
+        return self.selectedDate()  # В реальном коде нужно реализовать точное определение    
+    # ===============================
     def last_comp(self):
         """открытие последних соревнований"""
         sex = ["Девочки", "Девушки", "Юниорки", "Женщины"]
@@ -1618,15 +1762,48 @@ class StartWindow(QMainWindow, Ui_Form):
         else:
             return
 
+    def load_events_from_mysql(self):
+        """Загрузка событий из MySQL через Peewee"""
+        events_data = []
+        
+        try:
+            # Получаем все события из БД
+            query = Title.select()
+            
+            for event in query:
+                # date_start = event.data_start
+                # Преобразуем datetime.date в QDate
+                qdate = QDate(event.data_start.year, event.data_start.month, event.data_start.day)
+                events_data.append({
+                    'date': qdate,
+                    'title': event.name,
+                    # 'description': event.description
+                })
+            
+            # Загружаем в календарь
+            self.calendar.load_events_from_db(events_data)
+
+            # self.last_competition()
+        except Exception as e:
+            print(f"Ошибка загрузки из БД: {e}")
+
     def last_competition(self):
         """заполняет меню -последние- прошедшими соревнованиями 5 штук"""
         data_list = []
+        # ================= виджет календарь ===============
+        self.setFixedSize(735, 431)
+        self.calendar.resize(713, 190)
+        self.calendar.show()
+        
+        #  =================================================      
+        
         fir_window.comboBox_arhive_year.clear()
         fir_window.comboBox_arhive_year.setEnabled(True)
         titles = Title.select().order_by(Title.data_start.desc())
         for t in titles:
             date_start = t.data_start
             str_data = date_start.strftime("%Y-%B")
+            # str = format_mysql_date(str_data)
             if str_data not in data_list:
                 data_list.append(str_data)
         data_list.insert(0, "-выберите дату-")
@@ -1724,7 +1901,84 @@ class StartWindow(QMainWindow, Ui_Form):
             elif platform == "win32":  # Windows...
                 os.system(f"{view_file}")
             os.chdir("..")
-         
+
+
+class CustomCalendar(QCalendarWidget):
+    """Кастомный календарь с отображением событий при наведении"""
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        
+        # Включаем отслеживание мыши для виджета
+        self.setMouseTracking(True)
+        
+        # Словарь для хранения событий по датам {QDate: [список событий]}
+        self.events_by_date = {}
+        
+        # Настройка формата для подсветки дат с событиями
+        self.highlight_format = QTextCharFormat()
+        self.highlight_format.setBackground(QColor("lightblue"))
+        self.highlight_format.setForeground(QColor("darkblue"))
+        self.highlight_format.setFontWeight(QFont.Bold)
+        
+        # # Подключаем сигнал наведения на ячейку
+        # self.entered.connect(self.on_date_entered)
+        QToolTip.setFont(QFont("Arial", 10))
+        # Также можно отслеживать движение мыши для обновления тултипа
+        self.setMouseTracking(True)
+    
+    def set_events_for_date(self, date: QDate, events: list):
+        """Установить список событий для конкретной даты"""
+        self.events_by_date[date] = events
+        # Подсвечиваем дату
+        self.setDateTextFormat(date, self.highlight_format)
+    
+    def load_events_from_db(self, events_data):
+        """
+        Загрузить события из базы данных
+        events_data: список словарей или объектов с полями 'date' и 'title'
+        """
+        for event in events_data:
+            date = event['date'] if isinstance(event['date'], QDate) else QDate(
+                event['date'].year, event['date'].month, event['date'].day
+            )
+            title = event['title']
+            
+            if date in self.events_by_date:
+                self.events_by_date[date].append(title)
+            else:
+                self.events_by_date[date] = [title]
+                self.setDateTextFormat(date, self.highlight_format)
+    
+    def on_date_entered(self, date: QDate):
+        """Обработчик наведения курсора на дату"""
+        if date in self.events_by_date:
+            events = self.events_by_date[date]
+            # Формируем текст тултипа
+            if len(events) == 1:
+                tooltip_text = f"📅 Событие: {events[0]}"
+            else:
+                tooltip_text = f"📅 События ({len(events)}):\n• " + "\n• ".join(events)
+            
+            # Показываем тултип в позиции курсора
+            QToolTip.showText(self.mapToGlobal(self.cursor().pos()), tooltip_text, self)
+        else:
+            # Убираем тултип, если на дате нет событий
+            QToolTip.hideText()
+    
+    def mouseMoveEvent(self, event):
+        """Обновляем тултип при движении мыши"""
+        # Получаем дату под курсором
+        date = self.dateAt(event.pos())
+        if date.isValid():
+            self.on_date_entered(date)
+        super().mouseMoveEvent(event)
+    
+    def dateAt(self, pos):
+        """Получить дату по координатам (упрощенная версия)"""
+        # Более точная реализация через hitTest
+        return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+
 
 class ToolTip(): # создание всплывающих подсказок
     my_win.Button_made_R_file.setToolTip("Создание файла Excel для обсчета рейтинга")

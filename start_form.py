@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\Alex\Competitions_TT_v6\UI\start_form.ui'
+# Form implementation generated from reading ui file 'c:\Users\Alex\Competitions_TT\UI\start_form.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(737, 237)
+        Form.resize(737, 431)
         Form.setAutoFillBackground(False)
         self.LinkButton = QtWidgets.QCommandLinkButton(Form)
         self.LinkButton.setGeometry(QtCore.QRect(150, 53, 571, 31))
@@ -184,6 +184,9 @@ class Ui_Form(object):
         self.Button_view_pdf.setObjectName("Button_view_pdf")
         self.horizontalLayout.addWidget(self.Button_view_pdf)
         self.horizontalLayout_2.addLayout(self.horizontalLayout)
+        self.calendarWidget = QtWidgets.QCalendarWidget(Form)
+        self.calendarWidget.setGeometry(QtCore.QRect(10, 230, 312, 183))
+        self.calendarWidget.setObjectName("calendarWidget")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)

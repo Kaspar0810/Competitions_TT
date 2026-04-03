@@ -1,0 +1,198 @@
+2026-04-03 14:58:54,056 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,056 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,078 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,080 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,098 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,098 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,106 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,106 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,117 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,118 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,123 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,129 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,139 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,140 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,148 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,165 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,264 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,264 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,271 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,272 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,392 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,393 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,400 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,404 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,408 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,409 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,415 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,429 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,437 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,438 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,446 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:58:54,455 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,689 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,690 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,793 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,794 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,801 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,803 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,809 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,810 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,817 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,827 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,831 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'selectedDate'
+2026-04-03 14:59:07,844 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1687, in mouseMoveEvent
+    date = self.dateAt(event.pos())
+  File "c:\Users\Alex\Competitions_TT\main.py", line 1695, in dateAt
+    return self.selectedDate()  # В реальном коде нужно реализовать точное определение
+           ^^^^^^^^^^^^^^^^^
+AttributeError: 'StartWindow' object has no attribute 'selectedDate'
