@@ -1,9 +1,0 @@
-2026-04-03 13:56:32,547 - ERROR - Необработанное исключение: NameError: name 'form' is not defined
-2026-04-03 13:56:32,595 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 2078, in <module>
-    fir_window = StartWindow()  # Создаём объект класса ExampleApp
-  File "c:\Users\Alex\Competitions_TT\main.py", line 1518, in __init__
-    form.resize(731, 200)
-    ^^^^
-NameError: name 'form' is not defined. Did you mean: 'format'?

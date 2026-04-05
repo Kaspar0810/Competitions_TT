@@ -1,9 +1,0 @@
-2026-04-03 13:47:17,296 - ERROR - Необработанное исключение: AttributeError: 'StartWindow' object has no attribute 'startWindow'
-2026-04-03 13:47:17,360 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 2078, in <module>
-    fir_window = StartWindow()  # Создаём объект класса ExampleApp
-  File "c:\Users\Alex\Competitions_TT\main.py", line 1518, in __init__
-    self.startWindow.resize(731, 200)
-    ^^^^^^^^^^^^^^^^
-AttributeError: 'StartWindow' object has no attribute 'startWindow'

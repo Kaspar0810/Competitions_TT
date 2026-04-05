@@ -1,9 +1,0 @@
-2026-04-03 13:48:54,027 - ERROR - Необработанное исключение: NameError: name 'start_form' is not defined
-2026-04-03 13:48:54,458 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex\Competitions_TT\main.py", line 2078, in <module>
-    fir_window = StartWindow()  # Создаём объект класса ExampleApp
-  File "c:\Users\Alex\Competitions_TT\main.py", line 1518, in __init__
-    start_form.resize(731, 200)
-    ^^^^^^^^^^
-NameError: name 'start_form' is not defined

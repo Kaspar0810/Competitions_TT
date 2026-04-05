@@ -80,12 +80,13 @@ from main_window import Ui_MainWindow
 from start_form import Ui_Form
 from datetime import *
 
+from PyQt5.QtWidgets import *
 from PyQt5 import *
-from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex, QItemSelectionModel, QTime, Qt, QTimer
+from PyQt5.QtCore import QAbstractTableModel, QThread, pyqtSignal, Qt, QModelIndex, QItemSelectionModel, QTime, Qt, QTimer, QEvent
 from PyQt5.QtGui import QIcon, QBrush, QColor, QFont, QPalette
 from PyQt5.QtWidgets import QPushButton, QRadioButton, QHeaderView, QComboBox, QListWidgetItem, QItemDelegate, QStyledItemDelegate, QFrame, QTimeEdit, QCalendarWidget
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QMenu, QInputDialog, QTableWidgetItem, QLineEdit, QLabel, QGroupBox, QHBoxLayout, QVBoxLayout, QToolTip
-from PyQt5.QtWidgets import QAbstractItemView, QFileDialog, QProgressDialog, QAction, QDesktopWidget, QTableView, QColorDialog, QMessageBox, QCheckBox
+from PyQt5.QtWidgets import QAbstractItemView, QFileDialog, QProgressDialog, QAction, QDesktopWidget, QTableView, QColorDialog, QMessageBox, QCheckBox, QListWidget
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QTextCharFormat, QColor
@@ -1255,70 +1256,6 @@ my_win.setWindowIcon(QIcon("CTT.png"))
 my_win.resize(1390, 780) ## ===== размер формы ==================
 my_win.center()
 
-# ===========
-# # ============== вариант новых кнопок ================
-# class CompetitionFrame(QFrame):
-#     """Фрейм с кнопками соревнований"""
-    
-#     # def __init__(self, parent=None):
-#     #     super().__init__(parent)
-#     #     self.init_ui()
-#     #     self.load_competitions()
-    
-    # def init_ui(self):
-    #     """Инициализация интерфейса"""
-    #     # Основной layout для фрейма
-    #     self.layout = QVBoxLayout(self)
-    #     self.layout.setContentsMargins(0, 0, 0, 0)
-    #     self.layout.setSpacing(2)
-        
-    #     # Настройка фрейма
-    #     self.setFrameStyle(QFrame.Box)
-    #     self.setLineWidth(2)
-# def button_comp():
-#     frame = QFrame(my_win)
-#     frame.setFrameStyle(QFrame.Box | QFrame.Sunken)
-#     frame.setGeometry(10, 25, 242, 30)
-
-#     buttons_layout = QHBoxLayout(frame) # располагает кнопки внутри горизонтально layout
-#     buttons_layout.setContentsMargins(2, 2, 2, 2)  # Отступы от краев фрайма кнопок 
-
-#     font = QFont('Times New Roman', 10)
-#     Button_turnir_1 = QPushButton("-#-") # (в каком виджете размещена)
-#     Button_turnir_1.setFont(font)
-#     Button_turnir_1.setFlat(False)
-#     Button_turnir_1.show()
-#     Button_turnir_2 = QPushButton("-#-") # (в каком виджете размещена)
-#     Button_turnir_2.setFont(font)
-#     Button_turnir_2.setFlat(False)
-#     Button_turnir_2.show()
-#         # вариант с двумя кнопками
-#     Button_turnir_3 = QPushButton("-#-") # (в каком виджете размещена)
-#     Button_turnir_3.setFont(font)
-#     Button_turnir_3.setFlat(False)
-#     Button_turnir_3.show()
-#     Button_turnir_4 = QPushButton("-#-") # (в каком виджете размещена)
-#     Button_turnir_4.setFont(font)
-#     Button_turnir_4.setFlat(False)
-#     Button_turnir_4.show()
-
-#     buttons_layout.addWidget(Button_turnir_1)
-#     buttons_layout.addWidget(Button_turnir_2)
-
-#     buttons_layout.addWidget(Button_turnir_3)
-#     buttons_layout.addWidget(Button_turnir_4)
-
-
-#     Button_turnir_1.setEnabled(False)
-#     Button_turnir_2.setEnabled(False)
-
-#     Button_turnir_3.setEnabled(False)
-#     Button_turnir_4.setEnabled(False)
-#     Button_turnir_1.clicked.connect(my_win.fast_change_comp)
-#     Button_turnir_2.clicked.connect(my_win.fast_change_comp)
-#     Button_turnir_3.clicked.connect(my_win.fast_change_comp)
-#     Button_turnir_4.clicked.connect(my_win.fast_change_comp)
-
 # ==========================
 frame = QFrame(my_win)
 frame.setFrameStyle(QFrame.Box | QFrame.Sunken)
@@ -1403,109 +1340,7 @@ def update_player_list():
             if bd == bd_r and city == city_r:
                 r_new = gamer.r_list
                 Player.update(rank=r_new).where(Player.id == id_pl).execute()
-
-# ============== вариант новых кнопок ================
-# class CompetitionFrame(QFrame):
-#     """Фрейм с кнопками соревнований"""
-    
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-#         self.init_ui()
-#         self.load_competitions()
-    
-#     def init_ui(self):
-#         """Инициализация интерфейса"""
-#         # Основной layout для фрейма
-#         self.layout = QVBoxLayout(self)
-#         self.layout.setContentsMargins(0, 0, 0, 0)
-#         self.layout.setSpacing(2)
-        
-#         # Настройка фрейма
-#         self.setFrameStyle(QFrame.Box)
-#         self.setLineWidth(2)
-        
-#     def load_competitions(self):
-#         """Загрузка соревнований из БД"""
-#         competitions = Title.select()
-
-            
-#             # Создание кнопок для каждого соревнования
-#         for comp in competitions:
-#             self.add_competition_button(comp)
-            
-#         #     cursor.close()
-#         #     connection.close()
-            
-#         # except mysql.connector.Error as err:
-#         #     QMessageBox.critical(
-#         #         self, 
-#         #         "Ошибка БД", 
-#         #         f"Ошибка подключения к базе данных:\n{err}"
-#         #     )
-#         # except Exception as e:
-#         #     QMessageBox.critical(
-#         #         self, 
-#         #         "Ошибка", 
-#         #         f"Неизвестная ошибка:\n{e}"
-#         #     )
-    
-#     def add_competition_button(self, competition):
-#         """Добавление кнопки соревнования"""
-#         # Формирование текста кнопки
-#         name = competition['Название соревнования']
-#         start_date = competition['Дата начала']
-#         end_date = competition['Дата окончания']
-        
-#         button_text = f"{name}\nс {start_date} по {end_date}"
-        
-#         # Создание кнопки
-#         button = QPushButton(button_text)
-#         button.setMinimumHeight(80)
-#         button.setFont(QFont('Arial', 10))
-        
-#         # Сохраняем данные соревнования в свойстве кнопки
-#         button.competition_data = competition
-        
-#         # Подключаем сигнал нажатия
-#         button.clicked.connect(self.on_competition_clicked)
-        
-#         # Добавляем кнопку в layout
-#         self.layout.addWidget(button)
-    
-#     def on_competition_clicked(self):
-#         """Обработчик нажатия на кнопку соревнования"""
-#         button = self.sender()  # Получаем кнопку, которая была нажата
-        
-#         if button and hasattr(button, 'competition_data'):
-#             comp_data = button.competition_data
-            
-#             # Здесь запускается соответствующее соревнование
-#             self.start_competition(comp_data)
-    
-#     def start_competition(self, competition_data):
-#         """Запуск соревнования"""
-#         name = competition_data['Название соревнования']
-#         start_date = competition_data['Дата начала']
-#         end_date = competition_data['Дата окончания']
-        
-#         # Формируем сообщение о запуске
-#         msg = f"Запуск соревнования:\n\n"
-#         msg += f"Название: {name}\n"
-#         msg += f"Дата начала: {start_date}\n"
-#         msg += f"Дата окончания: {end_date}\n"
-#         msg += f"Количество записей: {competition_data.get('count', 1)}"
-        
-#         # Показываем информационное сообщение
-#         # В реальном приложении здесь будет код запуска соревнования
-#         QMessageBox.information(self, "Запуск соревнования", msg)
-        
-#         # Здесь можно добавить реальную логику запуска
-#         # Например, открытие нового окна с соревнованием
-#         # или выполнение определенных действий
-
-
 # =======================================
-
 
 class StartWindow(QMainWindow, Ui_Form):
     """Стартовое окно приветствия"""
@@ -1515,49 +1350,50 @@ class StartWindow(QMainWindow, Ui_Form):
         self.setupUi(self)  # загружает настройки формы(окна) из QT
         self.setWindowTitle('Добро пожаловать в COMPETITIONS_TT')
         self.setWindowIcon(QIcon("CTT.png"))
-        self.setFixedSize(739, 240)
+        # self.setFixedSize(739, 240)
+        self.setFixedSize(739, 340)
+        self.progressBar.hide()
+       
         
         self.Button_open.clicked.connect(self.open)
         self.Button_new.clicked.connect(self.new)
         self.Button_view_pdf.clicked.connect(self.view_competition_on_arhive)
         # self.Button_old.clicked.connect(self.last_competition)
-        self.Button_old.clicked.connect(self.load_events_from_mysql)
+        self.Button_old.clicked.connect(self.last_competition)
         # self.Button_R.clicked.connect(self.r_load)
-        self.LinkButton.clicked.connect(self.last_comp)
+        self.LinkButton.clicked.connect(self.last_comp_open)
 
         self.Button_open.setEnabled(False)
         self.Button_view_pdf.setEnabled(False)
         self.comboBox_arhive_year.setEnabled(False)
-        self.comboBox_arhive_year.currentTextChanged.connect(self.choice_competition)
+        # self.comboBox_arhive_year.currentTextChanged.connect(self.choice_competition)
         # == вариант виджета календаря == 
-        events_data = []
-        self.calendar = CustomCalendar(self)
+        # events_data = []
+        font = QFont()
+        self.calendar = QCalendarWidget(self)
+        font.setPointSize(11)  # Увеличиваем шрифт
+        self.calendar.setFont(font)
         self.calendar.hide()
-        self.setMouseTracking(True)
-        self.calendar.load_events_from_db(events_data)
+         
+        self.listWidget_comp = QListWidget(self)
+        font.setPointSize(11)  # Увеличиваем шрифт
+        self.listWidget_comp.setFont(font)
+        self.listWidget_comp.hide()
 
         # Словарь для хранения событий по датам {QDate: [список событий]}
-        # self.events_by_date = {}
-        # self.setMouseTracking(True)
-        # # Настройка формата для подсветки дат с событиями
-        # self.highlight_format = QTextCharFormat()
-        # self.highlight_format.setBackground(QColor("lightblue"))
-        # self.highlight_format.setForeground(QColor("darkblue"))
-        # self.highlight_format.setFontWeight(QFont.Bold)
-        
-        # # Подключаем сигнал наведения на ячейку
-        # self.entered.connect(self.on_date_entered)
-        # # self.entered.connect(self.on_date_entered)
+        self.events_by_date = {}
+       
+        self.calendar.hide()
 
-        # self.calendarWidget.hide()
-        # # 1. Настройка календаря
-        # self.setup_calendar()
+        # 1. Настройка календаря
+        self.setup_calendar()
 
-        # # 2. Загрузка дат из базы данных
-        # self.load_dates_from_db()
+        # 2. Загрузка дат из базы данных
+        self.load_dates_from_db()
 
-        # # # 3. Подключение сигнала нажатия на дату
-        # # self.calendarWidget.clicked.connect(self.on_date_clicked)
+        # # 3. Подключение сигнала нажатия на дату
+        self.calendar.clicked.connect(self.on_date_clicked)
+        self.listWidget_comp.itemSelectionChanged.connect(self.on_event_selected)
 
 
         # ========== проверяет создана ли база, если нет то создает
@@ -1589,8 +1425,22 @@ class StartWindow(QMainWindow, Ui_Form):
             self.Button_open.setEnabled(False)
             self.Button_old.setEnabled(False)   
     
-   
-    def __load_dates_from_db(self):
+
+# =========================
+
+    def setup_calendar(self):
+        """Дополнительная настройка календаря, если необходимо"""
+        # Например, можно установить минимальную и максимальную дату
+        # 1. Включаем сетку
+        self.calendar.setGridVisible(True)
+        
+        # 2. Скрываем вертикальные номера недель
+        self.calendar.setVerticalHeaderFormat(QCalendarWidget.NoVerticalHeader)
+
+        # 3. Устанавливаем минимальную дату
+        self.calendar.setMinimumDate(QDate(2023, 1, 1))
+
+    def load_dates_from_db(self):
         """Загружает даты из MySQL через Peewee и подсвечивает их в календаре"""
         # Создаем формат для подсветки
         highlight_format = QTextCharFormat()
@@ -1602,11 +1452,9 @@ class StartWindow(QMainWindow, Ui_Form):
             # Запрос к базе данных через Peewee
             # Допустим, у вас есть модель Event с полем event_date
             # Получаем все уникальные даты, которые есть в таблице
+            # events_with_dates = Event.select(Event.event_date).distinct()
             events_with_dates = []  # Заглушка, замените на ваш реальный запрос
-
             events_with_dates = Title.select(Title.data_start).distinct()
-            # events_with_dates = []  # Заглушка, замените на ваш реальный запрос
-
             # Подсвечиваем каждую дату в календаре
             for event in events_with_dates:
                 # event.event_date должен быть объектом datetime.date или QDate
@@ -1615,88 +1463,52 @@ class StartWindow(QMainWindow, Ui_Form):
                     event.data_start.month,
                     event.data_start.day
                 )
-                self.calendarWidget.setDateTextFormat(date_to_highlight, highlight_format)
+                self.calendar.setDateTextFormat(date_to_highlight, highlight_format)
                 print(f"Подсвечена дата: {date_to_highlight.toString()}")
 
         except Exception as e:
             print(f"Ошибка при загрузке дат из БД: {e}")
+    
+    def on_date_clicked(self, date):
+        """Обрабатывает нажатие на дату в календаре"""
+        print(f"Выбрана дата: {date.toString('yyyy-MM-dd')}")
 
-    # def on_date_clicked(self, date):
-    #     """Обрабатывает нажатие на дату в календаре"""
-    #     print(f"Выбрана дата: {date.toString('yyyy-MM-dd')}")
-
-    #     # Здесь вы можете сделать запрос в базу, чтобы показать события за этот день
-    #     # Например, вывести их в QListWidget или QTextEdit
-    #     try:
-    #         # Запрос через Peewee
-    #         # events_on_date = Event.select().where(Event.event_date == date.toPyDate())
-    #         events_on_date = [] # Заглушка
-
-    #         if events_on_date:
-    #             # Очищаем предыдущие данные, например, в listWidget
-    #             self.listWidget.clear()
-    #             for event in events_on_date:
-    #                 self.listWidget.addItem(event.name)  # Добавляем название события
-    #         else:
-    #             self.listWidget.clear()
-    #             self.listWidget.addItem("Нет событий на эту дату")
-
-    #     except Exception as e:
-    #         print(f"Ошибка при получении событий: {e}")
-
-    def __load_events_from_db(self, events_data):
-        """
-        Загрузить события из базы данных
-        events_data: список словарей или объектов с полями 'date' и 'title'
-        """
-        for event in events_data:
-            date = event['date'] if isinstance(event['date'], QDate) else QDate(
-                event['date'].year, event['date'].month, event['date'].day
-            )
-            title = event['title']
-            
-            if date in self.events_by_date:
-                self.events_by_date[date].append(title)
+        # Здесь вы можете сделать запрос в базу, чтобы показать события за этот день
+        # Например, вывести их в QListWidget или QTextEdit
+        try:
+            # Запрос через Peewee
+            events_on_date = Title.select().where(Title.data_start == date.toPyDate())
+            if events_on_date:
+                # Очищаем предыдущие данные, например, в listWidget
+                self.listWidget_comp.clear()
+                n = 1
+                for event in events_on_date:
+                    self.listWidget_comp.addItem(f"{n}: {event.name}.{event.vozrast}.{event.gamer}")  # Добавляем название события
+                    n += 1
             else:
-                self.events_by_date[date] = [title]
-                self.setDateTextFormat(date, self.highlight_format)
+                self.listWidget_comp.clear()
+                self.listWidget_comp.addItem("Нет событий на эту дату")
 
-    def __on_date_entered(self, date: QDate):
-        """Обработчик наведения курсора на дату"""
-        if date in self.events_by_date:
-            events = self.events_by_date[date]
-            # Формируем текст тултипа
-            if len(events) == 1:
-                tooltip_text = f"📅 Событие: {events[0]}"
-            else:
-                tooltip_text = f"📅 События ({len(events)}):\n• " + "\n• ".join(events)
-            
-            # Показываем тултип в позиции курсора
-            QToolTip.showText(self.mapToGlobal(self.cursor().pos()), tooltip_text, self)
+        except Exception as e:
+            print(f"Ошибка при получении событий: {e}")
+    
+    def on_event_selected(self):
+        """Обработчик выбора события в списке"""
+        selected_items = self.listWidget_comp.selectedItems()
+        
+        if selected_items:
+            # Если событие выбрано, меняем текст кнопки
+            self.Button_open.setText("Запустить")
+            self.Button_open.setEnabled(True)
+            # self.btn_delete.setText(f"🗑️ Удалить: {selected_items[0].text()}")
         else:
-            # Убираем тултип, если на дате нет событий
-            QToolTip.hideText()
-
-    def __set_events_for_date(self, date: QDate, events: list):
-        """Установить список событий для конкретной даты"""
-        self.events_by_date[date] = events
-        # Подсвечиваем дату
-        self.setDateTextFormat(date, self.highlight_format)
-
-    def __mouseMoveEvent(self, event):
-        """Обновляем тултип при движении мыши"""
-        # Получаем дату под курсором
-        date = self.dateAt(event.pos())
-        if date.isValid():
-            self.on_date_entered(date)
-        super().mouseMoveEvent(event)
-
-    def __dateAt(self, pos):
-        """Получить дату по координатам (упрощенная версия)"""
-        # Более точная реализация через hitTest
-        return self.selectedDate()  # В реальном коде нужно реализовать точное определение    
+            # Если ничего не выбрано
+            selected_date = self.calendar.selectedDate()
+            events_count = len(self.events_by_date.get(selected_date, []))
+            # self.btn_edit.setText(f"✏️ Редактировать ({events_count})")
+            # self.btn_delete.setText("🗑️ Удалить событие")
     # ===============================
-    def last_comp(self):
+    def last_comp_open(self):
         """открытие последних соревнований"""
         sex = ["Девочки", "Девушки", "Юниорки", "Женщины"]
         control_date_R_list()
@@ -1724,12 +1536,14 @@ class StartWindow(QMainWindow, Ui_Form):
         if isinstance(flag, list): # узнает принадлежит переменная к типу
            delete_db_copy(del_files_list=flag) 
         go_to()
+        # self.choice_competition()
         # button_comp() 
         my_win.show()
 
     def new(self):
         """запускает новые соревнования"""
         msgBox = QMessageBox
+        self.progressBar.show()
         result = msgBox.question(my_win, "", "Вы действительно хотите создать новые соревнования?",
                                  msgBox.Ok, msgBox.Cancel)
         if result == msgBox.Ok:
@@ -1762,54 +1576,41 @@ class StartWindow(QMainWindow, Ui_Form):
         else:
             return
 
-    def load_events_from_mysql(self):
-        """Загрузка событий из MySQL через Peewee"""
-        events_data = []
-        
-        try:
-            # Получаем все события из БД
-            query = Title.select()
-            
-            for event in query:
-                # date_start = event.data_start
-                # Преобразуем datetime.date в QDate
-                qdate = QDate(event.data_start.year, event.data_start.month, event.data_start.day)
-                events_data.append({
-                    'date': qdate,
-                    'title': event.name,
-                    # 'description': event.description
-                })
-            
-            # Загружаем в календарь
-            self.calendar.load_events_from_db(events_data)
-
-            # self.last_competition()
-        except Exception as e:
-            print(f"Ошибка загрузки из БД: {e}")
-
     def last_competition(self):
         """заполняет меню -последние- прошедшими соревнованиями 5 штук"""
         data_list = []
         # ================= виджет календарь ===============
+        # self.setFixedSize(735, 431)
         self.setFixedSize(735, 431)
-        self.calendar.resize(713, 190)
+        self.progressBar.hide()
+        self.comboBox.hide()
+        # self.calendar.setGeometry(QtCore.QRect(10, 235, 205, 170))
+        # self.calendar.show()
+        # self.listWidget_comp.setGeometry(215, 235, 490, 170)
+        # self.calendar.setGeometry(QtCore.QRect(10, 235, 717, 208))
+        # self.calendar.show()
+        # self.listWidget_comp.setGeometry(10, 450, 717, 120)
+        self.calendar.setGeometry(QtCore.QRect(153, 120, 570, 173))
         self.calendar.show()
-        
+        self.listWidget_comp.setGeometry(10, 305, 717, 120)
+        self.listWidget_comp.show()
+        self.load_dates_from_db()
         #  =================================================      
         
         fir_window.comboBox_arhive_year.clear()
         fir_window.comboBox_arhive_year.setEnabled(True)
-        titles = Title.select().order_by(Title.data_start.desc())
-        for t in titles:
-            date_start = t.data_start
-            str_data = date_start.strftime("%Y-%B")
-            # str = format_mysql_date(str_data)
-            if str_data not in data_list:
-                data_list.append(str_data)
-        data_list.insert(0, "-выберите дату-")
-        fir_window.comboBox_arhive_year.addItems(data_list)
 
-    def choice_competition(self):
+        # titles = Title.select().order_by(Title.data_start.desc())
+        # for t in titles:
+        #     date_start = t.data_start
+        #     str_data = date_start.strftime("%Y-%B")
+        #     # str = format_mysql_date(str_data)
+        #     if str_data not in data_list:
+        #         data_list.append(str_data)
+        # data_list.insert(0, "-выберите дату-")
+        # fir_window.comboBox_arhive_year.addItems(data_list)
+
+    def _choice_competition(self):
         """выбор соревнования из архива"""
         full_name_list = []
         fir_window.comboBox.clear()
@@ -1827,6 +1628,25 @@ class StartWindow(QMainWindow, Ui_Form):
         fir_window.Button_open.setEnabled(True)
         fir_window.Button_view_pdf.setEnabled(True)
 
+    def _choice_competition(self):
+        """выбор соревнования из архива"""
+        full_name_list = []
+        # fir_window.comboBox.clear()
+        # data_text = fir_window.listWidget_comp.currentItem().text()
+
+        # index = fir_window.comboBox_arhive_year.currentIndex()
+        # data_text = self.calendar.date.toString('yyyy-MM-dd')
+        # if index > 0:
+        date_object = datetime.strptime(data_text, '%Y-%B').date()
+        # end_date = date_object + relativedelta(months=1)
+        # title = Title.select().where((Title.data_start >= date_object) & (Title.data_start < end_date))
+        # for m in title:
+        #     full_comp = m.full_name_comp
+        #     age = m.vozrast
+        #     full_name_list.append(f"{full_comp} {age}")
+        # fir_window.comboBox.addItems(full_name_list)
+        # # fir_window.Button_open.setEnabled(True)
+        # fir_window.Button_view_pdf.setEnabled(True)
 
     def load_old(self):
         """загружает в комбобокс архивные соревнования"""
@@ -1901,83 +1721,6 @@ class StartWindow(QMainWindow, Ui_Form):
             elif platform == "win32":  # Windows...
                 os.system(f"{view_file}")
             os.chdir("..")
-
-
-class CustomCalendar(QCalendarWidget):
-    """Кастомный календарь с отображением событий при наведении"""
-    
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        
-        # Включаем отслеживание мыши для виджета
-        self.setMouseTracking(True)
-        
-        # Словарь для хранения событий по датам {QDate: [список событий]}
-        self.events_by_date = {}
-        
-        # Настройка формата для подсветки дат с событиями
-        self.highlight_format = QTextCharFormat()
-        self.highlight_format.setBackground(QColor("lightblue"))
-        self.highlight_format.setForeground(QColor("darkblue"))
-        self.highlight_format.setFontWeight(QFont.Bold)
-        
-        # # Подключаем сигнал наведения на ячейку
-        # self.entered.connect(self.on_date_entered)
-        QToolTip.setFont(QFont("Arial", 10))
-        # Также можно отслеживать движение мыши для обновления тултипа
-        self.setMouseTracking(True)
-    
-    def set_events_for_date(self, date: QDate, events: list):
-        """Установить список событий для конкретной даты"""
-        self.events_by_date[date] = events
-        # Подсвечиваем дату
-        self.setDateTextFormat(date, self.highlight_format)
-    
-    def load_events_from_db(self, events_data):
-        """
-        Загрузить события из базы данных
-        events_data: список словарей или объектов с полями 'date' и 'title'
-        """
-        for event in events_data:
-            date = event['date'] if isinstance(event['date'], QDate) else QDate(
-                event['date'].year, event['date'].month, event['date'].day
-            )
-            title = event['title']
-            
-            if date in self.events_by_date:
-                self.events_by_date[date].append(title)
-            else:
-                self.events_by_date[date] = [title]
-                self.setDateTextFormat(date, self.highlight_format)
-    
-    def on_date_entered(self, date: QDate):
-        """Обработчик наведения курсора на дату"""
-        if date in self.events_by_date:
-            events = self.events_by_date[date]
-            # Формируем текст тултипа
-            if len(events) == 1:
-                tooltip_text = f"📅 Событие: {events[0]}"
-            else:
-                tooltip_text = f"📅 События ({len(events)}):\n• " + "\n• ".join(events)
-            
-            # Показываем тултип в позиции курсора
-            QToolTip.showText(self.mapToGlobal(self.cursor().pos()), tooltip_text, self)
-        else:
-            # Убираем тултип, если на дате нет событий
-            QToolTip.hideText()
-    
-    def mouseMoveEvent(self, event):
-        """Обновляем тултип при движении мыши"""
-        # Получаем дату под курсором
-        date = self.dateAt(event.pos())
-        if date.isValid():
-            self.on_date_entered(date)
-        super().mouseMoveEvent(event)
-    
-    def dateAt(self, pos):
-        """Получить дату по координатам (упрощенная версия)"""
-        # Более точная реализация через hitTest
-        return self.selectedDate()  # В реальном коде нужно реализовать точное определение
 
 
 class ToolTip(): # создание всплывающих подсказок
@@ -2670,7 +2413,26 @@ def go_to():
     sex = ["Девочки", "Девушки", "Юниорки", "Женщины"]
     t = Title.select().where(Title.id == title_id()).get()
     if sender == fir_window.Button_open:
-        full_name_with_age = fir_window.comboBox.currentText()
+        selected_date = fir_window.calendar.selectedDate()
+        date_str = selected_date.toString('yyyy-MM-dd')
+        name_comp = fir_window.listWidget_comp.selectedItems()
+        current_row = fir_window.listWidget_comp.currentRow()
+        if current_row >= 0:
+            current_item = fir_window.listWidget_comp.item(current_row)
+            txt = current_item.text()
+            mark = txt.find(":")
+            text_value = txt[mark + 2:]
+            
+            print(f"Выбрана строка {current_row}: {text_value}")
+        else:
+            print("Ничего не выбрано")
+        znak1 = text_value.find(".")
+        name = text_value[:znak1]
+        znak2 = text_value.rfind(".")
+        gamer = text_value[znak2 + 1:]
+        vozrast = text_value[znak1 + 1:znak2]
+        t = Title.select().where((Title.name == name) & (Title.gamer == gamer) & (Title.data_start == date_str))
+        full_name_with_age = f"{name}.{date_str}.{gamer}.{vozrast}"
     elif sender == my_win.first_comp_Action:
         full_name_with_age = my_win.first_comp_Action.text()
     elif sender == my_win.second_comp_Action:
@@ -2681,16 +2443,18 @@ def go_to():
         full_name_with_age = my_win.fourth_comp_Action.text()
     elif sender == my_win.go_to_Action: # == переход из меню перейти к
         full_name_with_age = my_win.go_to_Action.text()  # полное название к которым переходим
+   
 # ======= вид кнопки без нажатия ==============
     buttons = frame.findChildren(QPushButton)
     for btn in buttons:
         if btn.isFlat() is True:
             btn.setFlat(False)
       # ==== смена названия в меню -перейти к-
-    t = Title.select().where(Title.id == title_id()).get()
-    full_name_current = t.full_name_comp # полное название текущих соревнований
-    age_current = t.vozrast
-    my_win.go_to_Action.setText(f"{full_name_current} {age_current}") # надпись на меню -перейти к- соревнования которые были
+    # t = Title.select().where(Title.id == title_id()).get()
+    if sender != fir_window.Button_open:
+        full_name_current = t.full_name_comp # полное название текущих соревнований
+        age_current = t.vozrast
+        my_win.go_to_Action.setText(f"{full_name_current} {age_current}") # надпись на меню -перейти к- соревнования которые были
 
     mark = full_name_with_age.find("до") 
     if mark > 0: 
