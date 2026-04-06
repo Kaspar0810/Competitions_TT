@@ -2798,7 +2798,7 @@ def find_in_rlist():
             cur_index = my_win.comboBox_choice_R.currentIndex()
             txt = my_win.lineEdit_find_player_in_R.text()
         else:
-            my_win.textEdit.clear()
+            # my_win.textEdit.clear()
             txt = my_win.lineEdit_Family_name.text()
 
         zn = txt.find(" ")
@@ -2923,7 +2923,7 @@ def next_field():
 def find_city():
     """Поиск городов и область"""
     msgBox = QMessageBox()
-    my_win.textEdit.clear()
+    # my_win.textEdit.clear()
     city_list = []
     sender = my_win.sender()
     my_win.listWidget.clear()
@@ -7327,7 +7327,7 @@ def check_repeat_player(pl, bd):
             b_day_formated = b_day.strftime('%d.%m.%Y') # форматирование даты
             dr.append(b_day_formated)
         if bd in dr:
-            my_win.textEdit.setText("Такой игрок уже присутствует в списках!")   
+            # my_win.textEdit.setText("Такой игрок уже присутствует в списках!")   
             flag = True
         else:
             flag = False

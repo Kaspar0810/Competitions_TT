@@ -100,6 +100,7 @@ class Title(BaseModel):
     perenos = IntegerField()
     otchestvo = IntegerField()
     r_date = CharField()
+    vid_turnira = CharField(15)
 
     class Meta:
         db_table = "titles"
