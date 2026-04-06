@@ -193,7 +193,6 @@ class Players_double(BaseModel):
         db_tables = "players_double"
         order_by = "r_sum"
 
-
 class Game_list(BaseModel):
     number_group = CharField()
     rank_num_player = IntegerField()
@@ -285,6 +284,28 @@ class Referee(BaseModel):
     class Meta:
         db_table = "referees"
         order_by = "family"
+
+class Team(BaseModel):
+    team_name = CharField(70)    
+    region = CharField()
+    coach_team = CharField()
+    r_sum = IntegerField(10)
+    title_id = ForeignKeyField(Title)
+    id_pl1 = ForeignKeyField(Player)
+    r_pl1 = IntegerField()
+    id_pl2 = ForeignKeyField(Player)
+    r_pl2 = IntegerField()
+    id_pl3 = ForeignKeyField(Player)
+    r_pl3 = IntegerField()
+    id_pl4 = ForeignKeyField(Player)
+    r_pl5 = IntegerField()
+    id_pl5 = ForeignKeyField(Player)
+    r_pl5 = IntegerField()
+
+    class Meta:
+        db_table = "teams"
+        order_by = "r_sum"
+
         
 
 
