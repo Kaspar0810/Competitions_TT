@@ -1358,7 +1358,6 @@ class StartWindow(QMainWindow, Ui_Form):
         self.Button_open.clicked.connect(self.open)
         self.Button_new.clicked.connect(self.new)
         self.Button_view_pdf.clicked.connect(self.view_competition_on_arhive)
-        # self.Button_old.clicked.connect(self.last_competition)
         self.Button_old.clicked.connect(self.last_competition)
         # self.Button_R.clicked.connect(self.r_load)
         self.LinkButton.clicked.connect(self.last_comp_open)
@@ -1452,7 +1451,6 @@ class StartWindow(QMainWindow, Ui_Form):
             # Запрос к базе данных через Peewee
             # Допустим, у вас есть модель Event с полем event_date
             # Получаем все уникальные даты, которые есть в таблице
-            # events_with_dates = Event.select(Event.event_date).distinct()
             events_with_dates = []  # Заглушка, замените на ваш реальный запрос
             events_with_dates = Title.select(Title.data_start).distinct()
             # Подсвечиваем каждую дату в календаре
@@ -1474,7 +1472,6 @@ class StartWindow(QMainWindow, Ui_Form):
         print(f"Выбрана дата: {date.toString('yyyy-MM-dd')}")
 
         # Здесь вы можете сделать запрос в базу, чтобы показать события за этот день
-        # Например, вывести их в QListWidget или QTextEdit
         try:
             # Запрос через Peewee
             events_on_date = Title.select().where(Title.data_start == date.toPyDate())
@@ -1495,11 +1492,34 @@ class StartWindow(QMainWindow, Ui_Form):
     def on_event_selected(self):
         """Обработчик выбора события в списке"""
         selected_items = self.listWidget_comp.selectedItems()
-        
+ 
+        selected_date = fir_window.calendar.selectedDate()
+        date_str = selected_date.toString('yyyy-MM-dd')
+        name_comp = fir_window.listWidget_comp.selectedItems()
+        current_row = fir_window.listWidget_comp.currentRow()
+        if current_row >= 0:
+            current_item = fir_window.listWidget_comp.item(current_row)
+            txt = current_item.text()
+            mark = txt.find(":")
+            text_value = txt[mark + 2:]
+
+        znak1 = text_value.find(".")
+        name = text_value[:znak1]
+        znak2 = text_value.rfind(".")
+        gamer = text_value[znak2 + 1:]
+        vozrast = text_value[znak1 + 1:znak2]
+        titles_pdf = Title.select().where((Title.name == name) & (Title.gamer == gamer) & (Title.data_start == date_str))
+        for t in titles_pdf:
+            pdf_comp = t.pdf_comp
+            break
         if selected_items:
             # Если событие выбрано, меняем текст кнопки
-            self.Button_open.setText("Запустить")
+            self.Button_open.setText("Открыть")
             self.Button_open.setEnabled(True)
+            if pdf_comp:
+                self.Button_view_pdf.setEnabled(True)
+            else:
+                self.Button_view_pdf.setEnabled(False)
             # self.btn_delete.setText(f"🗑️ Удалить: {selected_items[0].text()}")
         else:
             # Если ничего не выбрано
@@ -1511,7 +1531,9 @@ class StartWindow(QMainWindow, Ui_Form):
     def last_comp_open(self):
         """открытие последних соревнований"""
         sex = ["Девочки", "Девушки", "Юниорки", "Женщины"]
-        control_date_R_list()
+        flag_system = ready_system()
+        if flag_system is False:
+            control_date_R_list()
         id_title = db_select_title()      
         tab_enabled(id_title)
         title_new = Title.select().where(Title.id == id_title).get()
@@ -1637,7 +1659,7 @@ class StartWindow(QMainWindow, Ui_Form):
         # index = fir_window.comboBox_arhive_year.currentIndex()
         # data_text = self.calendar.date.toString('yyyy-MM-dd')
         # if index > 0:
-        date_object = datetime.strptime(data_text, '%Y-%B').date()
+        # date_object = datetime.strptime(data_text, '%Y-%B').date()
         # end_date = date_object + relativedelta(months=1)
         # title = Title.select().where((Title.data_start >= date_object) & (Title.data_start < end_date))
         # for m in title:
@@ -9251,7 +9273,6 @@ def choice_semifinal_automat(stage):
         #  """Создание групп 1-го полуфинала с учетом регионов"""
         system = System.select().where(System.title_id == title_id())
         systems = system.select().where(System.stage == "Предварительный").get()
-        # choices = Choice.select().where(Choice.title_id == title_id())
         total_group = systems.total_group
         id_system = system_id(stage)
         system_stage = system.select().where(System.id == id_system).get()
@@ -9688,8 +9709,6 @@ def create_semi_final_1(mesto_first, total_group):
                                                                 my_win, "ВНИМАНИЕ", "Рекомендуется ручная замена игроков с 1-ми местами\n"
                                                                 f"в группе {group_1_num} оба спортсмена {region_1}!"
                                                                 )
-                            # print(f"Рекомендуется ручная замена игроков с 1-ми местами в группе {group_1_num} полуфинала")
-                            # print(f"Текущие пары оставлены: 1-{group_32_num} и 2-{group_30_num}")
                             
                             last_groups_conflict = False
                             conflict_info = None
@@ -9744,10 +9763,6 @@ def create_semi_final_1(mesto_first, total_group):
                         'group_2': gr2,
                         'group_32': gr32,
                         'group_30': gr31
-                        # 'group_1': group_num_list_1_16[0] if len(group_num_list_1_16) > 0 else None,
-                        # 'group_2': group_num_list_1_16[1] if len(group_num_list_1_16) > 1 else None,
-                        # 'group_32': group_num_list_17_32[1] if len(group_num_list_17_32) > 1 else group_num_list_17_32[0],
-                        # 'group_30': group_num_list_17_32[0] if len(group_num_list_17_32) > 0 else None
                     }
                 k += 1
     
@@ -9764,8 +9779,6 @@ def create_semi_final_1(mesto_first, total_group):
             player.save()
     
     return group_1_16
-
-
 
 def find_index_by_group(data, gr_num):
     for index, item in enumerate(data):
