@@ -2922,6 +2922,7 @@ def next_field():
 
 def find_city():
     """Поиск городов и область"""
+    msgBox = QMessageBox()
     my_win.textEdit.clear()
     city_list = []
     sender = my_win.sender()
@@ -3883,40 +3884,41 @@ def add_player():
         my_win.Button_del_player.setEnabled(False) 
         my_win.lineEdit_id.clear()       
     my_win.lineEdit_Family_name.setFocus()
+
     def add_players_to_team(pl_id, team, coach_team):
-    """добавляет игроков в команду"""
-    # import pandas as pd
-     # Создаем DataFrame с 5 столбцами
-    # df = pd.DataFrame(columns=['id_pl1', 'id_pl2', 'id_pl3', 'id_pl4', 'id_pl5'])
-    r_sum_list = []
-    teams = Team.select().where((Team.title_id == title_id()) & (Team.team_name == team)).get()
-    count = (len(teams))
-    if count == 0:
-        players = Player.select().where((Player.title_id == title_id()) & (Player.id == pl_id)).get()
-        r_pl1 = players.rank
-        teams = Team(team_name=team, region="", coach_team=coach_team, r_sum=r_pl1, r_pl1=r_pl1, title_id=title_id(), id_pl1=pl_id).save()
-    else:
-        players = Player.select().where((Player.title_id == title_id()) & (Player.id == pl_id)).get()
-        if count == 1:
-            r_pl1 = teams.r_pl1
-            r_pl2 = players.rank            
-            r_summa = r_pl1 + r_pl2
-            Team.update(id_pl2=pl_id, r_pl2=r_pl2, r_sum=r_summa).execute()
-        elif count == 2:
-            r_pl1 = teams.r_pl1
-            r_pl2 = teams.r_pl2
-            r_pl3 = players.rank           
-            r_summa = r_pl1 + r_pl2 + r_pl3
-            Team.update(id_pl3=pl_id, r_pl3=r_pl3, r_sum=r_summa).execute() 
-        elif count == 3:
-            r_pl1 = teams.r_pl1
-            r_pl2 = teams.r_pl2
-            r_pl3 = teams.r_pl3
-            r_pl4 = players.rank 
-            r_sum_list = [r_pl1, r_pl2, r_pl3, r_pl4]
-            r_sum_list.sort(reverse = True)
-            r_summa = r_sum_list[:3]
-            Team.update(id_pl4=pl_id, r_pl4=r_pl4, r_sum=r_summa).execute()      
+        """добавляет игроков в команду"""
+        # import pandas as pd
+        # Создаем DataFrame с 5 столбцами
+        # df = pd.DataFrame(columns=['id_pl1', 'id_pl2', 'id_pl3', 'id_pl4', 'id_pl5'])
+        r_sum_list = []
+        teams = Team.select().where((Team.title_id == title_id()) & (Team.team_name == team)).get()
+        count = (len(teams))
+        if count == 0:
+            players = Player.select().where((Player.title_id == title_id()) & (Player.id == pl_id)).get()
+            r_pl1 = players.rank
+            teams = Team(team_name=team, region="", coach_team=coach_team, r_sum=r_pl1, r_pl1=r_pl1, title_id=title_id(), id_pl1=pl_id).save()
+        else:
+            players = Player.select().where((Player.title_id == title_id()) & (Player.id == pl_id)).get()
+            if count == 1:
+                r_pl1 = teams.r_pl1
+                r_pl2 = players.rank            
+                r_summa = r_pl1 + r_pl2
+                Team.update(id_pl2=pl_id, r_pl2=r_pl2, r_sum=r_summa).execute()
+            elif count == 2:
+                r_pl1 = teams.r_pl1
+                r_pl2 = teams.r_pl2
+                r_pl3 = players.rank           
+                r_summa = r_pl1 + r_pl2 + r_pl3
+                Team.update(id_pl3=pl_id, r_pl3=r_pl3, r_sum=r_summa).execute() 
+            elif count == 3:
+                r_pl1 = teams.r_pl1
+                r_pl2 = teams.r_pl2
+                r_pl3 = teams.r_pl3
+                r_pl4 = players.rank 
+                r_sum_list = [r_pl1, r_pl2, r_pl3, r_pl4]
+                r_sum_list.sort(reverse = True)
+                r_summa = r_sum_list[:3]
+                Team.update(id_pl4=pl_id, r_pl4=r_pl4, r_sum=r_summa).execute()      
         # # Способ 1: Запись в цикле по индексам
         # for i in range(1, count + 1):
         #     df.loc[0, f'id_pl{i+1}'] = pl_id
