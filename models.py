@@ -288,19 +288,19 @@ class Referee(BaseModel):
 
 class Team(BaseModel):
     team_name = CharField(70)    
-    region = CharField()
+    region = CharField(null=True)
     coach_team = CharField()
     r_sum = IntegerField(10)
     title_id = ForeignKeyField(Title)
-    id_pl1 = ForeignKeyField(Player)
+    id_pl1 = ForeignKeyField(Player, null=True)
     r_pl1 = IntegerField()
-    id_pl2 = ForeignKeyField(Player)
+    id_pl2 = ForeignKeyField(Player, null=True)
     r_pl2 = IntegerField()
-    id_pl3 = ForeignKeyField(Player)
+    id_pl3 = ForeignKeyField(Player, null=True)
     r_pl3 = IntegerField()
-    id_pl4 = ForeignKeyField(Player)
-    r_pl5 = IntegerField()
-    id_pl5 = ForeignKeyField(Player)
+    id_pl4 = ForeignKeyField(Player, null=True)
+    r_pl4 = IntegerField()
+    id_pl5 = ForeignKeyField(Player, null=True)
     r_pl5 = IntegerField()
 
     class Meta:
