@@ -2699,15 +2699,19 @@ def title_made():
     region()
     # получение последней записи в таблице
     title = Title.select().order_by(Title.id.desc()).get()
-
+    # vid_turnira = title.vid_turnira
     # получение последнего id системы соревнования
     s = System.select().order_by(System.id.desc()).get()
     add_open_tab(tab_page="Участники")
     with db:
         System.create_table()
-        sys = System(id=s, title_id=title, total_athletes=0, total_group=0, max_player=0, stage="", page_vid="",
-                     label_string="", kol_game_string="", choice_flag=False, score_flag=5, visible_game=True, stage_exit="", mesta_exit="", no_game="").save()
-
+        sys = System(id=s, title_id=title, total_athletes=0, total_group=0, max_player=0, stage=None, page_vid=None,
+                     label_string=None, kol_game_string=None, choice_flag=False, score_flag=5, visible_game=True,
+                       stage_exit=None, mesta_exit=None, no_game=None).save()
+    # if vid_turnira == "командные":
+    #     Team.create_table()
+    #     teams = Team(title_id=title_id()).save()
+        
 
 def data_title_string():
     """получение строки начало и конец соревнований для вставки в титульный лист"""
@@ -7674,15 +7678,27 @@ def load_comboBox_filter():
     team_list = []
     player = Player.select().where(Player.title_id == title_id())
     if tb_player == 0:
+        # try:
+        #     team = Team.get(
+        #         (Team.team_name == team_name) & 
+        #         (Team.region == region) & 
+        #         (Team.coach_team == coach_team)
+        #     )
+        #     print(f"Команда '{team_name}' найдена.")
+        #     created = False
+        # except:
+        #     pass
         teams = Team.select().where(Team.title_id == title_id())
-        if len(teams) > 0:
-            for t in teams:
-                teams_name = t.team_name
+        # if len(teams) > 0:
+        for t in teams:
+            teams_name = t.team_name
+            if teams_name is not None:
                 if teams_name not in team_list:
                     team_list.append(teams_name)
-            team_list.insert(0, "выбор")
-            my_win.comboBox_fltr_team.addItems(team_list)
-
+                team_list.insert(0, "выбор")
+                my_win.comboBox_fltr_team.addItems(team_list)
+            else:
+                break
     else:
         if my_win.comboBox_fltr_region.count() > 0:  # проверка на заполненность комбобокса данными
             return
