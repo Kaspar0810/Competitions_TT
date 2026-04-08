@@ -3521,6 +3521,11 @@ def add_player():
     # =========
     if pl_id == "": # добавляет нового игрока
         flag = check_repeat_player(pl, bd) # проверка повторного ввода игрока, flag = True, значит такой игрок есть
+        if flag is True:
+            msgBox.setWindowTitle("Информация")
+            msgBox.setText(f"{pl} из {ct}\nуже присутствует в списке участников")
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.exec_()
     else:
         if txt == "Редактировать":
             player = Player.select().where(Player.id == pl_id).get()
@@ -3545,7 +3550,6 @@ def add_player():
     if flag_otc == 1:        
         add_patronymic()
     add_city()
-    # txt_edit = my_win.textEdit.toPlainText()
     ms = "" # записвыает место в базу как пустое
     idc = Coach.get(Coach.coach == ch) # получает id тренера
     idp = 112 if flag_otc == 0 else Patronymic.get(Patronymic.patronymic == otc) # если отчество не предусмотренно то пишет отчество нет id = 112
@@ -7676,8 +7680,9 @@ def filter_player_team_list():
     player = Player.select().where(Player.title_id == title_id())
     players_id = get_players_ids_by_team_name()
     team = my_win.comboBox_fltr_team.currentText()
-    if team == "выбор":
-       teams = Team.select().where(Team.title_id == title_id()).get() 
+    if team == "команды":
+    #    teams = Team.select().where(Team.title_id == title_id()).get()
+       player_list = player.select().where(Player.title_id == title_id()) # фильтр по списку 
     else:
         teams = Team.select().where((Team.title_id == title_id()) & (Team.team_name == team)).get()
         coach_team = teams.coach_team
