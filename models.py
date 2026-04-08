@@ -289,23 +289,32 @@ class Referee(BaseModel):
 class Team(BaseModel):
     team_name = CharField(70)    
     region = CharField(null=True)
-    coach_team = CharField()
-    r_sum = IntegerField(10)
-    title_id = ForeignKeyField(Title)
-    id_pl1 = ForeignKeyField(Player, null=True)
-    r_pl1 = IntegerField()
-    id_pl2 = ForeignKeyField(Player, null=True)
-    r_pl2 = IntegerField()
-    id_pl3 = ForeignKeyField(Player, null=True)
-    r_pl3 = IntegerField()
-    id_pl4 = ForeignKeyField(Player, null=True)
-    r_pl4 = IntegerField()
-    id_pl5 = ForeignKeyField(Player, null=True)
-    r_pl5 = IntegerField()
+    coach_team = CharField(null=True)
+    r_sum = IntegerField(default=0)
+    
+    # Для внешних ключей явно указываем column_name
+    title_id = ForeignKeyField(Title, column_name='title_id', null=True)
+    id_pl1 = ForeignKeyField(Player, column_name='id_pl1', null=True)
+    r_pl1 = IntegerField(default=0)
+    id_pl2 = ForeignKeyField(Player, column_name='id_pl2', null=True)
+    r_pl2 = IntegerField(default=0)
+    id_pl3 = ForeignKeyField(Player, column_name='id_pl3', null=True)
+    r_pl3 = IntegerField(default=0)
+    id_pl4 = ForeignKeyField(Player, column_name='id_pl4', null=True)
+    r_pl4 = IntegerField(default=0)
+    id_pl5 = ForeignKeyField(Player, column_name='id_pl5', null=True)
+    r_pl5 = IntegerField(default=0)
 
     class Meta:
         db_table = "teams"
         order_by = "r_sum"
+        indexes = (
+        (('id_pl1',), False),  # обычный индекс
+        (('id_pl2',), False),
+        (('id_pl3',), False),
+        (('id_pl4',), False),
+        (('id_pl5',), False),
+    )
 
         
 

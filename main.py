@@ -827,11 +827,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """Экспорт базы данных"""   
         filename, filter = QtWidgets.QFileDialog.getSaveFileName(my_win, 'Выберите файл для сохранения','backup_db','*.sql')
 
-    # def update_player_list(self):
-    #     """Обновление рейтинга у спортсменов текущим R_list"""
-    #     pass
-
-
     def log_file_read(self):
         """Чтение лог файлов"""
         my_win.listWidget.clear()
@@ -1256,7 +1251,7 @@ my_win.setWindowTitle("Соревнования по настольному те
 my_win.setWindowIcon(QIcon("CTT.png"))
 my_win.resize(1390, 780) ## ===== размер формы ==================
 my_win.center()
-
+my_win.tableView_net.hide()
 # ==========================
 frame = QFrame(my_win)
 frame.setFrameStyle(QFrame.Box | QFrame.Sunken)
@@ -1510,7 +1505,7 @@ class StartWindow(QMainWindow, Ui_Form):
         name = text_value[:znak1]
         znak2 = text_value.rfind(".")
         gamer = text_value[znak2 + 1:]
-        vozrast = text_value[znak1 + 1:znak2]
+        # vozrast = text_value[znak1 + 1:znak2]
         titles_pdf = Title.select().where((Title.name == name) & (Title.gamer == gamer) & (Title.data_start == date_str))
         for t in titles_pdf:
             pdf_comp = t.pdf_comp
@@ -1601,8 +1596,6 @@ class StartWindow(QMainWindow, Ui_Form):
             tab_enabled(id_title)
             my_win.show()
 
-            # else: # командные соревнования
-            #     pass
         else:
             return
 
@@ -2699,7 +2692,7 @@ def title_made():
     region()
     # получение последней записи в таблице
     title = Title.select().order_by(Title.id.desc()).get()
-    # vid_turnira = title.vid_turnira
+    vid_turnira = title.vid_turnira
     # получение последнего id системы соревнования
     s = System.select().order_by(System.id.desc()).get()
     add_open_tab(tab_page="Участники")
@@ -2708,9 +2701,9 @@ def title_made():
         sys = System(id=s, title_id=title, total_athletes=0, total_group=0, max_player=0, stage=None, page_vid=None,
                      label_string=None, kol_game_string=None, choice_flag=False, score_flag=5, visible_game=True,
                        stage_exit=None, mesta_exit=None, no_game=None).save()
-    # if vid_turnira == "командные":
-    #     Team.create_table()
-    #     teams = Team(title_id=title_id()).save()
+    if vid_turnira == "командные":
+        Team.create_table()
+        teams = Team(title_id=title_id()).save()
         
 
 def data_title_string():
@@ -3080,15 +3073,15 @@ def fill_table(player_list):
     if row_count != 0:  # список удаленных игроков пуст если R = 0
        
         for row in range(row_count):  # добавляет данные из базы в TableWidget
-            item_1 = str(list(player_selected[row].values())[num_columns[0]])
-            item_2 = str(list(player_selected[row].values())[num_columns[1]])
-            item_3 = str(list(player_selected[row].values())[num_columns[2]])
+            item_1 = str(list(player_selected[row].values())[num_columns[0]]) # id игрока
+            item_2 = str(list(player_selected[row].values())[num_columns[1]]) # фамилия имя
+            item_3 = str(list(player_selected[row].values())[num_columns[2]]) # дата рождения
             if tb == 1:
                 item_3 = format_date_for_view(str_date=item_3) # преобразует дату к виду для экрана
-            item_4 = str(list(player_selected[row].values())[num_columns[3]])
-            item_5 = str(list(player_selected[row].values())[num_columns[4]])
-            item_6 = str(list(player_selected[row].values())[num_columns[5]])
-            item_7 = str(list(player_selected[row].values())[num_columns[6]])
+            item_4 = str(list(player_selected[row].values())[num_columns[3]]) # рейтинг
+            item_5 = str(list(player_selected[row].values())[num_columns[4]]) # город
+            item_6 = str(list(player_selected[row].values())[num_columns[5]]) # регион
+            item_7 = str(list(player_selected[row].values())[num_columns[6]]) # разряд
             data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
             if tb == 1:
                 if tb_team == 1:
@@ -3102,7 +3095,14 @@ def fill_table(player_list):
                         data_table_tmp = [item_8, item_9, item_10]
                     data_table_list.extend(data_table_tmp) 
                 else:
-                    pass
+                    coach_id = str(list(player_selected[row].values())[num_columns[7]])
+                    coach = Coach.get(Coach.id == coach_id)
+                    item_8 = coach.coach
+                    name_team = find_team_by_player(item_1)
+                    item_9 = name_team
+                    # item_9 = str(list(player_selected[row].values())[num_columns[8]])
+                    data_table_tmp = [item_8, item_9]
+                    data_table_list.extend(data_table_tmp)
             elif tb == 2:
                 if my_win.comboBox_filter_choice_stage.currentIndex() == 0:
                     item_8 = str(list(player_selected[row].values())[num_columns[7]])
@@ -3172,173 +3172,23 @@ def fill_table(player_list):
     my_win.tableView.show()
     hide_show_columns(num_columns)
 
+# Функция поиска
+def find_team_by_player(player_id):
+    """Упрощенная версия поиска"""
+    query = Team.select().where(
+        (Team.id_pl1 == player_id) |
+        (Team.id_pl2 == player_id) |
+        (Team.id_pl3 == player_id) |
+        (Team.id_pl4 == player_id) |
+        (Team.id_pl5 == player_id)
+    )
 
-# =========== вариант из ИИ ====
-def _fill_table(player_list):
-    """заполняет таблицу со списком участников QtableView спортсменами из db"""
-    data = []
-    data_table_tmp = []
-    data_table_list = []
-    sender = my_win.sender()
-    # model = MyTableModel(data, headers)
-    tb = my_win.tabWidget.currentIndex()
+    if query.exists():
+        for t in query:
+            team_nm = t.team_name
+            return team_nm
+    return None
 
-    player_selected = player_list.dicts().execute()
-    
-    row_count = len(player_selected)  # кол-во строк в таблице
-    num_columns = [0, 1, 2, 3, 4, 5, 6]
-
-    # кол-во наваний должно совпадать со списком столбцов
-    if tb == 1: # == списки участников
-        if my_win.checkBox_6.isChecked():
-            num_columns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'ДР', 'R', 'Город', 'Регион', 'Разряд', 'Тренер', 'Место', 'id_del'])
-        else:
-            num_columns = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'ДР', 'R', 'Город', 'Регион', 'Разряд', 'Тренер', 'Место']) 
-    elif tb == 2: # Система
-        stage = my_win.comboBox_filter_choice_stage.currentText()
-        if my_win.comboBox_filter_choice_stage.currentIndex() == 0:
-            num_columns = [1, 2, 3, 4, 7, 9, 10, 11, 13, 14, 16]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'Регион', 'Тренер', 'Группа', 'Место гр',
-                                              'ПФ', "Группа ПФ", 'Место ПФ', 'Финал', 'Место'])
-        elif stage == "Предварительный":
-            num_columns = [1, 2, 3, 4, 5, 7, 9]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'Регион', 'Тренер', 'R', 'Группа', 'Место в гр'])
-        elif stage == "1-й полуфинал" or stage == "2-й полуфинал":
-            num_columns = [1, 2, 3, 4, 5, 10, 11, 13]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'Регион', 'Тренер', 'R', 'ПФ', 'Группа ПФ', 'Место ПФ']) 
-        else: 
-            num_columns = [1, 2, 3, 4, 5, 14, 16]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'Регион', 'Тренер', 'R', 'Финал', 'Место в финале']) 
-    elif tb == 3: # результаты
-        num_columns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        model.setHorizontalHeaderLabels(['id',' Стадия', 'Группа', 'Встреча', '1-й игрок', '2-й игрок', 'Победитель', 'Очки','Общ. счет', 'Счет в партиях']) 
-    elif tb == 4: # пары
-        # headers = ['id','Фамилия Имя', 'Город', 'R', 'Фамилия имя', 'Город', 'R', 'Город_пары', 'R_общ']
-        tb_double = my_win.tabWidget_3.currentIndex()
-        if tb_double == 0: # вкладка списки пар
-            num_columns = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'Город', 'R', 'Фамилия имя', 'Город', 'R', 'Город_пары', 'R_общ']) 
-        else:
-            num_columns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            model.setHorizontalHeaderLabels(['id',' Стадия', 'Группа', 'Встреча', '1-й игрок', '2-й игрок', 'Победитель', 'Очки','Общ. счет', 'Счет в партиях'])  
-    elif tb == 5: # рейтинг
-        model.setHorizontalHeaderLabels(['id',' Место', 'R', 'Фамилия Имя', 'Дата рождения', 'Город', 'Регион']) 
-    elif tb == 6:
-        if sender == my_win.lineEdit_find_player_stat:
-            num_columns = [0, 1, 2, 3, 4, 5, 6, 7]
-            model.setHorizontalHeaderLabels(['id','Фамилия Имя', 'ДР', 'R', 'Город', 'Регион', 'Разряд', 'Тренер']) 
-        else:
-            num_columns = [0, 1, 4, 5, 6, 7, 8]
-            model.setHorizontalHeaderLabels(['id','Этап', 'Игрок-1', 'Игрок-2', 'Победитель', 'Тренер', ''])
-    
-    if tb == 1:
-        if my_win.checkBox_15.isChecked():
-            my_win.tableView.setSelectionMode(QAbstractItemView.MultiSelection) # выделение несколких строк по клику мышью
-        else:
-            my_win.tableView.setSelectionMode(QAbstractItemView.SingleSelection) # выделение одной строки по клику мышью
-        my_win.tableView.setSelectionBehavior(QAbstractItemView.SelectRows) 
-    elif tb == 3 or tb == 4 or tb == 6:
-        my_win.tableView.setSelectionMode(QAbstractItemView.SingleSelection) # выделение одной строки по клику мышью
-        my_win.tableView.setSelectionBehavior(QAbstractItemView.SelectRows) # 
-    else:
-        my_win.tableView.setSelectionMode(QAbstractItemView.NoSelection) # нет выделение строк по клику мышью
-
-    if tb == 5:
-        if row_count > 0:
-            my_win.label_78.setText(f"Поиск спортсмена в рейтинге: найдено всего {row_count} записей(и).")
-        else:
-            my_win.label_78.setText(f"Поиск спортсмена в рейтинге: не найдено ни одной записи.")
-
-    if row_count != 0:  # список удаленных игроков пуст если R = 0
-       
-        for row in range(row_count):  # добавляет данные из базы в TableWidget
-            item_1 = str(list(player_selected[row].values())[num_columns[0]])
-            item_2 = str(list(player_selected[row].values())[num_columns[1]])
-            item_3 = str(list(player_selected[row].values())[num_columns[2]])
-            if tb == 1:
-                item_3 = format_date_for_view(str_date=item_3) # преобразует дату к виду для экрана
-            item_4 = str(list(player_selected[row].values())[num_columns[3]])
-            item_5 = str(list(player_selected[row].values())[num_columns[4]])
-            item_6 = str(list(player_selected[row].values())[num_columns[5]])
-            item_7 = str(list(player_selected[row].values())[num_columns[6]])
-            data_table_list = [item_1, item_2, item_3, item_4, item_5, item_6, item_7]
-            if tb == 1:
-                coach_id = str(list(player_selected[row].values())[num_columns[7]])
-                coach = Coach.get(Coach.id == coach_id)
-                item_8 = coach.coach
-                item_9 = str(list(player_selected[row].values())[num_columns[8]])
-                data_table_tmp = [item_8, item_9]
-                if my_win.checkBox_6.isChecked():
-                    item_10 = str(list(player_selected[row].values())[num_columns[9]])
-                    data_table_tmp = [item_8, item_9, item_10]
-                data_table_list.extend(data_table_tmp) 
-            elif tb == 2:
-                if my_win.comboBox_filter_choice_stage.currentIndex() == 0:
-                    item_8 = str(list(player_selected[row].values())[num_columns[7]])
-                    item_9 = str(list(player_selected[row].values())[num_columns[8]])
-                    item_10 = str(list(player_selected[row].values())[num_columns[9]])
-                    item_11 = str(list(player_selected[row].values())[num_columns[10]])
-                    data_table_tmp = [item_8, item_9, item_10, item_11]
-                elif stage == "Предварительный":
-                    data_table_tmp = []
-                elif stage == "1-й полуфинал" or stage == "2-й полуфинал":
-                    item_8 = str(list(player_selected[row].values())[num_columns[7]])
-                    data_table_tmp = [item_8]
-                else:
-                    data_table_tmp = []
-                data_table_list.extend(data_table_tmp) 
-            elif tb == 3:
-                item_8 = str(list(player_selected[row].values())[num_columns[7]])
-                item_9 = str(list(player_selected[row].values())[num_columns[8]])
-                item_10 = str(list(player_selected[row].values())[num_columns[9]])
-                data_table_tmp = [item_8, item_9, item_10]
-                data_table_list.extend(data_table_tmp)
-            elif tb == 4:
-                item_8 = str(list(player_selected[row].values())[num_columns[7]])
-                item_9 = str(list(player_selected[row].values())[num_columns[8]])
-                data_table_tmp = [item_8, item_9]
-                data_table_list.extend(data_table_tmp)
-            elif tb == 6:
-                if sender != my_win.lineEdit_find_player_stat:
-                    coach_id = str(list(player_selected[row].values())[num_columns[7]])
-                    coach = Coach.get(Coach.id == coach_id)
-                    item_8 = coach.coach
-                    data_table_tmp = [item_8]
-                data_table_list.extend(data_table_tmp)
-            data.append(data_table_list.copy()) # данные, которые передаются в tableView (список списков)
-        model = MyTableModel(data)
-        my_win.tableView.setModel(model)
-        font = my_win.tableView.font()
-        font.setPointSize(11)
-        my_win.tableView.setFont(font)
-        # my_win.tableView.setSortingEnabled(True)
-        my_win.tableView.horizontalHeader().setFont(QFont("Times", 12, QFont.Bold)) # делает заголовки жирный и размер 13
-        my_win.tableView.horizontalHeader().setStyleSheet("background-color:yellow;") # делает фон заголовков светлоголубой
-
-        my_win.tableView.verticalHeader().setDefaultSectionSize(16) # высота строки 20 пикселей
-        # my_win.tableView.resizeColumnsToContents() # растягивает по содержимому
-        my_win.tableView.horizontalHeader().setStretchLastSection(True) # растягивает последнюю колонку до конца
-        my_win.tableView.setGridStyle(QtCore.Qt.SolidLine) # вид линии сетки 
-    else:
-        if tb == 1:
-            if my_win.checkBox_15.isChecked() and row_count == 0:
-                my_win.statusbar.showMessage(
-                "Нет спортсменов из предварительной заявки", 10000)
-                my_win.textEdit.setText("Нет спортсменов из предварительной заявки")
-            else:
-                row = 0
-                my_win.statusbar.showMessage(
-                    "Нет спортсменов удаленных из списка", 10000)
-                my_win.textEdit.setText("Нет спортсменов удаленных из списка")
-                my_win.checkBox_6.setChecked(False)
-        elif tb == 6:
-            row = 0
-            my_win.statusbar.showMessage(
-                "Такого спортсмена в рейтинг листе нет нет", 10000)
-    my_win.tableView.show()
-    hide_show_columns(num_columns)
 # =====================
 def _fill_table(player_list): # ============== вариант эксперемнетальный =============
     """заполняет таблицу со списком участников QtableView спортсменами из db"""
@@ -3891,7 +3741,6 @@ def add_players_to_team(pl_id, team, coach_team, player_rating):
     try:
         team = Team.get(
             (Team.team_name == team) & 
-            # (Team.region == region) & 
             (Team.coach_team == coach_team)
         )
         print(f"Команда '{team}' найдена.")
@@ -4582,11 +4431,14 @@ def page():
         # включает вкладку фильтр на -участники- в зависисмости от вида соревнований личные или команды
         vid_comp = titles.vid_turnira
         if vid_comp == "командные":
+            my_win.tabWidget_player.show()
+            my_win.tabWidget_player.resize(456, 50)
             my_win.tabWidget_player.setCurrentIndex(0)
             my_win.tabWidget_filter_players.setCurrentIndex(0)
         else:
             my_win.tabWidget_player.setCurrentIndex(1)
             my_win.tabWidget_filter_players.setCurrentIndex(1)
+            my_win.tabWidget_player.hide()
         my_win.checkBox_15.setChecked(False)
         my_win.tabWidget_2.setCurrentIndex(0)
         my_win.resize(1110, 750)
@@ -7678,27 +7530,16 @@ def load_comboBox_filter():
     team_list = []
     player = Player.select().where(Player.title_id == title_id())
     if tb_player == 0:
-        # try:
-        #     team = Team.get(
-        #         (Team.team_name == team_name) & 
-        #         (Team.region == region) & 
-        #         (Team.coach_team == coach_team)
-        #     )
-        #     print(f"Команда '{team_name}' найдена.")
-        #     created = False
-        # except:
-        #     pass
         teams = Team.select().where(Team.title_id == title_id())
-        # if len(teams) > 0:
         for t in teams:
             teams_name = t.team_name
-            if teams_name is not None:
+            if teams_name == "":
+                break
+            else:
                 if teams_name not in team_list:
                     team_list.append(teams_name)
-                team_list.insert(0, "выбор")
-                my_win.comboBox_fltr_team.addItems(team_list)
-            else:
-                break
+        team_list.insert(0, "команды")
+        my_win.comboBox_fltr_team.addItems(team_list)
     else:
         if my_win.comboBox_fltr_region.count() > 0:  # проверка на заполненность комбобокса данными
             return
@@ -7778,7 +7619,6 @@ def change_city_from_region():
     gorod.insert(0, "")
     my_win.comboBox_fltr_city.addItems(gorod)
 
-
 def filter_player_list(sender):
     """фильтрация списка участников по областям, тренерам, городам"""
     sender = my_win.sender()
@@ -7836,51 +7676,17 @@ def filter_player_team_list():
     player = Player.select().where(Player.title_id == title_id())
     players_id = get_players_ids_by_team_name()
     team = my_win.comboBox_fltr_team.currentText()
-    if team != "":
+    if team == "выбор":
+       teams = Team.select().where(Team.title_id == title_id()).get() 
+    else:
         teams = Team.select().where((Team.title_id == title_id()) & (Team.team_name == team)).get()
         coach_team = teams.coach_team
+        r_sum = str(teams.r_sum)
         my_win.lineEdit_coach_team.setText(coach_team)
         my_win.lineEdit_team.setText(team)
-   
+        my_win.lineEdit_team_r.setText(r_sum)   
         player_list = player.select().where(Player.id.in_(players_id)) # фильтр по списку
-        # elif region == "" and city != "":
-        #     player_list = player.select().where(Player.city == city)
-        # elif region != "" and city == "":
-        #     player_list = player.select().where(Player.region == region)
-        # else:
-        #     coach_id_list = []
-        #     ch = Coach.select().where(Coach.coach.contains(f'{coach}')) # поиск по части предложения
-        #     for j in ch:
-        #         id_ch = j.id
-        #         if id_ch not in coach_id_list:
-        #             coach_id_list.append(id_ch)
-        #     player_list = Player.select().where((Player.title_id == title_id()) & (Player.coach_id.in_(coach_id_list)))
-    # elif sender == my_win.checkBox_15: # отмечен чекбокс предзаявка
-    #     if my_win.checkBox_15.isChecked():
-    #         region = my_win.comboBox_fltr_region.currentText()
-    #         my_win.Button_app.setEnabled(True)
-    #         if region != "":
-    #             player_list = player.select().where((Player.application == "предварительная") & (Player.region == region))
-    #         else:
-    #             player_list = player.select().where(Player.application == "предварительная")
-    #         count = len(player_list)
-    #     else:
-            # my_win.Button_app.setEnabled(False)
-            # my_win.textEdit.clear()
-            # player_list_pred = player.select().where(Player.application == "предварительная")
-            # count = len(player_list_pred)
-            # player_list = Player.select().where(Player.title_id == title_id())
-    # elif sender == my_win.Button_reset_fltr_list:
-    #     player_list = Player.select().where(Player.title_id == title_id())
-    #     my_win.comboBox_fltr_team.setCurrentIndex(0)
-    #     # my_win.comboBox_fltr_city.setCurrentIndex(0)
-    #     # my_win.comboBox_fltr_coach.setCurrentIndex(0) 
-    #     # my_win.checkBox_15.setChecked(False)      
-    #     load_comboBox_filter()
-    # player_list_pred = player.select().where(Player.application == "предварительная")
-    # count = len(player_list_pred)    
-    # my_win.label_predzayavka.setText(f"По предзаявке {count} чел.")
-    # my_win.label_predzayavka.setStyleSheet("color: black")
+
     fill_table(player_list)
 
 def get_players_ids_by_team_name():
@@ -7902,7 +7708,6 @@ def get_players_ids_by_team_name():
     except Team.DoesNotExist:
         print(f"Команда '{team_name}' не найдена")
         return []
-
 
 def find_in_player_list():
     """поиск спортсмена или тренера"""
@@ -25001,33 +24806,43 @@ def schedule_reset():
 #     #     Player.update(region=reg).execute()
 #     print("Все записи обновлены")
 # =======        
-# def proba(): 
-#     # ======================
-#     myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
-#     # ========== создать таблицу    
-#     class Team(BaseModel):
-#         team_name = CharField(70)    
-#         region = CharField(null=True)
-#         coach_team = CharField()
-#         r_sum = IntegerField(10)
-#         title_id = ForeignKeyField(Title)
-#         id_pl1 = ForeignKeyField(Player, null=True)
-#         r_pl1 = IntegerField()
-#         id_pl2 = ForeignKeyField(Player, null=True)
-#         r_pl2 = IntegerField()
-#         id_pl3 = ForeignKeyField(Player, null=True)
-#         r_pl3 = IntegerField()
-#         id_pl4 = ForeignKeyField(Player, null=True)
-#         r_pl4 = IntegerField()
-#         id_pl5 = ForeignKeyField(Player, null=True)
-#         r_pl5 = IntegerField()
+def proba(): 
+    # ======================
+    myconn = pymysql.connect(host = "localhost", user = "root", password = "db_pass", database = "mysql_db") 
+    # ========== создать таблицу    
 
-#         class Meta:
-#             db_table = "teams"
-#             order_by = "r_sum"
+    class Team(BaseModel):
+        team_name = CharField(70)    
+        region = CharField(null=True)
+        coach_team = CharField(null=True)
+        r_sum = IntegerField(default=0)
+        
+        # Для внешних ключей явно указываем column_name
+        title_id = ForeignKeyField(Title, column_name='title_id', null=True)
+        id_pl1 = ForeignKeyField(Player, column_name='id_pl1', null=True)
+        r_pl1 = IntegerField(default=0)
+        id_pl2 = ForeignKeyField(Player, column_name='id_pl2', null=True)
+        r_pl2 = IntegerField(default=0)
+        id_pl3 = ForeignKeyField(Player, column_name='id_pl3', null=True)
+        r_pl3 = IntegerField(default=0)
+        id_pl4 = ForeignKeyField(Player, column_name='id_pl4', null=True)
+        r_pl4 = IntegerField(default=0)
+        id_pl5 = ForeignKeyField(Player, column_name='id_pl5', null=True)
+        r_pl5 = IntegerField(default=0)
 
-#     db.create_tables([Team])
-#     db.close()
+        class Meta:
+            db_table = "teams"
+            order_by = "r_sum"
+            indexes = (
+            (('id_pl1',), False),  # обычный индекс
+            (('id_pl2',), False),
+            (('id_pl3',), False),
+            (('id_pl4',), False),
+            (('id_pl5',), False),
+        )
+
+    db.create_tables([Team])
+    db.close()
     # ============ импорт новых данных в mysql (вариант перевод данных из соревновательной базы на EXCEL для работы в программе)=========
     # import glob
     # fname = QFileDialog.getOpenFileName(
@@ -25073,7 +24888,7 @@ def schedule_reset():
 #         # Добавляем возможность NULL для поля title_id
 #         migrate(migrator.set_null('teams', 'id_pl1', True))
 #     db.close()
-# my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
+my_win.Button_proba.clicked.connect(proba) # запуск пробной функции
 
 my_win.btn_select_range.clicked.connect(select_rows_with_options)
 my_win.btn_number_table.clicked.connect(select_numbers_tables)

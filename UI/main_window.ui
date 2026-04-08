@@ -883,7 +883,7 @@
         <x>4</x>
         <y>0</y>
         <width>456</width>
-        <height>46</height>
+        <height>27</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -898,7 +898,7 @@
          <rect>
           <x>2</x>
           <y>17</y>
-          <width>231</width>
+          <width>191</width>
           <height>20</height>
          </rect>
         </property>
@@ -906,9 +906,9 @@
        <widget class="QLineEdit" name="lineEdit_coach_team">
         <property name="geometry">
          <rect>
-          <x>242</x>
+          <x>255</x>
           <y>17</y>
-          <width>205</width>
+          <width>190</width>
           <height>20</height>
          </rect>
         </property>
@@ -925,6 +925,7 @@
         <property name="font">
          <font>
           <family>Times New Roman</family>
+          <pointsize>12</pointsize>
           <weight>75</weight>
           <italic>true</italic>
           <bold>true</bold>
@@ -937,7 +938,7 @@
        <widget class="QLabel" name="label_36">
         <property name="geometry">
          <rect>
-          <x>263</x>
+          <x>267</x>
           <y>0</y>
           <width>171</width>
           <height>16</height>
@@ -946,6 +947,7 @@
         <property name="font">
          <font>
           <family>Times New Roman</family>
+          <pointsize>12</pointsize>
           <weight>75</weight>
           <italic>true</italic>
           <bold>true</bold>
@@ -953,6 +955,38 @@
         </property>
         <property name="text">
          <string>Тренер-представитель</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_team_r">
+        <property name="geometry">
+         <rect>
+          <x>198</x>
+          <y>17</y>
+          <width>51</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_28">
+        <property name="geometry">
+         <rect>
+          <x>201</x>
+          <y>-2</y>
+          <width>50</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <italic>true</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>R общ</string>
         </property>
        </widget>
       </widget>
@@ -5150,8 +5184,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -5222,7 +5256,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_team">
        <attribute name="title">
@@ -5836,7 +5870,7 @@
           <rect>
            <x>4</x>
            <y>22</y>
-           <width>54</width>
+           <width>71</width>
            <height>18</height>
           </rect>
          </property>
@@ -5856,7 +5890,7 @@
           <rect>
            <x>90</x>
            <y>22</y>
-           <width>120</width>
+           <width>127</width>
            <height>24</height>
           </rect>
          </property>
@@ -5881,7 +5915,7 @@
           <rect>
            <x>4</x>
            <y>46</y>
-           <width>45</width>
+           <width>71</width>
            <height>18</height>
           </rect>
          </property>
@@ -5901,7 +5935,7 @@
           <rect>
            <x>90</x>
            <y>46</y>
-           <width>120</width>
+           <width>127</width>
            <height>24</height>
           </rect>
          </property>
@@ -5929,7 +5963,7 @@
           <rect>
            <x>4</x>
            <y>70</y>
-           <width>57</width>
+           <width>71</width>
            <height>18</height>
           </rect>
          </property>
@@ -5949,7 +5983,7 @@
           <rect>
            <x>90</x>
            <y>70</y>
-           <width>120</width>
+           <width>127</width>
            <height>24</height>
           </rect>
          </property>
@@ -6001,7 +6035,7 @@
         <widget class="QPushButton" name="Button_reset_fltr_list">
          <property name="geometry">
           <rect>
-           <x>111</x>
+           <x>116</x>
            <y>101</y>
            <width>100</width>
            <height>24</height>
@@ -6312,7 +6346,7 @@
        <widget class="QPushButton" name="Button_del_player">
         <property name="geometry">
          <rect>
-          <x>111</x>
+          <x>116</x>
           <y>22</y>
           <width>100</width>
           <height>25</height>
@@ -6343,8 +6377,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -6855,8 +6889,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -7584,8 +7618,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -7704,8 +7738,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
@@ -8075,8 +8109,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>98</width>
-       <height>28</height>
+       <width>239</width>
+       <height>418</height>
       </rect>
      </property>
      <attribute name="label">
