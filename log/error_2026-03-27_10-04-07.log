@@ -1,9 +1,0 @@
-2026-03-27 10:05:37,951 - ERROR - Необработанное исключение: TypeError: create_semi_final_2() takes 1 positional argument but 2 were given
-2026-03-27 10:05:37,951 - ERROR - Трассировка стека:
-Traceback (most recent call last):
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 1031, in choice
-    choice_semifinal_automat(stage)
-  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 9476, in choice_semifinal_automat
-    sf2_groups = create_semi_final_2(mesto_first, stage)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: create_semi_final_2() takes 1 positional argument but 2 were given
