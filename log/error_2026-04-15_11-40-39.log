@@ -1,0 +1,45 @@
+2026-04-15 11:44:35,219 - ERROR - Необработанное исключение: KeyError: 'М 16 лет'
+2026-04-15 11:44:35,219 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 736, in fast_change_comp
+    button_comp_enabled()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2066, in button_comp_enabled
+    id_comp = id_dict[txt_button] # id соревнований к котормы переходим
+              ~~~~~~~^^^^^^^^^^^^
+KeyError: 'М 16 лет'
+2026-04-15 11:44:57,361 - ERROR - Необработанное исключение: KeyError: 'М 16 лет'
+2026-04-15 11:44:57,361 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 736, in fast_change_comp
+    button_comp_enabled()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2066, in button_comp_enabled
+    id_comp = id_dict[txt_button] # id соревнований к котормы переходим
+              ~~~~~~~^^^^^^^^^^^^
+KeyError: 'М 16 лет'
+2026-04-15 11:44:58,584 - ERROR - Необработанное исключение: KeyError: 'Д 16 лет'
+2026-04-15 11:44:58,584 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 736, in fast_change_comp
+    button_comp_enabled()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2066, in button_comp_enabled
+    id_comp = id_dict[txt_button] # id соревнований к котормы переходим
+              ~~~~~~~^^^^^^^^^^^^
+KeyError: 'Д 16 лет'
+2026-04-15 11:45:05,096 - ERROR - Необработанное исключение: KeyError: 'М 16 лет'
+2026-04-15 11:45:05,097 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 736, in fast_change_comp
+    button_comp_enabled()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2066, in button_comp_enabled
+    id_comp = id_dict[txt_button] # id соревнований к котормы переходим
+              ~~~~~~~^^^^^^^^^^^^
+KeyError: 'М 16 лет'
+2026-04-15 11:45:06,345 - ERROR - Необработанное исключение: KeyError: 'Д 16 лет'
+2026-04-15 11:45:06,345 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 736, in fast_change_comp
+    button_comp_enabled()
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 2066, in button_comp_enabled
+    id_comp = id_dict[txt_button] # id соревнований к котормы переходим
+              ~~~~~~~^^^^^^^^^^^^
+KeyError: 'Д 16 лет'

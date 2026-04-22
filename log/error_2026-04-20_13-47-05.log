@@ -1,0 +1,7 @@
+2026-04-20 13:50:02,659 - ERROR - Необработанное исключение: ValueError: substring not found
+2026-04-20 13:50:02,661 - ERROR - Трассировка стека:
+Traceback (most recent call last):
+  File "c:\Users\Alex_SSHOR13\Competitions_TT\main.py", line 3963, in dclick_in_listwidget
+    sz = text.index(",")
+         ^^^^^^^^^^^^^^^
+ValueError: substring not found

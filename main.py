@@ -712,20 +712,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     button_list[j].setFont(font_no_und)
                     button_list[j].setFlat(False)
+                button_text = Button_turnir_1.text()
             elif sender == Button_turnir_2:
                 if j == 1:
                     button_list[j].setFont(font_und)
                     button_list[j].setFlat(True)
                 else:
                     button_list[j].setFont(font_no_und)
-                    button_list[j].setFlat(False)   
+                    button_list[j].setFlat(False)
+                button_text = Button_turnir_2.text()   
             elif sender == Button_turnir_3:             
                 if j == 2:
                     button_list[j].setFont(font_und)
                     button_list[j].setFlat(True)
                 else:
                     button_list[j].setFont(font_no_und)
-                    button_list[j].setFlat(False) 
+                    button_list[j].setFlat(False)
+                button_text = Button_turnir_3.text()    
             elif sender == Button_turnir_4:
                 if j == 3:
                     button_list[j].setFont(font_und)
@@ -733,7 +736,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     button_list[j].setFont(font_no_und)
                     button_list[j].setFlat(False)
-        button_comp_enabled()
+                button_text = Button_turnir_4.text()    
+        button_comp_enabled(button_text)
 
 
     def check_debitor_R(self):
@@ -2026,7 +2030,7 @@ my_win.dateEdit_start.setDate(date.today())
 my_win.dateEdit_end.setDate(date.today())
 
 
-def button_comp_enabled():
+def button_comp_enabled(button_text):
     """После нажатия кнопок быстрого перехода включает вкладку наиболее необходимую"""
     sender = my_win.sender()
     sex = ["Девочки", "Девушки", "Юниорки", "Женщины"]
@@ -2048,6 +2052,8 @@ def button_comp_enabled():
         else:
             pol_mark = "Д"
 
+
+    
     id_dict = {}
     button_list = [Button_turnir_1, Button_turnir_2, Button_turnir_3, Button_turnir_4]
     t = Title.get(Title.id == title_id())
